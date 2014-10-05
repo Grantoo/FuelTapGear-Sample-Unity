@@ -4,7 +4,9 @@ Temp/
 Obj/
 UnityGenerated/
 Library/
-FuelTapGear_iOS/
+TapGear_iOS/
+TapGear_iOSSim/
+TapGear_Web/
 
  
 # ===================================== #
