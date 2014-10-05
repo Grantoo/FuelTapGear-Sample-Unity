@@ -722,8 +722,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 1365093668}
   - 212: {fileID: 1365093667}
-  - 114: {fileID: 1365093666}
   - 61: {fileID: 1365093669}
+  - 114: {fileID: 1365093666}
   m_Layer: 0
   m_Name: buttonMultiPlayer
   m_TagString: Untagged
@@ -739,7 +739,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1365093665}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42059e5b708bf448a8ab8f925dbe1219, type: 3}
+  m_Script: {fileID: 11500000, guid: a443df9734a134062943633c66702532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &1365093667
