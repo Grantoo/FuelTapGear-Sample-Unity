@@ -235,8 +235,8 @@ public class mainmenuFuelFB : MonoBehaviour
 
 		if (paused) 
 		{
-			NotificationServices.ClearLocalNotifications ();
-			NotificationServices.ClearRemoteNotifications ();
+			//NotificationServices.ClearLocalNotifications ();
+			//NotificationServices.ClearRemoteNotifications ();
 		}
 
 	}
