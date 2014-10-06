@@ -23,7 +23,8 @@ ExportedObj/
 *.unityproj
 *.booproj
 *.apk
- 
+*.pyc
+
 # ============ #
 # OS generated #
 # ============ #
