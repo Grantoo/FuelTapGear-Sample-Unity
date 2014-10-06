@@ -1,17 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
-public class multiplayerButton : MonoBehaviour 
+
+
+public class FBLoginButton : MonoBehaviour 
 {
 	
 	void Start () 
 	{
-		
 	}
 	
 	void Update () 
 	{
-		
 		
 	}
 	
@@ -19,14 +19,15 @@ public class multiplayerButton : MonoBehaviour
 	{
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			Debug.Log ("multiplayerButton - left click.");
+			Debug.Log ("FBLoginButton - left click.");
 			
 			GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
 			mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
 			
 			
-			_mainmenuScript.launchPropeller();
+			_mainmenuScript.LoginButtonPressed();
 		}
 	}
+	
 	
 }
