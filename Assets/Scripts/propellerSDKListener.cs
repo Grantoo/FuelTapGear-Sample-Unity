@@ -15,17 +15,20 @@ using SimpleJSON;
 public class fuelSDKListener : PropellerSDKListener
 {
 	
+	public int m_matchStatus;
 	public string m_tournamentID;
 	public string m_matchID;
 	
 	
 	public override void SdkSocialLogin (bool allowCache)
 	{
+		Debug.Log ("SdkSocialLogin: handle social login");
+
 		// handle social login
-		//GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-		//mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
+		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
 		
-		//_mainmenuScript.PushFBDataToFuel();
+		_mainmenuScript.PushFBDataToFuel();
 	}
 	
 	
@@ -46,11 +49,10 @@ public class fuelSDKListener : PropellerSDKListener
 		           "pictureUrl = " + pictureUrl + "\n");
 		
 		// handle social invite
-		//GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-		//mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
-		//_mainmenuScript.onSocialInviteClicked (null); 
+		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
+		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+		_mainmenuScript.onSocialInviteClicked (null); 
 		
-		PropellerSDK.SdkSocialInviteCompleted();
 	}
 	
 	public override void SdkSocialShare (Dictionary<string, string> shareDetail)
@@ -114,13 +116,22 @@ public class fuelSDKListener : PropellerSDKListener
 		string theirNickname = them ["name"];
 		string theirAvatarURL = them ["avatar"];
 		
-		
-		Debug.Log ("m_tournamentID = " + m_tournamentID + "\n" +
-		           "m_matchID = " + m_matchID + "\n"
+
+		m_matchStatus = 1;
+
+		Debug.Log (	"__SdkCompletedWithMatch__" + "\n" +
+					"m_matchStatus = " + m_matchStatus + "\n" +
+		           	"m_tournamentID = " + m_tournamentID + "\n" +
+		           	"m_matchID = " + m_matchID + "\n"
 		           );
 		
 		// play the game for the given match data
 		//startGame();
+
+		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
+		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+		_mainmenuScript.LaunchMultiplayerGame(); 
+
 
 
 		

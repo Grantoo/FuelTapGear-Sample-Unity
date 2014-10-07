@@ -17,10 +17,9 @@ public class gameBackButton : MonoBehaviour
 	
 	void OnMouseOver () 
 	{
-		Debug.Log ("OnMouseOver");
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			Debug.Log ("- left click.");
+			Debug.Log ("gameBackButton - left click.");
 			
 			//get main loop game state
 			

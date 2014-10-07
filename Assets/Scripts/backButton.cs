@@ -17,10 +17,9 @@ public class backButton : MonoBehaviour
 
 	void OnMouseOver () 
 	{
-		Debug.Log ("OnMouseOver");
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			Debug.Log ("- left click.");
+			Debug.Log ("backButton - left click.");
 			
 			Application.LoadLevel("MainMenu");
 		}

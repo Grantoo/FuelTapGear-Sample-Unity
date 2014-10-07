@@ -18,7 +18,6 @@ public class startButton : MonoBehaviour
 
 	void OnMouseOver () 
 	{
-		Debug.Log ("OnMouseOver");
 		if (Input.GetMouseButtonDown (0)) 
 		{
 			//get main loop game state

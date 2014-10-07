@@ -12,6 +12,7 @@ public class MainLoop : MonoBehaviour
 		Done,
 	};
 
+	public bool scoreSet;
 	public int scoreValue = 0;
 	public float gameTimerValue = 5.0f;
 
@@ -71,6 +72,11 @@ public class MainLoop : MonoBehaviour
 	{
 		mGameState = eGameState.Init;
 
+
+		//may not need this
+		scoreSet = false;
+
+
 		//InitTextMeshObjs();
 	}
 	
@@ -105,6 +111,13 @@ public class MainLoop : MonoBehaviour
 					mGameState = eGameState.Done;
 					gameTimerValue = 0.0f;
 					setStartButtonText ("Reset");
+
+					//stuff score?
+
+					GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
+					mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+				
+					_mainmenuScript.StuffScore(scoreValue);
 				}
 
 				//update game timer

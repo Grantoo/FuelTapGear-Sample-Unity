@@ -9,16 +9,27 @@ using Facebook.MiniJSON;
 
 public class mainmenuFuelFB : MonoBehaviour 
 {
-	
+	public static mainmenuFuelFB Instance { get; private set; }
+
+
 	public enum eFBState 
 	{
 		WaitForInit, 
-		DataRetrived
+		DataRetrived,
+		LaunchWithResults,
+		SystemSettled
 	};
 	public eFBState mFBState = eFBState.WaitForInit;
 	
 	
-	private bool m_bInitialized;
+	public bool m_bInitialized;
+
+	public int m_matchStatus;
+	public int m_matchScore;
+	public string m_tournamentID;
+	public string m_matchID;
+
+
 	private fuelSDKListener m_listener;
 	
 	public string get_data; 
@@ -28,7 +39,8 @@ public class mainmenuFuelFB : MonoBehaviour
 	public string fbgender;
 	
 	private bool fbdata_ready; 
-	
+	public bool matchdata_ready; 
+
 	/*
 	 * Functions called from other scripts
 	*/
@@ -68,27 +80,85 @@ public class mainmenuFuelFB : MonoBehaviour
 	public void updateLoginText (string str) 
 	{
 		GameObject gameObj = GameObject.Find ("LoginStatusText");
-		TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-		tmesh.text = str;
+		if (gameObj) 
+		{
+			TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+			tmesh.text = str;
+		}
 	}
 	
 	
-	
-	
+	public void StuffScore(int scoreValue)
+	{
+		Debug.Log ("StuffScore = " + scoreValue);
+
+		matchdata_ready = true;
+
+
+		m_matchScore = scoreValue;
+
+		m_matchStatus = m_listener.m_matchStatus;
+		m_tournamentID = m_listener.m_tournamentID;
+		m_matchID = m_listener.m_matchID;
+
+		Debug.Log (	"__StuffScore__" + "\n" +
+		           "m_matchStatus = " + m_matchStatus + "\n" +
+		           "m_tournamentID = " + m_tournamentID + "\n" +
+		           "m_matchID = " + m_matchID + "\n"
+		           );
+
+
+	}
+
+
+
+
 	/*
 	 * Awake
 	*/
 	void Awake ()
 	{
 
-		fbdata_ready = false;
+		if (Instance != null && Instance != this) 
+		{
+			//destroy other instances
+			Destroy (gameObject);
+		} 
+		else if( Instance == null )
+		{
+			m_listener = new fuelSDKListener ();
+
+
+			if(m_listener == null) 
+			{
+				throw new Exception();
+			}
+
+
+			// Initialize FB SDK              
+			FB.Init(SetInit, OnHideUnity);  
+
+			fbdata_ready = false;
+			matchdata_ready = false;
+			
+			m_listener.m_matchStatus = 0;
+		}
 		
-		if (!m_bInitialized) 
+		Instance = this;
+		
+		DontDestroyOnLoad(gameObject);
+
+
+
+		//this init doesn't seem to work when you come in a second time (across scenes)
+		/*
+		if (false)//m_bInitialized == false) 
 		{
 			Debug.Log ("<----- Awake ----->");
 			
 			GameObject.DontDestroyOnLoad (gameObject);
-			
+
+
 			if (m_listener != null) 
 			{
 				throw new Exception();
@@ -103,18 +173,28 @@ public class mainmenuFuelFB : MonoBehaviour
 			{
 				throw new Exception();
 			}
+
+			// Initialize FB SDK              
+			FB.Init(SetInit, OnHideUnity);  
+
+			fbdata_ready = false;
+			matchdata_ready = false;
+
+			m_listener.m_matchStatus = 0;
+
 			
 			m_bInitialized = true;
+
+
+			Debug.Log ("<----- Awake Done ----->");
 		} 
 		else 
 		{
-			GameObject.Destroy (gameObject);
+			//not sure whay you would do this
+			//GameObject.Destroy (gameObject);
 		}
-		
-		// Initialize FB SDK              
-		FB.Init(SetInit, OnHideUnity);  
-		
-		Debug.Log ("<----- Awake Done ----->");
+		*/
+
 
 	}
 	
@@ -148,11 +228,23 @@ public class mainmenuFuelFB : MonoBehaviour
 		}
 
 
+
+
 		Debug.Log ("<----- Start Done ----->");
 
 	}
 	
-	
+	public void LaunchDashBoardWithResults()
+	{
+		Debug.Log (	"__LaunchDashBoardWithResults__" + "\n" +
+		           "m_matchStatus = " + m_listener.m_matchStatus + "\n" +
+		           "m_tournamentID = " + m_listener.m_tournamentID + "\n" +
+		           "m_matchID = " + m_listener.m_matchID + "\n"
+		           );
+
+		sendMatchResult (m_matchScore);
+	}
+
 	
 	/*
 	 * Update
@@ -172,11 +264,25 @@ public class mainmenuFuelFB : MonoBehaviour
 			break;
 			
 			case eFBState.DataRetrived:
-					break;
+				break;
+
+
+			case eFBState.LaunchWithResults:
+				break;
+
+			case eFBState.SystemSettled:
+
+				break;
+
 			
 		}
 		//-------------------------
 
+	}
+
+	public void LaunchMultiplayerGame()
+	{
+		Application.LoadLevel("GamePlay");
 	}
 	
 	private void sendMatchResult (long score)
@@ -235,8 +341,12 @@ public class mainmenuFuelFB : MonoBehaviour
 
 		if (paused) 
 		{
-			//NotificationServices.ClearLocalNotifications ();
-			//NotificationServices.ClearRemoteNotifications ();
+			#if UNITY_IPHONE
+
+			NotificationServices.ClearLocalNotifications ();
+			NotificationServices.ClearRemoteNotifications ();
+
+			#endif
 		}
 
 	}
@@ -265,7 +375,7 @@ public class mainmenuFuelFB : MonoBehaviour
 		{
 			//FB.Logout();
 
-			updateLoginText("Login to Facebook");
+			updateLoginText("Already Logged In");
 		}
 
 		
@@ -317,38 +427,10 @@ public class mainmenuFuelFB : MonoBehaviour
 
 	}
 	
-	/* deprecated
-	public Dictionary<string, string> GetFacebookInfo()  
-	{
-		Dictionary<string, string> loginInfo = null;
 
-		if (FB.IsLoggedIn) 
-		{
-			loginInfo = new Dictionary<string, string> ();
-			loginInfo.Add ("provider", "facebook");
-			loginInfo.Add ("email", fbemail);
-			loginInfo.Add ("id", FB.UserId);
-			loginInfo.Add ("token", FB.AccessToken);
-			
-			loginInfo.Add ("nickname", "nickname");
-
-			loginInfo.Add ("name", fbname);
-
-			loginInfo.Add ("gender", "gender");
-		} 
-		else 
-		{
-			Debug.LogError("Not Logged into Facebook!");
-		}
-
-		return loginInfo;
-	}
-	*/
-	
 	
 	public void PushFBDataToFuel()                                                                       
 	{
-
 		string provider = "facebook";
 		string email = fbemail;
 		string id = FB.UserId;
@@ -368,7 +450,8 @@ public class mainmenuFuelFB : MonoBehaviour
 		loginInfo.Add ("name", name);
 		loginInfo.Add ("gender", gender);
 		
-		Debug.Log ("*** loginInfo ***" + "\n" +
+		Debug.Log ("__PushFBDataToFuel__" + "\n" +
+		           "*** loginInfo ***" + "\n" +
 				   "provider = " + loginInfo ["provider"].ToString () + "\n" +
 		           "email = " + loginInfo ["email"].ToString () + "\n" +
 		           "id = " + loginInfo ["id"].ToString () + "\n" +
@@ -433,22 +516,34 @@ public class mainmenuFuelFB : MonoBehaviour
 	
 	public void onSocialInviteClicked(Dictionary<string, string> inviteInfo)                                                                                              
 	{ 
+		Debug.Log("appRequestCallback");  
 		/*
-
-		FB.AppRequest
-		(
-			message: "Cold Fusion.",
-			maxRecipients: 1,
-			callback:appRequestCallback
-		); 
-		 */                                                                                                            
+			string message,
+			string[] to = null,
+			List<object> filters = null,
+			string[] excludeIds = null,
+			int? maxRecipients = null,
+			string data = "",
+			string title = "",
+			FacebookDelegate callback = null)
+		*/
+			
+		FB.AppRequest ("Come On!", 
+		               null, 
+		               null, 
+		               null, 
+		               null, 
+		               "Some Data", 
+		               "Some Title", 
+		               appRequestCallback);
+		                                                                                                            
 		
 	}                                                                                                                              
 	private void appRequestCallback (FBResult result)                                                                              
 	{     
 
 		Debug.Log("appRequestCallback");  
-		/*                                                                                       
+		                                                                                       
 		if (result != null)                                                                                                        
 		{    
 			
@@ -463,9 +558,12 @@ public class mainmenuFuelFB : MonoBehaviour
 				//AddPopupMessage("Request Sent", ChallengeDisplayTime);
 				Debug.Log("Request sent");                                                                                       
 			} 
+
+			PropellerSDK.SdkSocialInviteCompleted();
+
 			
 		}  
-		*/
+
 	}  
 	
 	

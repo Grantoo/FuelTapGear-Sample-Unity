@@ -44,8 +44,8 @@ MonoBehaviour:
   UseTestServers: 0
   Orientation: 0
   HostGameObjectName: 
-  iOSGameHandleLogin: 0
-  iOSGameHandleInvite: 0
+  iOSGameHandleLogin: 1
+  iOSGameHandleInvite: 1
   iOSGameHandleShare: 0
   AndroidGCMSenderID: 
   AndroidGameHandleLogin: 0
