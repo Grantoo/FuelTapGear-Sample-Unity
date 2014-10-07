@@ -513,10 +513,15 @@ public class mainmenuFuelFB : MonoBehaviour
 	
 	
 	
-	
+	/*
+	 -----------------------------------------------------
+	 				FaceBook Invite
+	 -----------------------------------------------------
+	*/
+
 	public void onSocialInviteClicked(Dictionary<string, string> inviteInfo)                                                                                              
 	{ 
-		Debug.Log("appRequestCallback");  
+		Debug.Log("onSocialInviteClicked");  
 		/*
 			string message,
 			string[] to = null,
@@ -565,6 +570,74 @@ public class mainmenuFuelFB : MonoBehaviour
 		}  
 
 	}  
+
+
+
+	/*
+	 -----------------------------------------------------
+	 				FaceBook Share
+	 -----------------------------------------------------
+	*/
+	
+	public void onSocialShareClicked(Dictionary<string, string> inviteInfo)                                                                                              
+	{ 
+		Debug.Log("onSocialShareClicked");  
+		/*
+            string toId = "",
+            string link = "",
+            string linkName = "",
+            string linkCaption = "",
+            string linkDescription = "",
+            string picture = "",
+            string mediaSource = "",
+            string actionName = "",
+            string actionLink = "",
+            string reference = "",
+            Dictionary<string, string[]> properties = null,
+            FacebookDelegate callback = null)
+		*/
+		
+		FB.Feed (FB.UserId, 
+		         "", 
+		         "", 
+		         "", 
+		         "", 
+		         "", 
+		         "", 
+		         "", 
+		         "", 
+		         "", 
+		         null,
+		         appFeedCallback);
+		
+		
+	}                                                                                                                              
+	private void appFeedCallback (FBResult result)                                                                              
+	{     
+		
+		Debug.Log("appFeedCallback");  
+		
+		if (result != null)                                                                                                        
+		{    
+			
+			var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;                                      
+			object obj = 0;                                                                                                        
+			if (responseObject.TryGetValue ("cancelled", out obj))                                                                 
+			{                                                                                                                      
+				Debug.Log("Request cancelled");                                                                                  
+			}                                                                                                                      
+			else if (responseObject.TryGetValue ("request", out obj))                                                              
+			{                
+				//AddPopupMessage("Request Sent", ChallengeDisplayTime);
+				Debug.Log("Request sent");                                                                                       
+			} 
+			
+			PropellerSDK.SdkSocialShareCompleted();
+
+		}  
+		
+	}  
+
 	
 	
 }

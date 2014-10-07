@@ -59,8 +59,25 @@ public class fuelSDKListener : PropellerSDKListener
 	{
 		// handle social share
 		Debug.Log ("shareDetail" + shareDetail);
-		
-		PropellerSDK.SdkSocialShareCompleted();
+
+		string subject = shareDetail["subject"];
+		string longMessage = shareDetail["long"];
+		string shortMessage = shareDetail["short"];
+		string linkUrl = shareDetail["link"];
+		string pictureUrl = shareDetail["picture"];
+
+		Debug.Log ("subject = " + subject + "\n" +
+		           "longMessage = " + longMessage + "\n" +
+		           "shortMessage = " + shortMessage + "\n" +
+		           "linkUrl = " + linkUrl + "\n" +
+		           "pictureUrl = " + pictureUrl + "\n");
+
+
+		// handle social invite
+		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
+		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+		_mainmenuScript.onSocialShareClicked (null); 
+
 	}
 	
 	public override void SdkCompletedWithExit ()

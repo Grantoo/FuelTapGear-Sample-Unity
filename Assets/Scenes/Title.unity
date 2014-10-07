@@ -276,6 +276,14 @@ Prefab:
       propertyPath: AndroidGameHandleInvite
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
+      propertyPath: iOSGameHandleShare
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
+      propertyPath: AndroidGameHandleShare
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
   m_RootGameObject: {fileID: 959879213}
@@ -344,11 +352,11 @@ MonoBehaviour:
   HostGameObjectName: MainMenuFuelFB
   iOSGameHandleLogin: 1
   iOSGameHandleInvite: 1
-  iOSGameHandleShare: 0
+  iOSGameHandleShare: 1
   AndroidGCMSenderID: 
   AndroidGameHandleLogin: 1
   AndroidGameHandleInvite: 1
-  AndroidGameHandleShare: 0
+  AndroidGameHandleShare: 1
 --- !u!4 &959879215
 Transform:
   m_ObjectHideFlags: 0
