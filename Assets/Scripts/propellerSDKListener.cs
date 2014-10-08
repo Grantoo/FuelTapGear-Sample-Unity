@@ -15,10 +15,15 @@ using SimpleJSON;
 public class fuelSDKListener : PropellerSDKListener
 {
 	
-	public int m_matchStatus;
-	public string m_tournamentID;
-	public string m_matchID;
-	
+	//public int m_matchStatus;
+	//public string m_tournamentID;
+	//public string m_matchID;
+	//public int mMatchRound;
+
+
+
+
+
 	
 	public override void SdkSocialLogin (bool allowCache)
 	{
@@ -89,11 +94,7 @@ public class fuelSDKListener : PropellerSDKListener
 	public override void SdkCompletedWithMatch (Dictionary<string, string> matchResult)
 	{
 		// sdk completed with a match
-		
-		// extract the match data
-		m_tournamentID = matchResult ["tournamentID"];
-		m_matchID = matchResult ["matchID"];
-		
+
 		
 
 		// extract the params data
@@ -112,8 +113,7 @@ public class fuelSDKListener : PropellerSDKListener
 		
 		// extract the match round value
 		int round = json ["round"].AsInt;
-		Debug.Log ("round" + round);
-		
+
 		// extract the ads allowed flag
 		bool adsAllowed = json ["adsAllowed"].AsBool;
 		
@@ -134,20 +134,30 @@ public class fuelSDKListener : PropellerSDKListener
 		string theirAvatarURL = them ["avatar"];
 		
 
-		m_matchStatus = 1;
 
+		/*
 		Debug.Log (	"__SdkCompletedWithMatch__" + "\n" +
 					"m_matchStatus = " + m_matchStatus + "\n" +
 		           	"m_tournamentID = " + m_tournamentID + "\n" +
-		           	"m_matchID = " + m_matchID + "\n"
+		           	"m_matchID = " + m_matchID + "\n" +
+		            "round = " + round + "\n" +
+		            "adsAllowed = " + adsAllowed + "\n" +
+		            "fairPlay = " + fairPlay + "\n" +
+		            "yourNickname = " + yourNickname + "\n" +
+		            "yourAvatarURL = " + yourAvatarURL + "\n" +
+		            "theirNickname = " + theirNickname + "\n" +
+		            "theirAvatarURL = " + theirAvatarURL + "\n" 
 		           );
 		
 		// play the game for the given match data
 		//startGame();
 
+		*/
+
 		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
 		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
-		_mainmenuScript.LaunchMultiplayerGame(); 
+
+		_mainmenuScript.LaunchMultiplayerGame(matchResult); 
 
 
 

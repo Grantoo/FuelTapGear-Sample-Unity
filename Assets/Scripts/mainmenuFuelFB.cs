@@ -4,6 +4,81 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Facebook.MiniJSON;
+using SimpleJSON;
+
+
+public struct GameMatchData 
+{
+	private bool matchDataReady;
+	private bool matchComplete;
+	private string tournamentID;
+	private string matchID;
+	private int matchType;
+	private int matchRound;
+	private int matchScore;
+	private string yourNickname;
+	private string yourAvatarURL;
+	private string theirNickname;
+	private string theirAvatarURL;
+	
+	public bool MatchDataReady 
+	{	
+		get { return matchDataReady; }	
+		set { matchDataReady = value; }
+	}
+	public bool MatchComplete 
+	{	
+		get { return matchComplete; }	
+		set { matchComplete = value; }
+	}
+	public string TournamentID 
+	{	
+		get { return tournamentID; }	
+		set { tournamentID = value; }
+	}
+	public string MatchID 
+	{	
+		get { return matchID; }	
+		set { matchID = value; }
+	}
+	public int MatchType 
+	{	
+		get { return matchType; }	
+		set { matchType = value; }
+	}
+	public int MatchRound 
+	{	
+		get { return matchRound; }	
+		set { matchRound = value; }
+	}
+	public int MatchScore 
+	{	
+		get { return matchScore; }	
+		set { matchScore = value; }
+	}
+	public string YourNickname 
+	{	
+		get { return yourNickname; }	
+		set { yourNickname = value; }
+	}
+	public string YourAvatarURL 
+	{	
+		get { return yourAvatarURL; }	
+		set { yourAvatarURL = value; }
+	}
+	public string TheirNickname 
+	{	
+		get { return theirNickname; }	
+		set { theirNickname = value; }
+	}
+	public string TheirAvatarURL 
+	{	
+		get { return theirAvatarURL; }	
+		set { theirAvatarURL = value; }
+	}	
+}
+
+
 
 
 
@@ -11,6 +86,8 @@ public class mainmenuFuelFB : MonoBehaviour
 {
 	public static mainmenuFuelFB Instance { get; private set; }
 
+	private fuelSDKListener m_listener;
+	private GameMatchData m_matchData;
 
 	public enum eFBState 
 	{
@@ -20,26 +97,95 @@ public class mainmenuFuelFB : MonoBehaviour
 		SystemSettled
 	};
 	public eFBState mFBState = eFBState.WaitForInit;
-	
-	
-	public bool m_bInitialized;
 
-	public int m_matchStatus;
-	public int m_matchScore;
-	public string m_tournamentID;
-	public string m_matchID;
-
-
-	private fuelSDKListener m_listener;
-	
 	public string get_data; 
 	public string fbname;
 	public string fbfirstname;//use this as nickname for now
 	public string fbemail;
 	public string fbgender;
-	
 	private bool fbdata_ready; 
-	public bool matchdata_ready; 
+
+
+	public const int MATCH_TYPE_SINGLE = 0;
+	public const int MATCH_TYPE_MULTI = 1;
+
+
+	public GameMatchData getMatchData()
+	{
+		return m_matchData;
+	}
+
+	public void tryLaunchFuelSDK()
+	{
+		if (m_matchData.MatchComplete == true && m_matchData.MatchType == MATCH_TYPE_MULTI) 
+		{
+			LaunchDashBoardWithResults();
+		}
+	}
+
+
+	public void launchSinglePlayerGame()
+	{
+		m_matchData.MatchType = MATCH_TYPE_SINGLE;
+		m_matchData.MatchDataReady = false;
+
+		Application.LoadLevel("GamePlay");
+	}
+
+	public void LaunchMultiplayerGame(Dictionary<string, string> matchResult)
+	{
+		m_matchData.MatchType = MATCH_TYPE_MULTI;
+
+		m_matchData.MatchDataReady = true;
+
+		m_matchData.TournamentID = matchResult ["tournamentID"];
+		m_matchData.MatchID = matchResult ["matchID"];
+
+		// extract the params data
+		string paramsJSON = matchResult ["paramsJSON"];
+		JSONNode json = JSONNode.Parse (paramsJSON);
+
+		m_matchData.MatchRound = json ["round"].AsInt;
+
+		JSONClass you = json ["you"].AsObject;
+		m_matchData.YourNickname = you ["name"];
+		m_matchData.YourAvatarURL = you ["avatar"];
+
+		JSONClass them = json ["them"].AsObject;
+		m_matchData.TheirNickname = them ["name"];
+		m_matchData.TheirAvatarURL = them ["avatar"];
+
+		Debug.Log (	"__LaunchMultiplayerGame__" + "\n" +
+		           "MatchDataReady = " + m_matchData.MatchDataReady + "\n" +
+		           "TournamentID = " + m_matchData.TournamentID + "\n" +
+		           "MatchID = " + m_matchData.MatchID + "\n" +
+		           "MatchRound = " + m_matchData.MatchRound + "\n" +
+		           "adsAllowed = " + "\n" +
+		           "fairPlay = " + "\n" +
+		           "YourNickname = " + m_matchData.YourNickname + "\n" +
+		           "YourAvatarURL = " + m_matchData.YourAvatarURL + "\n" +
+		           "TheirNickname = " + m_matchData.TheirNickname + "\n" +
+		           "TheirAvatarURL = " + m_matchData.TheirAvatarURL + "\n" 
+		           );
+
+
+		m_matchData.MatchComplete = false;
+
+		Application.LoadLevel("GamePlay");
+	}
+	
+	private void sendMatchResult (long score)
+	{
+		Debug.Log ("sendMatchResult");
+		
+		Dictionary<string, object> matchResult = new Dictionary<string, object> ();
+		matchResult.Add ("tournamentID", m_matchData.TournamentID);
+		matchResult.Add ("matchID", m_matchData.MatchID);
+		matchResult.Add ("score", m_matchData.MatchScore);
+		
+		PropellerSDK.LaunchWithMatchResult (matchResult, m_listener);	
+	}
+	
 
 	/*
 	 * Functions called from other scripts
@@ -48,23 +194,19 @@ public class mainmenuFuelFB : MonoBehaviour
 	{
 		Debug.Log ("launchPropeller");
 
-		
 		if (m_listener == null) 
 		{
 			throw new Exception();
 		}
 		
 		PropellerSDK.Launch (m_listener);
-
-
 	}
-	
+
+	/* Debug, Deprecated */
 	public void generateScore ()
 	{
-
 		Debug.Log ("LaunchWithMatchResult - generateScore");
 
-		
 		if (m_listener == null) 
 		{
 			throw new Exception();
@@ -73,8 +215,6 @@ public class mainmenuFuelFB : MonoBehaviour
 		long score = (long)UnityEngine.Random.Range (0.0F, 50.0f);
 		
 		sendMatchResult (score);
-
-
 	}
 	
 	public void updateLoginText (string str) 
@@ -92,22 +232,13 @@ public class mainmenuFuelFB : MonoBehaviour
 	{
 		Debug.Log ("StuffScore = " + scoreValue);
 
-		matchdata_ready = true;
+		m_matchData.MatchScore = scoreValue;
 
-
-		m_matchScore = scoreValue;
-
-		m_matchStatus = m_listener.m_matchStatus;
-		m_tournamentID = m_listener.m_tournamentID;
-		m_matchID = m_listener.m_matchID;
-
-		Debug.Log (	"__StuffScore__" + "\n" +
-		           "m_matchStatus = " + m_matchStatus + "\n" +
-		           "m_tournamentID = " + m_tournamentID + "\n" +
-		           "m_matchID = " + m_matchID + "\n"
-		           );
-
-
+		//hmmm, better clean up this check
+		if (m_matchData.MatchDataReady == true) 
+		{
+			m_matchData.MatchComplete = true;
+		}
 	}
 
 
@@ -118,7 +249,6 @@ public class mainmenuFuelFB : MonoBehaviour
 	*/
 	void Awake ()
 	{
-
 		if (Instance != null && Instance != this) 
 		{
 			//destroy other instances
@@ -127,21 +257,20 @@ public class mainmenuFuelFB : MonoBehaviour
 		else if( Instance == null )
 		{
 			m_listener = new fuelSDKListener ();
-
-
 			if(m_listener == null) 
 			{
 				throw new Exception();
 			}
 
+			m_matchData = new GameMatchData ();
+			m_matchData.MatchDataReady = false;
+			m_matchData.MatchComplete = false;
 
 			// Initialize FB SDK              
 			FB.Init(SetInit, OnHideUnity);  
 
 			fbdata_ready = false;
-			matchdata_ready = false;
-			
-			m_listener.m_matchStatus = 0;
+
 		}
 		
 		Instance = this;
@@ -205,11 +334,9 @@ public class mainmenuFuelFB : MonoBehaviour
 	*/
 	void Start () 
 	{
-
 		Debug.Log ("<----- Start ----->");
 
 		PropellerSDK.SyncChallengeCounts ();
-
 
 		PropellerSDK.SyncTournamentInfo ();
 
@@ -227,22 +354,13 @@ public class mainmenuFuelFB : MonoBehaviour
 			Debug.Log ("fuelEnabled NotificationEnabled!");
 		}
 
-
-
-
 		Debug.Log ("<----- Start Done ----->");
 
 	}
 	
 	public void LaunchDashBoardWithResults()
 	{
-		Debug.Log (	"__LaunchDashBoardWithResults__" + "\n" +
-		           "m_matchStatus = " + m_listener.m_matchStatus + "\n" +
-		           "m_tournamentID = " + m_listener.m_tournamentID + "\n" +
-		           "m_matchID = " + m_listener.m_matchID + "\n"
-		           );
-
-		sendMatchResult (m_matchScore);
+		sendMatchResult (m_matchData.MatchScore);
 	}
 
 	
@@ -280,26 +398,7 @@ public class mainmenuFuelFB : MonoBehaviour
 
 	}
 
-	public void LaunchMultiplayerGame()
-	{
-		Application.LoadLevel("GamePlay");
-	}
-	
-	private void sendMatchResult (long score)
-	{
 
-		Debug.Log ("sendMatchResult");
-
-		Dictionary<string, object> matchResult = new Dictionary<string, object> ();
-		matchResult.Add ("tournamentID", m_listener.m_tournamentID);
-		matchResult.Add ("matchID", m_listener.m_matchID);
-		matchResult.Add ("score", score);
-		
-		PropellerSDK.LaunchWithMatchResult (matchResult, m_listener);
-
-	}
-	
-	
 	
 	
 	

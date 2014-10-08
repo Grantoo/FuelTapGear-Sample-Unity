@@ -45,6 +45,27 @@ public class MainLoop : MonoBehaviour
 		tmesh.text = str;
 	}
 
+
+	public void updateYourAvatarText (string str) 
+	{
+		GameObject gameObj = GameObject.Find ("yournameTextMesh");
+		TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.text = str;
+	}
+	public void updateTheirAvatarText (string str) 
+	{
+		GameObject gameObj = GameObject.Find ("theirnameTextMesh");
+		TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.text = str;
+	}
+	public void updateMatchRoundText (string str) 
+	{
+		GameObject gameObj = GameObject.Find ("matchroundTextMesh");
+		TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.text = str;
+	}
+
+
 	void resetGear () 
 	{
 		GameObject _gearAction = GameObject.Find("GearProxy1");
@@ -62,10 +83,10 @@ public class MainLoop : MonoBehaviour
 		updateScoreText ( "0" );
 
 		//init game timer
-		updateGameTimerText ( "5.000000" );
+		updateGameTimerText ( "5.00" );
 
 		//init start button text
-		setStartButtonText ("Start");
+		//setStartButtonText ("Start");
 	}
 
 	void Start () 
@@ -76,6 +97,24 @@ public class MainLoop : MonoBehaviour
 		//may not need this
 		scoreSet = false;
 
+		//set match data
+		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
+		mainmenuFuelFB _FuelFBHandlerScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+		
+		GameMatchData _data = _FuelFBHandlerScript.getMatchData();
+
+		if (_data.MatchDataReady == true) 
+		{
+			updateYourAvatarText (_data.YourNickname);
+			updateTheirAvatarText (_data.TheirNickname);
+			updateMatchRoundText ("Round - " + _data.MatchRound.ToString ());
+		} 
+		else 
+		{
+			updateYourAvatarText ("You");
+			updateTheirAvatarText ("Computer");
+			updateMatchRoundText ("Round - X");
+		}
 
 		//InitTextMeshObjs();
 	}
@@ -110,7 +149,7 @@ public class MainLoop : MonoBehaviour
 				{
 					mGameState = eGameState.Done;
 					gameTimerValue = 0.0f;
-					setStartButtonText ("Reset");
+					setStartButtonText ("Press the green button for match results.");
 
 					//stuff score?
 
@@ -121,7 +160,7 @@ public class MainLoop : MonoBehaviour
 				}
 
 				//update game timer
-				updateGameTimerText ( gameTimerValue.ToString() );
+				updateGameTimerText ( gameTimerValue.ToString("0.00") );
 		
 				//update tap score
 				updateScoreText ( scoreValue.ToString() );

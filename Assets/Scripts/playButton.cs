@@ -20,7 +20,14 @@ public class playButton : MonoBehaviour
 		{
 			Debug.Log ("playButton - left click.");
 			
-			Application.LoadLevel("GamePlay");
+			GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
+			mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+			
+			
+			//_mainmenuScript.LaunchDashBoardWithResults();
+			
+			
+			_mainmenuScript.launchSinglePlayerGame();
 		}
 	}
 }

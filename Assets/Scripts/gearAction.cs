@@ -39,7 +39,7 @@ public class gearAction : MonoBehaviour
 		angle -= spinvelocity;
 		transform.rotation = Quaternion.Euler(0, 0, angle);
 
-		updateSpinText ( spinvelocity.ToString () );
+		updateSpinText ( spinvelocity.ToString ("0.00") );
 
 	}
 
@@ -55,7 +55,17 @@ public class gearAction : MonoBehaviour
 				MainLoop _mainloopScript = _mainLoop.GetComponent<MainLoop>();
 			
 				var _gameState = _mainloopScript.mGameState;
-				
+
+
+				if(_gameState == MainLoop.eGameState.Ready)
+				{
+					//first tap, tell mainloop to start
+					_mainloopScript.mGameState = MainLoop.eGameState.Running;
+					_gameState = _mainloopScript.mGameState;
+
+					_mainloopScript.setStartButtonText("Tap! Fast, fast, faster!!");
+				}
+
 				if(_gameState == MainLoop.eGameState.Running)
 				{
 					_mainloopScript.scoreValue++;
@@ -79,6 +89,7 @@ public class gearAction : MonoBehaviour
 
 					//Debug.Log ("Gear Tap - spinvelocity = " + spinvelocity);
 				}
+
 			}
 		}
 	}

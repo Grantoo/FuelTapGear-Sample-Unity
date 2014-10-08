@@ -16,11 +16,19 @@ public class InitMainMenu : MonoBehaviour
 			var _coins = PlayerPrefs.GetInt("userCoins");
 
 			//set user coins
-			userCoins = GameObject.Find ("coinsTextMesh");
+			userCoins = GameObject.Find ("goldTextMesh");
 			TextMesh t = (TextMesh)userCoins.GetComponent (typeof(TextMesh)); 
-			t.text = "Coins:" + _coins.ToString();
+			t.text = "Gold:" + _coins.ToString();
 
 		}
+
+
+		//try launch fuelSDK
+		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
+		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+		
+		_mainmenuScript.tryLaunchFuelSDK();
+
 		
 
 	}

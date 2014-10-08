@@ -28,7 +28,7 @@ public class gameBackButton : MonoBehaviour
 			
 			var _gameState = _mainloopScript.mGameState;
 			
-			if(_gameState == MainLoop.eGameState.Ready)
+			if(_gameState == MainLoop.eGameState.Done)
 			{
 				Application.LoadLevel("MainMenu");
 			}

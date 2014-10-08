@@ -25,7 +25,10 @@ public class debugButton : MonoBehaviour
 			mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
 			
 			
-			_mainmenuScript.LaunchDashBoardWithResults();
+			//_mainmenuScript.LaunchDashBoardWithResults();
+
+
+			_mainmenuScript.launchPropeller();
 		}
 	}
 	
