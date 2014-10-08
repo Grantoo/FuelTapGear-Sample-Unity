@@ -33,7 +33,7 @@ public class fuelSDKListener : PropellerSDKListener
 		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
 		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
 		
-		_mainmenuScript.PushFBDataToFuel();
+		_mainmenuScript.trySocialLogin();
 	}
 	
 	

@@ -647,6 +647,76 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 314250e8ad28c45408be9de868ac82ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &907164190
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 907164193}
+  - 23: {fileID: 907164192}
+  - 102: {fileID: 907164191}
+  m_Layer: 0
+  m_Name: ChallengeCount
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!102 &907164191
+TextMesh:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 907164190}
+  m_Text: Challenge Count
+  m_OffsetZ: 0
+  m_CharacterSize: 1
+  m_LineSpacing: 1
+  m_Anchor: 0
+  m_Alignment: 0
+  m_TabSize: 4
+  m_FontSize: 48
+  m_FontStyle: 0
+  m_RichText: 1
+  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294823304
+--- !u!23 &907164192
+Renderer:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 907164190}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!4 &907164193
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 907164190}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.4548769, y: 4.60904741, z: 4}
+  m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
 --- !u!1 &982332679
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,6 +797,7 @@ GameObject:
   - 4: {fileID: 1206987717}
   - 212: {fileID: 1206987716}
   - 61: {fileID: 1206987718}
+  - 114: {fileID: 1206987719}
   m_Layer: 0
   m_Name: TWButton
   m_TagString: Untagged
@@ -779,6 +850,17 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_Size: {x: 2.47000003, y: 2.47000003}
   m_Center: {x: 0, y: 0}
+--- !u!114 &1206987719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1206987715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc55867b7ef284bf9a3eae27fd354a87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1354492683
 GameObject:
   m_ObjectHideFlags: 0

@@ -109,10 +109,17 @@ public class mainmenuFuelFB : MonoBehaviour
 	public const int MATCH_TYPE_SINGLE = 0;
 	public const int MATCH_TYPE_MULTI = 1;
 
+	private int _challengeCount;
+
 
 	public GameMatchData getMatchData()
 	{
 		return m_matchData;
+	}
+
+	public int getChallengeCount()
+	{
+		return _challengeCount;
 	}
 
 	public void tryLaunchFuelSDK()
@@ -244,6 +251,8 @@ public class mainmenuFuelFB : MonoBehaviour
 
 
 
+
+
 	/*
 	 * Awake
 	*/
@@ -340,6 +349,8 @@ public class mainmenuFuelFB : MonoBehaviour
 
 		PropellerSDK.SyncTournamentInfo ();
 
+		PropellerSDK.SyncVirtualGoods();
+
 
 		// enable push notifications
 		PropellerSDK.EnableNotification ( PropellerSDK.NotificationType.push );
@@ -413,6 +424,11 @@ public class mainmenuFuelFB : MonoBehaviour
 		}
 		
 		// Update the UI with the count
+
+		Debug.Log ("OnPropellerSDKChallengeCountUpdated : countInt = " + countInt);
+
+
+		_challengeCount = countInt;
 	}
 	
 	public void OnPropellerSDKTournamentInfo (Dictionary<string, string> tournamentInfo)
@@ -479,7 +495,17 @@ public class mainmenuFuelFB : MonoBehaviour
 
 		
 	}
-	
+	public void LogoutButtonPressed()
+	{
+		if (FB.IsLoggedIn) 
+		{      
+
+			Debug.Log("LogoutButtonPressed: LOGGING OUT!");                                                          
+
+			FB.Logout();
+		}
+	}
+
 	void LoginCallback(FBResult result)                                                        
 	{                                                                                          
 		Debug.Log("___LoginCallback___");                                                          
@@ -526,19 +552,33 @@ public class mainmenuFuelFB : MonoBehaviour
 
 	}
 	
+	public void trySocialLogin()                                                                       
+	{
+		if (FB.IsLoggedIn) 
+		{    
+			PushFBDataToFuel();
+		}
+		else 
+		{
+			FB.Login("email, publish_actions", LoginCallback); 
+		}
+
+	}
 
 	
 	public void PushFBDataToFuel()                                                                       
 	{
+
 		string provider = "facebook";
 		string email = fbemail;
 		string id = FB.UserId;
 		string token = FB.AccessToken;
+		DateTime expireDate = FB.AccessTokenExpiresAt;
 		string nickname = fbfirstname;//not available from FB using first name
 		string name = fbname;
 		string gender = fbgender;
-		
-		
+
+
 		Dictionary<string, string> loginInfo = null;
 		loginInfo = new Dictionary<string, string> ();
 		loginInfo.Add ("provider", provider);
@@ -548,18 +588,23 @@ public class mainmenuFuelFB : MonoBehaviour
 		loginInfo.Add ("nickname", nickname);
 		loginInfo.Add ("name", name);
 		loginInfo.Add ("gender", gender);
-		
+
+		//string localTime = 
+
+
 		Debug.Log ("__PushFBDataToFuel__" + "\n" +
-		           "*** loginInfo ***" + "\n" +
-				   "provider = " + loginInfo ["provider"].ToString () + "\n" +
-		           "email = " + loginInfo ["email"].ToString () + "\n" +
-		           "id = " + loginInfo ["id"].ToString () + "\n" +
-		           "token = " + loginInfo ["token"].ToString () + "\n" +
-		           "nickname = " + loginInfo ["nickname"].ToString () + "\n" +
-		           "name = " + loginInfo ["name"].ToString () + "\n" +
-		           "gender = " + loginInfo ["gender"].ToString () + "\n");
-		
+				"*** loginInfo ***" + "\n" +
+				"provider = " + loginInfo ["provider"].ToString () + "\n" +
+				"email = " + loginInfo ["email"].ToString () + "\n" +
+				"id = " + loginInfo ["id"].ToString () + "\n" +
+				"token = " + loginInfo ["token"].ToString () + "\n" +
+				"nickname = " + loginInfo ["nickname"].ToString () + "\n" +
+				"name = " + loginInfo ["name"].ToString () + "\n" +
+				"gender = " + loginInfo ["gender"].ToString () + "\n" +
+				"expireDate = " + expireDate.ToLongDateString ());
+
 		PropellerSDK.SdkSocialLoginCompleted (loginInfo);
+
 
 	}
 	
