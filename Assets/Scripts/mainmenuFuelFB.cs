@@ -275,64 +275,15 @@ public class mainmenuFuelFB : MonoBehaviour
 			m_matchData.MatchDataReady = false;
 			m_matchData.MatchComplete = false;
 
-			// Initialize FB SDK              
-			FB.Init(SetInit, OnHideUnity);  
-
 			fbdata_ready = false;
 
+			// Initialize FB SDK              
+			FB.Init(SetInit, OnHideUnity);  
 		}
 		
 		Instance = this;
 		
 		DontDestroyOnLoad(gameObject);
-
-
-
-		//this init doesn't seem to work when you come in a second time (across scenes)
-		/*
-		if (false)//m_bInitialized == false) 
-		{
-			Debug.Log ("<----- Awake ----->");
-			
-			GameObject.DontDestroyOnLoad (gameObject);
-
-
-			if (m_listener != null) 
-			{
-				throw new Exception();
-			}
-			
-			if (!Application.isEditor) 
-			{
-				m_listener = new fuelSDKListener ();
-			}
-			
-			if (m_listener == null) 
-			{
-				throw new Exception();
-			}
-
-			// Initialize FB SDK              
-			FB.Init(SetInit, OnHideUnity);  
-
-			fbdata_ready = false;
-			matchdata_ready = false;
-
-			m_listener.m_matchStatus = 0;
-
-			
-			m_bInitialized = true;
-
-
-			Debug.Log ("<----- Awake Done ----->");
-		} 
-		else 
-		{
-			//not sure whay you would do this
-			//GameObject.Destroy (gameObject);
-		}
-		*/
-
 
 	}
 	
@@ -349,7 +300,7 @@ public class mainmenuFuelFB : MonoBehaviour
 
 		PropellerSDK.SyncTournamentInfo ();
 
-		PropellerSDK.SyncVirtualGoods();
+		//PropellerSDK.SyncVirtualGoods();
 
 
 		// enable push notifications
@@ -387,7 +338,7 @@ public class mainmenuFuelFB : MonoBehaviour
 			case eFBState.WaitForInit:
 					if (fbdata_ready) 
 					{
-						PushFBDataToFuel();	
+						//PushFBDataToFuel();	
 						mFBState = eFBState.DataRetrived;
 					}
 			break;
@@ -488,18 +439,14 @@ public class mainmenuFuelFB : MonoBehaviour
 		}
 		else
 		{
-			//FB.Logout();
-
 			updateLoginText("Already Logged In");
 		}
-
 		
 	}
 	public void LogoutButtonPressed()
 	{
 		if (FB.IsLoggedIn) 
 		{      
-
 			Debug.Log("LogoutButtonPressed: LOGGING OUT!");                                                          
 
 			FB.Logout();
@@ -508,14 +455,16 @@ public class mainmenuFuelFB : MonoBehaviour
 
 	void LoginCallback(FBResult result)                                                        
 	{                                                                                          
-		Debug.Log("___LoginCallback___");                                                          
-		
+		Debug.Log("___Login_Callback___");                                                          
 
-		if (FB.IsLoggedIn)                                                                     
+		if (FB.IsLoggedIn) 
 		{                                                                                      
-			OnLoggedIn();                                                                      
-		}  
-		                                                                                  
+			OnLoggedIn ();                                                                      
+		} 
+		else 
+		{
+			Debug.Log("....WARNING NOT LOGGING IN");                                                          
+		}
 	}                                                                                          
 	
 	void OnLoggedIn()                                                                          
@@ -548,18 +497,34 @@ public class mainmenuFuelFB : MonoBehaviour
 		fbfirstname = dict ["first_name"].ToString();
 
 
-		fbdata_ready = true;	
+		//fbdata_ready = true;
+
+
+		PushFBDataToFuel ();
 
 	}
 	
-	public void trySocialLogin()                                                                       
+	public void trySocialLogin(bool allowCache)                                                                       
 	{
-		if (FB.IsLoggedIn) 
+		if (FB.IsLoggedIn && allowCache == false) 
 		{    
-			PushFBDataToFuel();
+			Debug.Log("trySocialLogin::::Logout - Login");                                                          
+
+			FB.Logout();
+			FB.Login("email, publish_actions", LoginCallback); 
+
+			//return to sdk
+			//PropellerSDK.SdkSocialLoginCompleted (null);
+
+		}
+		else if (FB.IsLoggedIn) 
+		{    
+			Debug.Log("trySocialLogin::::PushFBDataToFuel");                                                          
+			PushFBDataToFuel();//is this needed
 		}
 		else 
 		{
+			Debug.Log("trySocialLogin::::Login");                                                          
 			FB.Login("email, publish_actions", LoginCallback); 
 		}
 
@@ -568,7 +533,6 @@ public class mainmenuFuelFB : MonoBehaviour
 	
 	public void PushFBDataToFuel()                                                                       
 	{
-
 		string provider = "facebook";
 		string email = fbemail;
 		string id = FB.UserId;
@@ -618,7 +582,7 @@ public class mainmenuFuelFB : MonoBehaviour
 	private void SetInit()                                                                       
 	{                                                                                            
 		Debug.Log("Facebook SetInit"); 
-		                                                                 
+		    
 		if (FB.IsLoggedIn)                                                                       
 		{                                                                                        
 			Debug.Log("....Already logged in");
@@ -638,8 +602,7 @@ public class mainmenuFuelFB : MonoBehaviour
 	private void OnHideUnity(bool isGameShown)                                                   
 	{                                                                                            
 		Debug.Log("Facebook OnHideUnity");    
-		 
-		                                                         
+		                                                        
 		if (!isGameShown)                                                                        
 		{                                                                                        
 			// pause the game - we will need to hide                                             
@@ -650,7 +613,6 @@ public class mainmenuFuelFB : MonoBehaviour
 			// start the game back up - we're getting focus again                                
 			Time.timeScale = 1;                                                                  
 		}
-
 		                                                                                       
 	}    
 	
@@ -676,15 +638,23 @@ public class mainmenuFuelFB : MonoBehaviour
 			string title = "",
 			FacebookDelegate callback = null)
 		*/
-			
-		FB.AppRequest ("Come On!", 
-		               null, 
-		               null, 
-		               null, 
-		               null, 
-		               "Some Data", 
-		               "Some Title", 
-		               appRequestCallback);
+
+
+		if (FB.IsLoggedIn) 
+		{
+			FB.AppRequest ("Come On!", 
+			null, 
+			null, 
+			null, 
+			null, 
+			"Some Data", 
+			"Some Title", 
+			appRequestCallback);
+		} 
+		else 
+		{
+			FB.Login("email, publish_actions", LoginCallback); 
+		}
 		                                                                                                            
 		
 	}                                                                                                                              
@@ -740,19 +710,26 @@ public class mainmenuFuelFB : MonoBehaviour
             Dictionary<string, string[]> properties = null,
             FacebookDelegate callback = null)
 		*/
-		
-		FB.Feed (FB.UserId, 
-		         "", 
-		         "", 
-		         "", 
-		         "", 
-		         "", 
-		         "", 
-		         "", 
-		         "", 
-		         "", 
-		         null,
-		         appFeedCallback);
+
+		if (FB.IsLoggedIn) 
+		{
+			FB.Feed (FB.UserId, 
+	         "", 
+	         "", 
+	         "", 
+	         "", 
+	         "", 
+	         "", 
+	         "", 
+	         "", 
+	         "", 
+	         null,
+	         appFeedCallback);
+		} 
+		else 
+		{
+			FB.Login("email, publish_actions", LoginCallback); 
+		}
 		
 		
 	}                                                                                                                              
