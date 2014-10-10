@@ -30,10 +30,10 @@ public class fuelSDKListener : PropellerSDKListener
 		Debug.Log ("SdkSocialLogin: handle social login");
 
 		// handle social login
-		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
-		
-		_mainmenuScript.trySocialLogin(allowCache);
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+
+		_fuelHandlerScript.trySocialLogin(allowCache);
 	}
 	
 	
@@ -54,9 +54,9 @@ public class fuelSDKListener : PropellerSDKListener
 		           "pictureUrl = " + pictureUrl + "\n");
 		
 		// handle social invite
-		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
-		_mainmenuScript.onSocialInviteClicked (null); 
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+		_fuelHandlerScript.onSocialInviteClicked (null); 
 		
 	}
 	
@@ -79,9 +79,9 @@ public class fuelSDKListener : PropellerSDKListener
 
 
 		// handle social invite
-		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
-		_mainmenuScript.onSocialShareClicked (null); 
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+		_fuelHandlerScript.onSocialShareClicked (null); 
 
 	}
 	
@@ -154,10 +154,10 @@ public class fuelSDKListener : PropellerSDKListener
 
 		*/
 
-		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
-		_mainmenuScript.LaunchMultiplayerGame(matchResult); 
+		_fuelHandlerScript.LaunchMultiplayerGame(matchResult); 
 
 
 

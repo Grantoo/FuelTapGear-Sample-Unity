@@ -23,24 +23,24 @@ public class InitMainMenu : MonoBehaviour
 		}
 
 		//get Fuel Handler
-		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
 
 		//challenge count
-		_mainmenuScript.SyncChallengeCounts();
+		_fuelHandlerScript.SyncChallengeCounts();
 
 
 		//Tournament Info
-		_mainmenuScript.SyncTournamentInfo();
+		_fuelHandlerScript.SyncTournamentInfo();
 
 
 		//Virtual Goods
-		_mainmenuScript.SyncVirtualGoods();
+		_fuelHandlerScript.SyncVirtualGoods();
 
 
 		//try launch fuelSDK
-		_mainmenuScript.tryLaunchFuelSDK();
+		_fuelHandlerScript.tryLaunchFuelSDK();
 
 	}
 

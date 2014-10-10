@@ -21,11 +21,11 @@ public class multiplayerButton : MonoBehaviour
 		{
 			Debug.Log ("multiplayerButton - left click.");
 			
-			GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-			mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+
 			
-			
-			_mainmenuScript.launchPropeller();
+			_fuelHandlerScript.launchPropeller();
 		}
 	}
 	

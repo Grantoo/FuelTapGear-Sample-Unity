@@ -221,86 +221,6 @@ Transform:
   - {fileID: 2103947576}
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!1001 &757545742
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: m_RootOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: HostGameObjectName
-      value: MainMenuFuelFB
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: iOSGameHandleInvite
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: AndroidGameHandleLogin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: AndroidGameHandleInvite
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: iOSGameHandleShare
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: AndroidGameHandleShare
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: iOSGameHandleLogin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: GameKey
-      value: 542b3bec636f62427de7ac00
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: GameSecret
-      value: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-  m_RootGameObject: {fileID: 959879213}
-  m_IsPrefabParent: 0
-  m_IsExploded: 1
 --- !u!1 &885672965
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,58 +249,6 @@ Transform:
   - {fileID: 1446534100}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!1 &959879213
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 100000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-  m_PrefabInternal: {fileID: 757545742}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 959879215}
-  - 114: {fileID: 959879214}
-  m_Layer: 0
-  m_Name: PropellerSDK
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &959879214
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f,
-    type: 2}
-  m_PrefabInternal: {fileID: 757545742}
-  m_GameObject: {fileID: 959879213}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0196703dca3124befaaa46cfd4c044a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GameKey: 542b3bec636f62427de7ac00
-  GameSecret: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
-  UseTestServers: 0
-  Orientation: 0
-  HostGameObjectName: MainMenuFuelFB
-  iOSGameHandleLogin: 1
-  iOSGameHandleInvite: 1
-  iOSGameHandleShare: 1
-  AndroidGCMSenderID: 
-  AndroidGameHandleLogin: 1
-  AndroidGameHandleInvite: 1
-  AndroidGameHandleShare: 1
---- !u!4 &959879215
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-  m_PrefabInternal: {fileID: 757545742}
-  m_GameObject: {fileID: 959879213}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
 --- !u!1 &1446534095
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,45 +432,27 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!1 &2072109349
+--- !u!1 &1906362746
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 2072109351}
-  - 114: {fileID: 2072109350}
+  - 4: {fileID: 1906362747}
   m_Layer: 0
-  m_Name: MainMenuFuelFB
+  m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2072109350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2072109349}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d173cc15f3f0d4f3c95b1c0f7da1add3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mFBState: 0
-  get_data: 
-  fbname: 
-  fbfirstname: 
-  fbemail: 
-  fbgender: 
---- !u!4 &2072109351
+--- !u!4 &1906362747
 Transform:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2072109349}
+  m_GameObject: {fileID: 1906362746}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.71987677, y: .944518626, z: 15.4020996}
   m_LocalScale: {x: 1, y: 1, z: 1}

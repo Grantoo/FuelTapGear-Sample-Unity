@@ -82,9 +82,9 @@ public struct GameMatchData
 
 
 
-public class mainmenuFuelFB : MonoBehaviour 
+public class FuelHandler : MonoBehaviour 
 {
-	public static mainmenuFuelFB Instance { get; private set; }
+	public static FuelHandler Instance { get; private set; }
 
 	private fuelSDKListener m_listener;
 	private GameMatchData m_matchData;
@@ -480,7 +480,7 @@ public class mainmenuFuelFB : MonoBehaviour
 
 		
 		// Acknowledge the receipt of the virtual goods list
-		//PropellerSDK.AcknowledgeVirtualGoods(transactionId, true); - just removed for testing
+		PropellerSDK.AcknowledgeVirtualGoods(transactionId, true);
 
 
 	}

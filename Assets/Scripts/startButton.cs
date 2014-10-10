@@ -21,11 +21,11 @@ public class startButton : MonoBehaviour
 		{
 			Debug.Log ("FBLogoutButton - left click.");
 			
-			GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-			mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
+			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+
 			
-			
-			_mainmenuScript.LogoutButtonPressed();
+			_fuelHandlerScript.LogoutButtonPressed();
 		}
 	}
 	

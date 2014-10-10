@@ -98,10 +98,10 @@ public class MainLoop : MonoBehaviour
 		scoreSet = false;
 
 		//set match data
-		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-		mainmenuFuelFB _FuelFBHandlerScript = _mainmenu.GetComponent<mainmenuFuelFB>();
-		
-		GameMatchData _data = _FuelFBHandlerScript.getMatchData();
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+
+		GameMatchData _data = _fuelHandlerScript.getMatchData();
 
 		if (_data.MatchDataReady == true) 
 		{
@@ -153,10 +153,10 @@ public class MainLoop : MonoBehaviour
 
 					//stuff score?
 
-					GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
-					mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
-				
-					_mainmenuScript.StuffScore(scoreValue);
+					GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+					FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+
+					_fuelHandlerScript.StuffScore(scoreValue);
 				}
 
 				//update game timer
