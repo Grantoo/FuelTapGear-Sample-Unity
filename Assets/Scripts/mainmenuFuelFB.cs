@@ -292,10 +292,6 @@ public class mainmenuFuelFB : MonoBehaviour
 		Debug.Log ("<----- Start ----->");
 
 
-
-		//PropellerSDK.SyncVirtualGoods();
-
-
 		// enable push notifications
 		PropellerSDK.EnableNotification ( PropellerSDK.NotificationType.push );
 		
@@ -329,7 +325,7 @@ public class mainmenuFuelFB : MonoBehaviour
 		switch (mFBState) 
 		{
 			case eFBState.WaitForInit:
-					if (fbdata_ready) 
+					if (fbdata_ready) //deprecated? probably
 					{
 						//PushFBDataToFuel();	
 						mFBState = eFBState.DataRetrived;
@@ -357,7 +353,7 @@ public class mainmenuFuelFB : MonoBehaviour
 	
 	/*
 	 -----------------------------------------------------
-					SyncChallengeCounts
+						Challenge Counts
 	 -----------------------------------------------------
 	*/
 	public void SyncChallengeCounts ()
@@ -395,7 +391,7 @@ public class mainmenuFuelFB : MonoBehaviour
 	
 	/*
 	 -----------------------------------------------------
-					SyncTournamentInfo
+						Tournament Info
 	 -----------------------------------------------------
 	*/
 	public void SyncTournamentInfo ()
@@ -404,24 +400,105 @@ public class mainmenuFuelFB : MonoBehaviour
 	}
 	public void OnPropellerSDKTournamentInfo (Dictionary<string, string> tournamentInfo)
 	{
-		Debug.Log ("OnPropellerSDKTournamentInfo : tournamentInfo = " + tournamentInfo);
+		Debug.Log ("OnPropellerSDKTournamentInfo");
+
+		bool tournyRunning = false;
 
 		if ((tournamentInfo == null) || (tournamentInfo.Count == 0)) 
 		{
 			// there is no tournament currently running
+			Debug.Log ("....no tournaments currently running");
 		} 
 		else 
 		{
-			//string name = tournamentInfo["name"];
-			//string campaignName = tournamentInfo["campaignName"];
-			//string sponsorName = tournamentInfo["sponsorName"];
-			//string startDate = tournamentInfo["startDate"];
-			//string endDate = tournamentInfo["endDate"];
-			//string logo = tournamentInfo["logo"];
+			string name = tournamentInfo["name"];
+			string campaignName = tournamentInfo["campaignName"];
+			string sponsorName = tournamentInfo["sponsorName"];
+			string startDate = tournamentInfo["startDate"];
+			string endDate = tournamentInfo["endDate"];
+			string logo = tournamentInfo["logo"];
+
+			Debug.Log ("______________________" + "\n" +
+			           "*** TournamentInfo ***" + "\n" +
+			           "name = " + name + "\n" +
+			           "campaignName = " + campaignName + "\n" +
+			           "sponsorName = " + sponsorName + "\n" +
+			           "startDate = " + startDate + "\n" +
+			           "endDate = " + endDate + "\n" +
+			           "logo = " + logo + "\n"
+					  );
+
+
+			tournyRunning = true;
 		}
 		
 		// Update the UI with the tournament information
+
+		GameObject _mainmenu = GameObject.Find("InitMainMenu");
+		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
+
+		_mainmenuScript.RefreshTournamentInfo(tournyRunning, "noname", 0);
 	}
+
+	public void tryRefreshTournamentInfo(Dictionary<string, string> tournamentInfo)
+	{
+		GameObject _mainmenu = GameObject.Find("InitMainMenu");
+		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
+		
+		if(_mainmenuScript)
+		{
+		}
+	}
+
+
+	
+	/*
+	 -----------------------------------------------------
+						Virtual Goods
+	 -----------------------------------------------------
+	*/
+	public void SyncVirtualGoods ()
+	{
+		PropellerSDK.SyncVirtualGoods ();
+	}
+
+	public void OnPropellerSDKVirtualGoodList (Dictionary<string, object> virtualGoodInfo)
+	{
+		Debug.Log ("OnPropellerSDKVirtualGoodList");
+
+		string transactionId = (string) virtualGoodInfo["transactionID"];
+		List<string> virtualGoods = (List<string>) virtualGoodInfo["virtualGoods"];
+		
+		// Store the virtual goods for consumption
+
+		foreach (string vg in virtualGoods)
+		{
+
+			Debug.Log (">>>>>> vg = " + vg);
+		}
+
+
+		
+		// Acknowledge the receipt of the virtual goods list
+		//PropellerSDK.AcknowledgeVirtualGoods(transactionId, true); - just removed for testing
+
+
+	}
+
+	public void OnPropellerSDKVirtualGoodRollback (string transactionId)
+	{
+		Debug.Log ("OnPropellerSDKVirtualGoodRollback");
+
+		// Rollback the virtual good transaction for the given transaction ID
+	}
+
+
+
+
+
+
+
+
 	
 	void OnApplicationPause(bool paused)
 	{

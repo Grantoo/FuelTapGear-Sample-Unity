@@ -225,6 +225,9 @@ public class PropellerExample : MonoBehaviour
 		} else if (GUI.Button (new Rect (kButtonX, kSpacing + ((kButtonHeight + kSpacing) * 9f), kButtonWidth, kButtonHeight), "SetLanguageCode: es")) {
 			languageCodeText = "es";
 			PropellerSDK.SetLanguageCode(languageCodeText);
+		} else if (GUI.Button (new Rect (kButtonX, kSpacing + ((kButtonHeight + kSpacing) * 10f), kButtonWidth, kButtonHeight), "SetLanguageCode: pt")) {
+			languageCodeText = "pt";
+			PropellerSDK.SetLanguageCode(languageCodeText);
 		}
 		
 		GUIStyle textStyle = new GUIStyle ();
@@ -234,7 +237,7 @@ public class PropellerExample : MonoBehaviour
 		textStyle.normal.textColor = Color.white;
 		textStyle.alignment = TextAnchor.MiddleCenter;
 		
-		GUI.Label (new Rect (kButtonX, kSpacing + ((kButtonHeight + kSpacing) * 10f), kButtonWidth, kButtonHeight), "Language Code: " + languageCodeText, textStyle);
+		GUI.Label (new Rect (kButtonX, kSpacing + ((kButtonHeight + kSpacing) * 11f), kButtonWidth, kButtonHeight), "Language Code: " + languageCodeText, textStyle);
 	}
 	
 	private void OnGUINotificationToggling (float kButtonX, float kSpacing, float kButtonWidth, float kButtonHeight) {

@@ -18,11 +18,11 @@ public class InitMainMenu : MonoBehaviour
 			//set user coins (virtual goods)
 			userCoins = GameObject.Find ("goldTextMesh");
 			TextMesh t = (TextMesh)userCoins.GetComponent (typeof(TextMesh)); 
-			t.text = "Gold:" + _coins.ToString();
+			t.text = "x" + _coins.ToString();
 
 		}
 
-		//get controller object
+		//get Fuel Handler
 		GameObject _mainmenu = GameObject.Find("MainMenuFuelFB");
 		mainmenuFuelFB _mainmenuScript = _mainmenu.GetComponent<mainmenuFuelFB>();
 
@@ -31,9 +31,16 @@ public class InitMainMenu : MonoBehaviour
 		_mainmenuScript.SyncChallengeCounts();
 
 
+		//Tournament Info
+		_mainmenuScript.SyncTournamentInfo();
+
+
+		//Virtual Goods
+		_mainmenuScript.SyncVirtualGoods();
+
+
 		//try launch fuelSDK
 		_mainmenuScript.tryLaunchFuelSDK();
-
 
 	}
 
@@ -43,10 +50,25 @@ public class InitMainMenu : MonoBehaviour
 		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = ccount.ToString();
 	}
-	
+
+	public void RefreshTournamentInfo(bool enabled, string tournamentName, int timeRemaining)
+	{
+		GameObject gameObj = GameObject.Find ("Trophy");
+
+		if(enabled == false)
+		{
+			gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
+		}
+		else
+		{
+			gameObj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
+		}
+
+
+	}
+
 	void Update () 
 	{
-		
-		
+			
 	}
 }
