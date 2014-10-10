@@ -28,18 +28,20 @@ public class InitMainMenu : MonoBehaviour
 
 
 		//challenge count
-		GameObject ccount = GameObject.Find ("ChallengeCount");
-		TextMesh tmesh = (TextMesh)ccount.GetComponent (typeof(TextMesh)); 
-
-		int _challengeCount = _mainmenuScript.getChallengeCount();
-		tmesh.text = "Challenge Count:" + _challengeCount.ToString();
+		_mainmenuScript.SyncChallengeCounts();
 
 
 		//try launch fuelSDK
 		_mainmenuScript.tryLaunchFuelSDK();
 
-		
 
+	}
+
+	public void RefreshChallengeCount(int ccount)
+	{
+		GameObject ccountObj = GameObject.Find ("ChallengeCount");
+		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
+		tmesh.text = ccount.ToString();
 	}
 	
 	void Update () 

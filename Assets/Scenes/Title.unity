@@ -580,17 +580,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mFBState: 0
-  m_bInitialized: 0
-  m_matchStatus: 0
-  m_matchScore: 0
-  m_tournamentID: 
-  m_matchID: 
   get_data: 
   fbname: 
   fbfirstname: 
   fbemail: 
   fbgender: 
-  matchdata_ready: 0
 --- !u!4 &2072109351
 Transform:
   m_ObjectHideFlags: 0

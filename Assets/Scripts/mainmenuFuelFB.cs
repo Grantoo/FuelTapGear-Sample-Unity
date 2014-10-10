@@ -109,7 +109,6 @@ public class mainmenuFuelFB : MonoBehaviour
 	public const int MATCH_TYPE_SINGLE = 0;
 	public const int MATCH_TYPE_MULTI = 1;
 
-	private int _challengeCount;
 
 
 	public GameMatchData getMatchData()
@@ -117,10 +116,6 @@ public class mainmenuFuelFB : MonoBehaviour
 		return m_matchData;
 	}
 
-	public int getChallengeCount()
-	{
-		return _challengeCount;
-	}
 
 	public void tryLaunchFuelSDK()
 	{
@@ -296,9 +291,7 @@ public class mainmenuFuelFB : MonoBehaviour
 	{
 		Debug.Log ("<----- Start ----->");
 
-		PropellerSDK.SyncChallengeCounts ();
 
-		PropellerSDK.SyncTournamentInfo ();
 
 		//PropellerSDK.SyncVirtualGoods();
 
@@ -362,28 +355,57 @@ public class mainmenuFuelFB : MonoBehaviour
 
 
 	
-	
-	
+	/*
+	 -----------------------------------------------------
+					SyncChallengeCounts
+	 -----------------------------------------------------
+	*/
+	public void SyncChallengeCounts ()
+	{
+		PropellerSDK.SyncChallengeCounts ();
+	}
 	
 	public void OnPropellerSDKChallengeCountUpdated (string count)
 	{
 		int countInt;
-		
+
+		Debug.Log ("OnPropellerSDKChallengeCountUpdated : count = " + count);
+
 		if (!int.TryParse(count, out countInt))
 		{
 			return;
 		}
-		
-		// Update the UI with the count
 
 		Debug.Log ("OnPropellerSDKChallengeCountUpdated : countInt = " + countInt);
 
-
-		_challengeCount = countInt;
+		// Update the UI with the count
+		tryRefreshChallengeCount (countInt);
 	}
 	
+	public void tryRefreshChallengeCount(int ccount)
+	{
+		GameObject _mainmenu = GameObject.Find("InitMainMenu");
+		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
+
+		if(_mainmenuScript)
+		{
+			_mainmenuScript.RefreshChallengeCount(ccount);
+		}
+	}
+	
+	/*
+	 -----------------------------------------------------
+					SyncTournamentInfo
+	 -----------------------------------------------------
+	*/
+	public void SyncTournamentInfo ()
+	{
+		PropellerSDK.SyncTournamentInfo ();
+	}
 	public void OnPropellerSDKTournamentInfo (Dictionary<string, string> tournamentInfo)
 	{
+		Debug.Log ("OnPropellerSDKTournamentInfo : tournamentInfo = " + tournamentInfo);
+
 		if ((tournamentInfo == null) || (tournamentInfo.Count == 0)) 
 		{
 			// there is no tournament currently running
