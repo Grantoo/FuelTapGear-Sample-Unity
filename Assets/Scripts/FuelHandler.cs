@@ -464,11 +464,13 @@ public class FuelHandler : MonoBehaviour
 
 	public void OnPropellerSDKVirtualGoodList (Dictionary<string, object> virtualGoodInfo)
 	{
-		Debug.Log ("OnPropellerSDKVirtualGoodList");
 
 		string transactionId = (string) virtualGoodInfo["transactionID"];
 		List<string> virtualGoods = (List<string>) virtualGoodInfo["virtualGoods"];
-		
+
+
+		Debug.Log ("OnPropellerSDKVirtualGoodList: transactionId = " + transactionId);
+
 		// Store the virtual goods for consumption
 
 		foreach (string vg in virtualGoods)

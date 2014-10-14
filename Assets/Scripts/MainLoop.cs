@@ -117,8 +117,49 @@ public class MainLoop : MonoBehaviour
 		}
 
 		//InitTextMeshObjs();
+
+		GameObject _gameObj = GameObject.Find("yourAvatar");
+		StartCoroutine(downloadImgX(_data.YourAvatarURL, _gameObj));
+
+		_gameObj = GameObject.Find("theirAvatar");
+		StartCoroutine(downloadImgX(_data.TheirAvatarURL, _gameObj));
+
 	}
-	
+
+	IEnumerator DownloadImage(string url, Texture2D tex) 
+	{
+		WWW www = new WWW(url);
+		yield return www;
+
+		tex.LoadImage(www.bytes);
+	}
+
+
+	IEnumerator downloadImgX (string url, GameObject _gameObj)
+	{
+		Texture2D texture = new Texture2D(1,1);
+		WWW www = new WWW(url);
+		yield return www;
+		www.LoadImageIntoTexture(texture);
+
+		SpriteRenderer sr = _gameObj.GetComponent<SpriteRenderer>();
+
+		Debug.Log ("downloadImgX - texture.width, height : " + texture.width + ", " + texture.height);
+		Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+		sr.sprite = image;
+
+		if(texture.width == 50)
+		{
+			_gameObj.transform.localScale = new Vector3(2.0f, 2.0f, 1.0f);
+		}
+		else
+		{
+			_gameObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+		}
+		Debug.Log ("downloadImgX - tried to load image...");
+	}
+
+
 	void Update () 
 	{
 		switch (mGameState) 

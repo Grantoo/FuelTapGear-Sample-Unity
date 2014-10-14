@@ -8,10 +8,22 @@ public class InitPlayerPrefs : MonoBehaviour
 	{
 		Debug.Log ("InitPlayerPrefs!");
 
-		if (PlayerPrefs.HasKey ("userCoins") == false) 
+		if (PlayerPrefs.HasKey ("gameTokens") == false) 
 		{
-			Debug.Log ("_setting userCoins");
-			PlayerPrefs.SetInt("userCoins", 0);
+			Debug.Log ("_setting gameTokens");
+			PlayerPrefs.SetInt("gameTokens", 0);
+		}
+
+		if (PlayerPrefs.HasKey ("userGold") == false) 
+		{
+			Debug.Log ("_setting userGold");
+			PlayerPrefs.SetInt("userGold", 0);
+		}
+
+		if (PlayerPrefs.HasKey ("diamonds") == false) 
+		{
+			Debug.Log ("_setting diamonds");
+			PlayerPrefs.SetInt("diamonds", 0);
 		}
 
 		if (PlayerPrefs.HasKey ("hiScore") == false) 

@@ -10,17 +10,22 @@ public class InitMainMenu : MonoBehaviour
 	{
 		Debug.Log ("InitMainMenu!");
 
-		if (PlayerPrefs.HasKey ("userCoins")) 
+		if (PlayerPrefs.HasKey ("userGold")) 
 		{
-			Debug.Log ("_getting userCoins");
-			var _coins = PlayerPrefs.GetInt("userCoins");
+			Debug.Log ("_getting userGold");
+			var _gold = PlayerPrefs.GetInt("userGold");
 
 			//set user coins (virtual goods)
 			userCoins = GameObject.Find ("goldTextMesh");
 			TextMesh t = (TextMesh)userCoins.GetComponent (typeof(TextMesh)); 
-			t.text = "x" + _coins.ToString();
+			t.text = "x" + _gold.ToString();
 
 		}
+
+		//hide trophy
+		GameObject gameObj = GameObject.Find ("Trophy");
+		gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
+
 
 		//get Fuel Handler
 		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
