@@ -108,6 +108,12 @@ public class MainLoop : MonoBehaviour
 			updateYourAvatarText (_data.YourNickname);
 			updateTheirAvatarText (_data.TheirNickname);
 			updateMatchRoundText ("Round - " + _data.MatchRound.ToString ());
+
+			GameObject _gameObj = GameObject.Find("yourAvatar");
+			StartCoroutine(downloadImgX(_data.YourAvatarURL, _gameObj));
+			
+			_gameObj = GameObject.Find("theirAvatar");
+			StartCoroutine(downloadImgX(_data.TheirAvatarURL, _gameObj));
 		} 
 		else 
 		{
@@ -118,11 +124,6 @@ public class MainLoop : MonoBehaviour
 
 		//InitTextMeshObjs();
 
-		GameObject _gameObj = GameObject.Find("yourAvatar");
-		StartCoroutine(downloadImgX(_data.YourAvatarURL, _gameObj));
-
-		_gameObj = GameObject.Find("theirAvatar");
-		StartCoroutine(downloadImgX(_data.TheirAvatarURL, _gameObj));
 
 	}
 
@@ -190,7 +191,7 @@ public class MainLoop : MonoBehaviour
 				{
 					mGameState = eGameState.Done;
 					gameTimerValue = 0.0f;
-					setStartButtonText ("Press the green button for match results.");
+					setStartButtonText ("< Main Menu for match results.");
 
 					//stuff score?
 

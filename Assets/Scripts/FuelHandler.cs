@@ -450,6 +450,16 @@ public class FuelHandler : MonoBehaviour
 		}
 	}
 
+	public void tryRefreshHiScore()
+	{
+		GameObject _mainmenu = GameObject.Find("InitMainMenu");
+		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
+		
+		if(_mainmenuScript)
+		{
+			_mainmenuScript.RefreshHiScore(m_matchData.MatchScore);
+		}
+	}
 
 	
 	/*
@@ -464,27 +474,44 @@ public class FuelHandler : MonoBehaviour
 
 	public void OnPropellerSDKVirtualGoodList (Dictionary<string, object> virtualGoodInfo)
 	{
-
 		string transactionId = (string) virtualGoodInfo["transactionID"];
 		List<string> virtualGoods = (List<string>) virtualGoodInfo["virtualGoods"];
 
-
 		Debug.Log ("OnPropellerSDKVirtualGoodList: transactionId = " + transactionId);
+
 
 		// Store the virtual goods for consumption
 
-		foreach (string vg in virtualGoods)
+		GameObject _mainmenu = GameObject.Find("InitMainMenu");
+		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
+		if (_mainmenuScript == null) 
 		{
-
-			Debug.Log (">>>>>> vg = " + vg);
+			throw new Exception();
 		}
 
+		foreach (string vg in virtualGoods)
+		{
+			Debug.Log (">>>>>> vg = " + vg);
 
-		
+			if(vg == "gameToken")//Game Token
+			{
+				_mainmenuScript.RefreshGameTokenCount(3);
+			}
+			else if(vg == "goldPack")//Bunch of gold
+			{
+				_mainmenuScript.RefreshGoldCount(8);
+			}
+			else if(vg == "diamondGrade1")//Single Diamond
+			{
+				_mainmenuScript.RefreshDiamondCount(1);
+			}
+		}
+
+		//tell main menu to setup some fan fair
+		_mainmenuScript.VirtualGoodsFanFare();
+
 		// Acknowledge the receipt of the virtual goods list
 		PropellerSDK.AcknowledgeVirtualGoods(transactionId, true);
-
-
 	}
 
 	public void OnPropellerSDKVirtualGoodRollback (string transactionId)
