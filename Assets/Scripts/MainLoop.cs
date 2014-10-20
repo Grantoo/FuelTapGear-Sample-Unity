@@ -123,6 +123,8 @@ public class MainLoop : MonoBehaviour
 		}
 
 		//InitTextMeshObjs();
+		GameObject _backObj = GameObject.Find("backButton");
+		_backObj.renderer.enabled = false;
 
 
 	}
@@ -151,11 +153,11 @@ public class MainLoop : MonoBehaviour
 
 		if(texture.width == 50)
 		{
-			_gameObj.transform.localScale = new Vector3(2.0f, 2.0f, 1.0f);
+			_gameObj.transform.localScale = new Vector3(2.5f, 2.5f, 1.0f);
 		}
 		else
 		{
-			_gameObj.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+			_gameObj.transform.localScale = new Vector3(1.25f, 1.25f, 1.0f);
 		}
 		Debug.Log ("downloadImgX - tried to load image...");
 	}
@@ -193,12 +195,21 @@ public class MainLoop : MonoBehaviour
 					gameTimerValue = 0.0f;
 					setStartButtonText ("< Main Menu for match results.");
 
-					//stuff score?
+					//stuff score & speed
+
+					GameObject _gearAction = GameObject.Find("GearProxy1");
+					gearAction _gearActionScript = _gearAction.GetComponent<gearAction>();
+					int maxspeed = (int)_gearActionScript.maxspinvelocity;
+
 
 					GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 					FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
-					_fuelHandlerScript.StuffScore(scoreValue);
+					_fuelHandlerScript.StuffScore(scoreValue, maxspeed);
+
+					GameObject _backObj = GameObject.Find("backButton");
+					_backObj.renderer.enabled = true;
+
 				}
 
 				//update game timer

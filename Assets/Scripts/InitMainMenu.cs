@@ -4,9 +4,15 @@ using System.Collections;
 public class InitMainMenu : MonoBehaviour 
 {
 
+
 	void Start () 
 	{
 		Debug.Log ("InitMainMenu!");
+
+		//init particles to off
+		GameObject particleObj = GameObject.Find ("VirtualGoodsParticles");
+		ParticleSystem psystem = (ParticleSystem)particleObj.GetComponent (typeof(ParticleSystem)); 
+		psystem.Stop();
 
 		//GAME TOKENS
 		RefreshGameTokenCount(0);
@@ -18,8 +24,16 @@ public class InitMainMenu : MonoBehaviour
 		RefreshDiamondCount(0);
 
 
+		//hide challenge count pieces
+		GameObject gameObj = GameObject.Find("ccbacking");
+		gameObj.renderer.enabled = false;
+
+		GameObject ccountObj = GameObject.Find ("ChallengeCount");
+		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = false;
+
 		//hide trophy
-		GameObject gameObj = GameObject.Find ("Trophy");
+		gameObj = GameObject.Find ("Trophy");
 		gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
 
 		//get Fuel Handler
@@ -46,9 +60,14 @@ public class InitMainMenu : MonoBehaviour
 	
 	public void RefreshChallengeCount(int ccount)
 	{
+		//show challenge count pieces and set count values
+		GameObject gameObj = GameObject.Find("ccbacking");
+		gameObj.renderer.enabled = true;
+
 		GameObject ccountObj = GameObject.Find ("ChallengeCount");
 		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = ccount.ToString();
+		tmesh.renderer.enabled = true;
 	}
 
 	public void RefreshTournamentInfo(bool enabled, string tournamentName, int timeRemaining)
@@ -158,6 +177,6 @@ public class InitMainMenu : MonoBehaviour
 
 	void Update () 
 	{
-			
+
 	}
 }

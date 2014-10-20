@@ -16,6 +16,7 @@ public struct GameMatchData
 	private int matchType;
 	private int matchRound;
 	private int matchScore;
+	private int matchMaxSpeed;
 	private string yourNickname;
 	private string yourAvatarURL;
 	private string theirNickname;
@@ -55,6 +56,11 @@ public struct GameMatchData
 	{	
 		get { return matchScore; }	
 		set { matchScore = value; }
+	}
+	public int MatchMaxSpeed 
+	{	
+		get { return matchMaxSpeed; }	
+		set { matchMaxSpeed = value; }
 	}
 	public string YourNickname 
 	{	
@@ -179,15 +185,45 @@ public class FuelHandler : MonoBehaviour
 	private void sendMatchResult (long score)
 	{
 		Debug.Log ("sendMatchResult");
+
+		long visualScore = score;
 		
 		Dictionary<string, object> matchResult = new Dictionary<string, object> ();
 		matchResult.Add ("tournamentID", m_matchData.TournamentID);
 		matchResult.Add ("matchID", m_matchData.MatchID);
 		matchResult.Add ("score", m_matchData.MatchScore);
-		
+		string visualScoreStr = visualScore.ToString() + " taps : " + m_matchData.MatchMaxSpeed.ToString() + " mps";
+		matchResult.Add ("visualScore", visualScoreStr);
+
 		PropellerSDK.LaunchWithMatchResult (matchResult, m_listener);	
 	}
 	
+	private void sendCustomMatchResult (long score, float visualScore)
+	{
+		Debug.Log ("sendCustomMatchResult");
+
+		// construct custom leader board score currency dictionary for auxScore1
+		Dictionary<string, object> auxScore1Currency = new Dictionary<string, object> ();
+		auxScore1Currency.Add ("id", "visualScore");
+		auxScore1Currency.Add ("score", visualScore);
+		auxScore1Currency.Add ("visualScore", visualScore.ToString ());
+
+		// construct array of custom leader board score currencies
+		List<object> currencies = new List<object> ();
+		currencies.Add (auxScore1Currency);
+
+		// construct match data dictionary
+		Dictionary<string, object> matchData = new Dictionary<string, object> ();
+		matchData.Add ("currencies", currencies);
+
+		Dictionary<string, object> matchResult = new Dictionary<string, object> ();
+		matchResult.Add ("tournamentID", m_matchData.TournamentID);
+		matchResult.Add ("matchID", m_matchData.MatchID);
+		matchResult.Add ("score", m_matchData.MatchScore);
+		matchResult.Add ("matchData", matchData);
+
+		PropellerSDK.LaunchWithMatchResult (matchResult, m_listener);	
+	}
 
 	/*
 	 * Functions called from other scripts
@@ -204,21 +240,7 @@ public class FuelHandler : MonoBehaviour
 		PropellerSDK.Launch (m_listener);
 	}
 
-	/* Debug, Deprecated */
-	public void generateScore ()
-	{
-		Debug.Log ("LaunchWithMatchResult - generateScore");
 
-		if (m_listener == null) 
-		{
-			throw new Exception();
-		}
-		
-		long score = (long)UnityEngine.Random.Range (0.0F, 50.0f);
-		
-		sendMatchResult (score);
-	}
-	
 	public void updateLoginText (string str) 
 	{
 		GameObject gameObj = GameObject.Find ("LoginStatusText");
@@ -230,11 +252,12 @@ public class FuelHandler : MonoBehaviour
 	}
 	
 	
-	public void StuffScore(int scoreValue)
+	public void StuffScore(int scoreValue, int speedValue)
 	{
 		Debug.Log ("StuffScore = " + scoreValue);
 
 		m_matchData.MatchScore = scoreValue;
+		m_matchData.MatchMaxSpeed = speedValue;
 
 		//hmmm, better clean up this check
 		if (m_matchData.MatchDataReady == true) 
@@ -312,6 +335,7 @@ public class FuelHandler : MonoBehaviour
 	public void LaunchDashBoardWithResults()
 	{
 		sendMatchResult (m_matchData.MatchScore);
+		//sendCustomMatchResult (m_matchData.MatchScore, 44);
 	}
 
 	
@@ -489,26 +513,33 @@ public class FuelHandler : MonoBehaviour
 			throw new Exception();
 		}
 
+		bool virtualGoodsTaken = false;
 		foreach (string vg in virtualGoods)
 		{
 			Debug.Log (">>>>>> vg = " + vg);
 
 			if(vg == "gameToken")//Game Token
 			{
-				_mainmenuScript.RefreshGameTokenCount(3);
+				_mainmenuScript.RefreshGameTokenCount(8);
+				virtualGoodsTaken = true;
 			}
 			else if(vg == "goldPack")//Bunch of gold
 			{
-				_mainmenuScript.RefreshGoldCount(8);
+				_mainmenuScript.RefreshGoldCount(4);
+				virtualGoodsTaken = true;
 			}
 			else if(vg == "diamondGrade1")//Single Diamond
 			{
 				_mainmenuScript.RefreshDiamondCount(1);
+				virtualGoodsTaken = true;
 			}
 		}
 
 		//tell main menu to setup some fan fair
-		_mainmenuScript.VirtualGoodsFanFare();
+		if(virtualGoodsTaken == true)
+		{
+			_mainmenuScript.VirtualGoodsFanFare();
+		}
 
 		// Acknowledge the receipt of the virtual goods list
 		PropellerSDK.AcknowledgeVirtualGoods(transactionId, true);

@@ -33,7 +33,7 @@ public class startButton : MonoBehaviour
 			GameObject _mainmenu = GameObject.Find("InitMainMenu");
 			InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
 
-			_mainmenuScript.VirtualGoodsFanFare();
+			//_mainmenuScript.VirtualGoodsFanFare();
 
 		}
 	}

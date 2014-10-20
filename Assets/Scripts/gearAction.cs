@@ -8,7 +8,9 @@ public class gearAction : MonoBehaviour
 	public int buttonDebounce = 0;
 	public float minTapDelta = 0.5f;
 	public float spinvelocity = 0.0f;
+	public float maxspinvelocity = 0.0f;
 	private float angle = 0.0f;
+	private float friction = 0.995f;
 
 
 	public void updateSpinText (string str) 
@@ -21,6 +23,7 @@ public class gearAction : MonoBehaviour
 	public void Reset () 
 	{
 		spinvelocity = 0.0f;
+		maxspinvelocity = 0.0f;
 		angle = 0.0f;
 	}
 
@@ -30,7 +33,7 @@ public class gearAction : MonoBehaviour
 	
 	void Update () 
 	{
-		
+
 		if (Input.GetMouseButtonUp (0)) 
 		{
 			buttonDebounce = 0;
@@ -39,7 +42,14 @@ public class gearAction : MonoBehaviour
 		angle -= spinvelocity;
 		transform.rotation = Quaternion.Euler(0, 0, angle);
 
-		updateSpinText ( spinvelocity.ToString ("0.00") );
+		GameObject shadow = GameObject.Find ("GearShadow");
+		shadow.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+		updateSpinText ( spinvelocity.ToString ("0.00") + " mps" );
+
+
+
+		spinvelocity *= friction;
 
 	}
 
@@ -86,6 +96,11 @@ public class gearAction : MonoBehaviour
 					}
 
 					spinvelocity += increase;
+
+					if(spinvelocity > maxspinvelocity)
+					{
+						maxspinvelocity = spinvelocity;
+					}
 
 					//Debug.Log ("Gear Tap - spinvelocity = " + spinvelocity);
 				}
