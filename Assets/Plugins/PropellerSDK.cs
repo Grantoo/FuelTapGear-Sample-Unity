@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using SimpleJSON;
+using PropellerSDKSimpleJSON;
 	
 public class PropellerSDK : MonoBehaviour
 {
@@ -35,7 +35,7 @@ public class PropellerSDK : MonoBehaviour
 	#region Unity Editor Fields
 	public string GameKey;
 	public string GameSecret;
-	public bool UseTestServers = false;
+	private bool UseTestServers = false;
 	public ContentOrientation Orientation = ContentOrientation.landscape;
 	public string HostGameObjectName;
 	public bool iOSGameHandleLogin;
@@ -554,18 +554,15 @@ public class PropellerSDK : MonoBehaviour
 #elif UNITY_ANDROID
 				m_jniPropellerUnity = new AndroidJavaClass( "org.grantoo.propellersdkunity.PropellerSDKUnitySingleton" );
 
-				// GCM initialization before Propeller SDK initialization
-				// since Propeller SDK initialization may try to register
-				// GCM push notifications, and the GCM library must be
-				// initialized for the registration to work
-				m_jniPropellerUnity.CallStatic("InitializeGCM", AndroidGCMSenderID);
-
 				gameHandleLogin = AndroidGameHandleLogin;
 				gameHandleInvite = AndroidGameHandleInvite;
 				gameHandleShare = AndroidGameHandleShare;				
 #endif
 				Initialize (GameKey, GameSecret, Orientation.ToString (), UseTestServers, gameHandleLogin, gameHandleInvite, gameHandleShare);
-				
+
+#if UNITY_ANDROID
+				m_jniPropellerUnity.CallStatic("InitializeGCM", AndroidGCMSenderID);
+#endif
 				if (!string.IsNullOrEmpty(HostGameObjectName)) {
 					m_hostGameObject = GameObject.Find(HostGameObjectName);
 				}

@@ -133,11 +133,14 @@ if not addFacebookDependencies(dataPath, frameworkGroup, resourceGroup):
 
 print 'Inserting Propeller libraries'
 
-# .mm and .a file are added automatically by Unity
+classesGroup = project.get_or_create_group( 'Classes' )
+librariesGroup = project.get_or_create_group( 'Libraries' )
 shutil.copy( pluginPath + '/PropellerSDK.h' , projectPath + '/Classes/PropellerSDK.h' )
-libraryGroup = project.get_or_create_group( 'Libraries' )
-project.add_file_if_doesnt_exist( projectPath + '/Classes/PropellerSDK.h', parent=libraryGroup )
-project.add_file_if_doesnt_exist( projectPath + '/libPropellerSDK.a' )
+shutil.copy( pluginPath + '/libPropellerSDK.a', projectPath + '/Libraries/libPropellerSDK.a' )
+shutil.copy( pluginPath + '/PropellerSDKUnityWrapper.mm', projectPath + '/Libraries/PropellerSDKUnityWrapper.mm' )
+project.add_file_if_doesnt_exist( projectPath + '/Classes/PropellerSDK.h', parent=classesGroup )
+project.add_file_if_doesnt_exist( projectPath + '/Libraries/libPropellerSDK.a', parent=librariesGroup )
+project.add_file_if_doesnt_exist( projectPath + '/Libraries/PropellerSDKUnityWrapper.mm', parent=librariesGroup )
 
 project.saveFormat3_2()
 

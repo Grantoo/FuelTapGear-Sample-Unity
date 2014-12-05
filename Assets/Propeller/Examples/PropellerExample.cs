@@ -190,7 +190,7 @@ public class PropellerExample : MonoBehaviour
 	
 	private void DisplayTournamentInfo(string tag, Dictionary<string, string> tournamentInfo) {
 		if ((tournamentInfo == null) || (tournamentInfo.Count == 0)) {
-			Debug.Log ("PropellerExample - " + tag + " - no tournament currently running");
+			Debug.Log ("PropellerExample - " + tag + " - no tournament currently running or scheduled");
 		} else {
 		    string name = tournamentInfo["name"];
 		    string campaignName = tournamentInfo["campaignName"];

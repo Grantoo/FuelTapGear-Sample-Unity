@@ -1,6 +1,5 @@
 #!/bin/bash
 
-currentDirectory=`pwd`
 xcodeDirectory=`xcode-select -p`
 
-python "$currentDirectory/Assets/Propeller/PostbuildScripts/PropellerBuild.py" "$currentDirectory/Assets/Plugins/iOS/" "$xcodeDirectory" "$1" "$2" $3
+python "$2/Propeller/PostbuildScripts/PropellerBuild.py" "$2/Plugins/iOS" "$xcodeDirectory" "$1" "$2" $3

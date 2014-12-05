@@ -193,7 +193,7 @@ public class MainLoop : MonoBehaviour
 				{
 					mGameState = eGameState.Done;
 					gameTimerValue = 0.0f;
-					setStartButtonText ("< Main Menu for match results.");
+					setStartButtonText ("< Match Results.");
 
 					//stuff score & speed
 

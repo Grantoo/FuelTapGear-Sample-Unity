@@ -35,7 +35,50 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 		public System.Exception exception;
 	}
 
-	private static ExecutionResult execute (string command, params string[] arguments)
+	private static string GetPluginRootPath ()
+	{
+		return GetPluginRootPath (Application.dataPath);
+	}
+
+	private static string GetPluginRootPath (string path)
+	{
+		if (File.Exists (path + "/Plugins/PropellerSDK.cs"))
+		{
+			return path;
+		}
+
+		string[] directories = null;
+
+		try
+		{
+			directories = Directory.GetDirectories (path);
+		}
+		catch (System.Exception)
+		{
+			return null;
+		}
+
+		if (directories == null)
+		{
+			return null;
+		}
+
+		string pluginRootPath = null;
+
+		foreach (string directory in directories)
+		{
+			pluginRootPath = GetPluginRootPath (directory);
+
+			if (pluginRootPath != null)
+			{
+				break;
+			}
+		}
+
+		return pluginRootPath;
+	}
+
+	private static ExecutionResult Execute (string command, params string[] arguments)
 	{
 		Process process = new Process ();
 		process.EnableRaisingEvents = true;
@@ -96,6 +139,14 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 	public static void OnPostprocessBuild (BuildTarget target, string pathToBuiltProject)
 	{
 #if UNITY_IOS
+		string pluginRootPath = GetPluginRootPath ();
+
+		if (pluginRootPath == null)
+		{
+			UnityEngine.Debug.Log ("[PropellerSDK] Unable to find the plugin root path");
+			return;
+		}
+
 		if (File.Exists (pathToBuiltProject + "/Classes/PropellerSDK.h"))
 		{
 			UnityEngine.Debug.Log ("[PropellerSDK] iOS project build already exists, skipping automatic SDK injection");
@@ -104,10 +155,10 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 
 		UnityEngine.Debug.Log ("[PropellerSDK] Setting the post build script permissions...");
 
-		ExecutionResult result = execute (
+		ExecutionResult result = Execute (
 			"chmod",
 			"755",
-			"\"" + Application.dataPath + "/Propeller/PostbuildScripts/PostbuildPropellerScript\"");
+			"\"" + pluginRootPath + "/Propeller/PostbuildScripts/PostbuildPropellerScript\"");
 
 		if (result.success)
 		{
@@ -155,10 +206,10 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 
 		UnityEngine.Debug.Log ("[PropellerSDK] Injecting Propeller SDK into the Xcode project...");
 
-		result = execute (
-			Application.dataPath + "/Propeller/PostbuildScripts/PostbuildPropellerScript",
+		result = Execute (
+			pluginRootPath + "/Propeller/PostbuildScripts/PostbuildPropellerScript",
 			"\"" + pathToBuiltProject + "\"",
-			"\"" + Application.dataPath + "\"",
+			"\"" + pluginRootPath + "\"",
 			((int) unityApiLevel).ToString());
 
 		if (result.success)
