@@ -68,10 +68,19 @@ public class MainLoop : MonoBehaviour
 
 	void resetGear () 
 	{
+		//get Fuel Handler
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+
+		int _gearShapeType = _fuelHandlerScript.getGearShapeType ();
+		float _gearFriction = _fuelHandlerScript.getGearFriction ();
+
 		GameObject _gearAction = GameObject.Find("GearProxy1");
 		gearAction _gearActionScript = _gearAction.GetComponent<gearAction>();
 
-		_gearActionScript.Reset ();
+
+
+		_gearActionScript.Reset (_gearShapeType, _gearFriction);
 	}
 
 
@@ -173,6 +182,8 @@ public class MainLoop : MonoBehaviour
 				gameTimerValue = 5.0f;
 
 				InitTextMeshObjs();
+
+				//reset with friction and geartype
 				resetGear();
 
 				mGameState = eGameState.Ready;
@@ -210,6 +221,14 @@ public class MainLoop : MonoBehaviour
 					GameObject _backObj = GameObject.Find("backButton");
 					_backObj.renderer.enabled = true;
 
+
+					//another complete game session
+					if (PlayerPrefs.HasKey ("numSessions")) 
+					{
+						int numSessions = PlayerPrefs.GetInt ("numSessions");
+						numSessions++;
+						PlayerPrefs.SetInt("numSessions", numSessions);
+					}
 				}
 
 				//update game timer

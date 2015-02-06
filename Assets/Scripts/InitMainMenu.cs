@@ -40,6 +40,11 @@ public class InitMainMenu : MonoBehaviour
 		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
+
+		//try launch fuelSDK
+		_fuelHandlerScript.setUserConditions();
+		_fuelHandlerScript.getUserValues ();
+
 		//Hi Score
 		_fuelHandlerScript.tryRefreshHiScore();
 

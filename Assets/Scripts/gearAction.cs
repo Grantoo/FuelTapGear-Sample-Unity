@@ -3,6 +3,8 @@ using System.Collections;
 
 public class gearAction : MonoBehaviour 
 {
+	public Sprite img0, img1, img2, img3, img4, img5;
+
 	public GameObject spinTextObj;
 
 	public int buttonDebounce = 0;
@@ -20,11 +22,42 @@ public class gearAction : MonoBehaviour
 		tmesh.text = str;
 	}
 
-	public void Reset () 
+	public void Reset (int _gearType, float _friction) 
 	{
 		spinvelocity = 0.0f;
 		maxspinvelocity = 0.0f;
 		angle = 0.0f;
+		friction = _friction;
+
+		GameObject shadow = GameObject.Find ("GearShadow");
+
+		switch (_gearType) 
+		{
+			case 0:
+				gameObject.GetComponent<SpriteRenderer>().sprite = img0;
+				shadow.GetComponent<SpriteRenderer>().sprite = img0;
+			break;
+			case 1:
+				gameObject.GetComponent<SpriteRenderer>().sprite = img1;
+				shadow.GetComponent<SpriteRenderer>().sprite = img1;
+			break;
+			case 2:
+				gameObject.GetComponent<SpriteRenderer>().sprite = img2;
+				shadow.GetComponent<SpriteRenderer>().sprite = img2;
+			break;
+			case 3:
+				gameObject.GetComponent<SpriteRenderer>().sprite = img3;
+				shadow.GetComponent<SpriteRenderer>().sprite = img3;
+			break;
+			case 4:
+				gameObject.GetComponent<SpriteRenderer>().sprite = img4;
+				shadow.GetComponent<SpriteRenderer>().sprite = img4;
+			break;
+			case 5:
+				gameObject.GetComponent<SpriteRenderer>().sprite = img5;
+				shadow.GetComponent<SpriteRenderer>().sprite = img5;
+			break;
+		}
 	}
 
 	void Start () 
@@ -104,12 +137,9 @@ public class gearAction : MonoBehaviour
 
 					//Debug.Log ("Gear Tap - spinvelocity = " + spinvelocity);
 				}
-
 			}
 		}
 	}
-	
-
 }
 
 

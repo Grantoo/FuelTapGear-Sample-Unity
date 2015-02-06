@@ -9,20 +9,24 @@ public class PropellerNotificationListenerExample : PropellerSDKNotificationList
 		m_propellerExample = propellerExample;
 	}
 	
-	public override void SdkOnNotificationEnabled (PropellerSDK.NotificationType type) {
-		Debug.Log("SdkOnNotificationEnabled - start");
+	public override void SdkOnNotificationEnabled (PropellerSDK.NotificationType type)
+	{
+		m_propellerExample.UpdateDialog ("SdkOnNotificationEnabled() callback called...");
+		m_propellerExample.UpdateDialog ("Notification type: " + type);
+		m_propellerExample.UpdateDialog ("Done!");
+		m_propellerExample.ShowDialog ();
 		
-		m_propellerExample.UpdateNotificationStatus(type);
-		
-		Debug.Log("SdkOnNotificationEnabled - end");
+		m_propellerExample.UpdateNotificationStatus (type);
 	}
-
-	public override void SdkOnNotificationDisabled (PropellerSDK.NotificationType type) {
-		Debug.Log("SdkOnNotificationDisabled - start");
+	
+	public override void SdkOnNotificationDisabled (PropellerSDK.NotificationType type)
+	{
+		m_propellerExample.UpdateDialog ("SdkOnNotificationDisabled() callback called...");
+		m_propellerExample.UpdateDialog ("Notification type: " + type);
+		m_propellerExample.UpdateDialog ("Done!");
+		m_propellerExample.ShowDialog ();
 		
-		m_propellerExample.UpdateNotificationStatus(type);
-		
-		Debug.Log("SdkOnNotificationDisabled - end");
+		m_propellerExample.UpdateNotificationStatus (type);
 	}
-
+	
 }

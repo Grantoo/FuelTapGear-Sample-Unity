@@ -138,7 +138,7 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 	[PostProcessBuild]
 	public static void OnPostprocessBuild (BuildTarget target, string pathToBuiltProject)
 	{
-#if UNITY_IOS
+//#if UNITY_IOS
 		string pluginRootPath = GetPluginRootPath ();
 
 		if (pluginRootPath == null)
@@ -221,7 +221,7 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 			UnityEngine.Debug.LogError ("[PropellerSDK] Injection of the Propeller SDK into the Xcode project failed!" + GetExecutionResultOutput (result));
 			return;
 		}
-#endif
+//#endif
 
 	}
 

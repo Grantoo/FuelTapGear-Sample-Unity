@@ -116,6 +116,20 @@ public class FuelHandler : MonoBehaviour
 	public const int MATCH_TYPE_MULTI = 1;
 
 
+	public string dynamicConditions;
+
+	private float gearFriction;
+	public float getGearFriction()
+	{	
+		return gearFriction;	
+	}
+
+	private int gearShapeType;
+	public int getGearShapeType() 
+	{	
+		return gearShapeType;
+	}
+
 
 	public GameMatchData getMatchData()
 	{
@@ -195,9 +209,144 @@ public class FuelHandler : MonoBehaviour
 		string visualScoreStr = visualScore.ToString() + " taps : " + m_matchData.MatchMaxSpeed.ToString() + " mps";
 		matchResult.Add ("visualScore", visualScoreStr);
 
-		PropellerSDK.LaunchWithMatchResult (matchResult, m_listener);	
+		PropellerSDK.SubmitMatchResult (matchResult);
+		PropellerSDK.Launch (m_listener);	
+	}
+
+
+
+	private int getNumLaunches ()
+	{
+		int numLaunches = 0;
+		if (PlayerPrefs.HasKey ("numLaunches")) 
+		{
+			numLaunches = PlayerPrefs.GetInt ("numLaunches");
+		}
+		Debug.Log ("....numLaunches = " + numLaunches);
+		return numLaunches;
+	}
+
+	private int getNumSessions ()
+	{
+		int numSessions = 0;
+		if (PlayerPrefs.HasKey ("numSessions")) 
+		{
+			numSessions = PlayerPrefs.GetInt ("numSessions");
+		}
+		Debug.Log ("....numSessions = " + numSessions);
+		return numSessions;
+	}
+
+	private int getUserAge ()
+	{
+		TimeSpan span = DateTime.Now.Subtract (new DateTime (1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+		int _currentTimeStamp = (int)span.TotalSeconds;
+
+		int _seconds = 0;
+		if (PlayerPrefs.HasKey ("installTimeStamp")) 
+		{
+			int _installTimeStamp = PlayerPrefs.GetInt ("installTimeStamp");
+			_seconds = _currentTimeStamp - _installTimeStamp;
+		}
+
+		int userAge = _seconds / 86400;
+
+		Debug.Log ("....userAge = " + userAge + " <--- " + _seconds + "/ 86400");
+
+		return userAge;
+	}
+
+	public void setUserConditions ()
+	{
+		Debug.Log ("setUserConditions");
+
+		String isTablet = "FALSE";
+
+		int userAge = getUserAge ();
+		int numLaunches = getNumLaunches ();
+		int numSessions = getNumSessions ();
+
+
+		Dictionary<string, object> conditions = new Dictionary<string, object> ();
+
+		//required
+		conditions.Add ("userAge", userAge.ToString());
+		conditions.Add ("numSessions", numSessions.ToString());
+		conditions.Add ("numLaunches", numLaunches.ToString());
+		conditions.Add ("isTablet", isTablet);
+
+		//standardized
+		conditions.Add ("orientation", "portrait");
+		conditions.Add ("daysSinceFirstPayment", "-1");
+		conditions.Add ("daysSinceLastPayment", "-1");
+		conditions.Add ("language", "en");
+		conditions.Add ("gender", "female");
+		conditions.Add ("age", "16");
+		conditions.Add ("gpsLong", "0.0000");
+		conditions.Add ("gpsLat", "0.00000");
+
+		//game conditions
+		conditions.Add ("gameVersion", "tapgear v1.1");
+
+		PropellerSDK.SetUserConditions (conditions);	
+	}
+
+	public void getUserValues()
+	{
+		PropellerSDK.GetUserValues();
 	}
 	
+	public void OnFuelDynamicsUserValues (Dictionary<string, object> userValuesInfo)
+	{
+		Debug.Log ("-----------OnFuelDynamicsUserValues----------------");
+
+		//Game Values - defined int the CSV
+		String _friction = "friction";
+		String _greartype = "geartype";
+		//String _conditions = "conditions";
+
+		foreach(KeyValuePair<string, object> entry in userValuesInfo)
+		{
+			Debug.Log ("....Key = " + entry.Key + " : Value = " + entry.Value);
+
+			if(_friction.Equals( entry.Key ))
+			{
+				string friction = (string) entry.Value;
+				gearFriction = float.Parse(friction);
+
+			}
+			else if(_greartype.Equals( entry.Key ))
+			{
+				string geartype = (string) entry.Value;
+				gearShapeType = int.Parse(geartype);
+			}
+			//else if(_conditions.Equals( entry.Key ))
+			//{
+			//	dynamicConditions = (string) entry.Value;
+			//}
+		}
+
+		//string friction = (string) userValuesInfo["friction"];
+		//string geartype = (string) userValuesInfo["geartype"];
+		//gearFriction = float.Parse(friction);
+		//gearShapeType = int.Parse(geartype);
+
+		Debug.Log ("__Final: gearFriction = " + gearFriction);
+		Debug.Log ("__Final: gearShapeType = " + gearShapeType);
+
+		//Debug.Log ("__based on: = " + dynamicConditions);
+
+		GameObject _mainmenu = GameObject.Find("InitMainMenu");
+		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
+		if (_mainmenuScript == null) 
+		{
+			throw new Exception();
+		}
+		
+	}
+
+
+
 	private void sendCustomMatchResult (long score, float visualScore)
 	{
 		Debug.Log ("sendCustomMatchResult");
@@ -222,7 +371,9 @@ public class FuelHandler : MonoBehaviour
 		matchResult.Add ("score", m_matchData.MatchScore);
 		matchResult.Add ("matchData", matchData);
 
-		PropellerSDK.LaunchWithMatchResult (matchResult, m_listener);	
+		PropellerSDK.SubmitMatchResult (matchResult);
+
+		PropellerSDK.Launch (m_listener);	
 	}
 
 	/*
@@ -297,6 +448,8 @@ public class FuelHandler : MonoBehaviour
 
 			// Initialize FB SDK              
 			FB.Init(SetInit, OnHideUnity);  
+
+
 		}
 		
 		Instance = this;
@@ -314,7 +467,6 @@ public class FuelHandler : MonoBehaviour
 	{
 		Debug.Log ("<----- Start ----->");
 
-
 		// enable push notifications
 		PropellerSDK.EnableNotification ( PropellerSDK.NotificationType.push );
 		
@@ -327,6 +479,17 @@ public class FuelHandler : MonoBehaviour
 		{
 			Debug.Log ("fuelEnabled NotificationEnabled!");
 		}
+
+		gearFriction = 0.98f;
+		gearShapeType = 0;
+
+		if (PlayerPrefs.HasKey ("numLaunches")) 
+		{
+			int numLaunches = PlayerPrefs.GetInt ("numLaunches");
+			numLaunches++;
+			PlayerPrefs.SetInt("numLaunches", numLaunches);
+		}
+
 
 		Debug.Log ("<----- Start Done ----->");
 

@@ -197,7 +197,7 @@ MonoBehaviour:
   GameKey: 542b3bec636f62427de7ac00
   GameSecret: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
   Orientation: 1
-  HostGameObjectName: 
+  HostGameObjectName: FuelHandlerObject
   iOSGameHandleLogin: 1
   iOSGameHandleInvite: 1
   iOSGameHandleShare: 1
@@ -676,6 +676,10 @@ Prefab:
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: Orientation
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
+      propertyPath: HostGameObjectName
+      value: FuelHandlerObject
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}

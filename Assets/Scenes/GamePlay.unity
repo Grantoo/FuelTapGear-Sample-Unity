@@ -674,6 +674,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12faa58fe2b1f49f1ad0daca9166c3b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  img0: {fileID: 21300000, guid: f8e952ca5dd604b9db87225089c69f11, type: 3}
+  img1: {fileID: 21300000, guid: 41ab2c32c09594da0b4749ded5ca75b1, type: 3}
+  img2: {fileID: 21300000, guid: f2984e77f22f648d7850c6e0dc818b0a, type: 3}
+  img3: {fileID: 21300000, guid: da66005caf3c94628a720aeb000586c5, type: 3}
+  img4: {fileID: 21300000, guid: 0a1600e9f239f42f794b6da8da80ddc1, type: 3}
+  img5: {fileID: 21300000, guid: 0ded20a8cda7948e68766472590f2b27, type: 3}
   spinTextObj: {fileID: 0}
   buttonDebounce: 0
   minTapDelta: .5

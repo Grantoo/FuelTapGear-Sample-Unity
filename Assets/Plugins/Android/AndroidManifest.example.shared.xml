@@ -38,9 +38,6 @@
 	<uses-permission
         android:name="YOUR_PACKAGE_NAME.permission.C2D_MESSAGE" />
 
-    <uses-feature
-        android:name="android.software.webview" />
-	
     <supports-screens
         android:resizeable="true"
         android:smallScreens="true"
@@ -80,22 +77,22 @@
 		</activity>
 
 		<meta-data
-		    android:name="org.grantoo.propellersdkunity.PropellerUnitySharedActivity"
+		    android:name="com.fuelpowered.lib.propeller.unity.PropellerUnitySharedActivity"
 		    android:value="UnityPlayerActivityProxy"/>
 
         <activity
-            android:name="org.grantoo.lib.propeller.PropellerSDKActivity"
+            android:name="com.fuelpowered.lib.propeller.PropellerSDKActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 		
         <activity
-            android:name="org.grantoo.lib.propeller.PropellerSDKNotificationActivity" />
+            android:name="com.fuelpowered.lib.propeller.PropellerSDKNotificationActivity" />
 
         <receiver
-            android:name="org.grantoo.lib.propeller.PropellerSDKLocalNotificationReceiver"
+            android:name="com.fuelpowered.lib.propeller.PropellerSDKLocalNotificationReceiver"
             android:process=":remote" />
 
         <receiver
-            android:name="org.grantoo.lib.propeller.gcm.PropellerSDKGCMBroadcastReceiver"
+            android:name="com.fuelpowered.lib.propeller.gcm.PropellerSDKGCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
 
             <intent-filter>
@@ -114,7 +111,7 @@
         </receiver>
 
         <service
-            android:name="org.grantoo.lib.propeller.gcm.PropellerSDKGCMIntentService" />
+            android:name="com.fuelpowered.lib.propeller.gcm.PropellerSDKGCMIntentService" />
 
     </application>
 

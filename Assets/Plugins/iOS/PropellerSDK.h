@@ -2,11 +2,11 @@
 //  PropellerSDK.h
 //  libPropellerSDK
 //
-//  Copyright (c) 2012 Grantoo. All rights reserved.
+//  Copyright (c) 2015 Fuel. All rights reserved.
 //
 // PropellerSDK is implemented as a singleton that is accessible
 // via an static instance factory method. One may use this class
-// to setup an easy Grantoo integration by simply following these
+// to setup an easy Fuel integration by simply following these
 // ordered steps:
 //
 // 1.) Call the initialize: method with the appropriate start-up params
@@ -142,12 +142,16 @@ typedef enum
 // Launch methods
 // -----------------------------------------------------------------------------
 
-// Displays the grantoo view by using the root view controller
+// Displays the fuel view by using the root view controller
 // and pushing onto the navigation stack, if we have a UINavigationController
 // at the root on iPhone or by presenting modally on iPhone or else by presenting
 // as a modal form sheet on iPad.
 - (BOOL)launch:(id<PropellerSDKDelegate>)delegate;
-- (BOOL)launchWithMatchResult:(NSDictionary*)matchResult delegate:(id<PropellerSDKDelegate>)delegate;
+
+// -----------------------------------------------------------------------------
+// Match result methods
+// -----------------------------------------------------------------------------
+- (BOOL)submitMatchResult:(NSDictionary*)matchResult;
 
 // -----------------------------------------------------------------------------
 // Challenge count methods
@@ -183,5 +187,14 @@ typedef enum
 - (BOOL)sdkSocialInviteCompleted;
 // Signal that the share process has completed.
 - (BOOL)sdkSocialShareCompleted;
+
+
+// -----------------------------------------------------------------------------
+// Dynamic Game Variables methods
+// -----------------------------------------------------------------------------
+
+// Request and Dynamic variables
+- (BOOL)setUserConditions:(NSDictionary *)conditions;
+- (BOOL)getUserValues;
 
 @end

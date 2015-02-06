@@ -41,6 +41,7 @@ public class PropellerSDK : MonoBehaviour
 	public bool iOSGameHandleLogin;
 	public bool iOSGameHandleInvite;
 	public bool iOSGameHandleShare;
+	public string AndroidNotificationIcon = "notify_icon";
 	public string AndroidGCMSenderID;
 	public bool AndroidGameHandleLogin;
 	public bool AndroidGameHandleInvite;
@@ -63,7 +64,7 @@ public class PropellerSDK : MonoBehaviour
 	[DllImport ("__Internal")]
 	private static extern bool iOSLaunch();
 	[DllImport ("__Internal")]
-	private static extern bool iOSLaunchWithMatchResult(string delimitedMatchInfo);
+	private static extern bool iOSSubmitMatchResult(string delimitedMatchInfo);
 	[DllImport ("__Internal")]
 	private static extern void iOSSyncChallengeCounts();
 	[DllImport ("__Internal")]
@@ -86,6 +87,10 @@ public class PropellerSDK : MonoBehaviour
 	private static extern void iOSSdkSocialShareCompleted();
 	[DllImport ("__Internal")]
 	private static extern void iOSRestoreAllLocalNotifications();
+	[DllImport ("__Internal")]
+	private static extern bool iOSSetUserConditions(string conditions);
+	[DllImport ("__Internal")]
+	private static extern void iOSGetUserValues();
 #elif UNITY_ANDROID
 	private static AndroidJavaClass m_jniPropellerUnity = null;
 #endif
@@ -150,26 +155,21 @@ public class PropellerSDK : MonoBehaviour
 	}
 	
 	/// <summary>
-	/// Launchs the SDK with the results of the match. You must stuff the match result into a dictionary that will be parsed and passed to the SDK.
+	/// Submits the results of the match. You must stuff the match result into a dictionary that will be parsed and passed to the SDK API servers..
 	/// Current parameters:
 	/// 	matchID
 	/// 	tournamentID
 	/// 	score
 	/// </summary>
 	/// <returns>
-	/// True if the call to the SDK succeeded.
+	/// True if the match results were submitted.
 	/// </returns>
 	/// <param name='matchResult'>
-	/// A dictionary filled with values the SDK needs to use to properly pass the result to the Propeller servers. Examples: score, tournamentID, matchID, etc.
+	/// A dictionary filled with values the SDK needs to use to properly pass the result to the API servers. Examples: score, tournamentID, matchID, etc.
 	/// </param>
-	/// <param name='listener'>
-	/// A class that subclasses the PropellerSDKListener abstract class that will receive various callbacks.
-	/// </param>
-	public static bool LaunchWithMatchResult (Dictionary<string, object> matchResult, PropellerSDKListener listener)
+	public static bool SubmitMatchResult (Dictionary<string, object> matchResult)
 	{
-		Debug.Log ("LaunchWithMatchResult - start");
-		
-		m_listener = listener;
+		Debug.Log ("SubmitMatchResult - start");
 		
 		bool succeeded = false;
 		
@@ -179,22 +179,22 @@ public class PropellerSDK : MonoBehaviour
 
 			if (matchResultJSON == null)
 			{
-				Debug.Log ("LaunchWithMatchResult - match result parse error");
+				Debug.Log ("SubmitMatchResult - match result parse error");
 			}
 			else
 			{
 #if UNITY_IPHONE
-				succeeded = iOSLaunchWithMatchResult( matchResultJSON.ToString () );
+				succeeded = iOSSubmitMatchResult( matchResultJSON.ToString () );
 #elif UNITY_ANDROID
 				using (AndroidJavaObject matchResultJavaJSONString = new AndroidJavaObject("java.lang.String", matchResultJSON.ToString ()))
 				{
-					succeeded = m_jniPropellerUnity.CallStatic<bool> ("LaunchWithMatchResult", matchResultJavaJSONString);
+					succeeded = m_jniPropellerUnity.CallStatic<bool> ("SubmitMatchResult", matchResultJavaJSONString);
 				}
 #endif
 			}
 		}
 		
-		Debug.Log ("LaunchWithMatchResult - end");
+		Debug.Log ("SubmitMatchResult - end");
 		
 		return succeeded;
 	}
@@ -399,7 +399,7 @@ public class PropellerSDK : MonoBehaviour
 	{
 		int notificationTypeValue = (int)notificationType;
 
-		AndroidJavaClass propellerSDKNotificationTypeClass = new AndroidJavaClass("org.grantoo.lib.propeller.PropellerSDKNotificationType");
+		AndroidJavaClass propellerSDKNotificationTypeClass = new AndroidJavaClass("com.fuelpowered.lib.propeller.PropellerSDKNotificationType");
 
 		return propellerSDKNotificationTypeClass.CallStatic<AndroidJavaObject>("findByValue", notificationTypeValue);
 	}
@@ -535,6 +535,67 @@ public class PropellerSDK : MonoBehaviour
 		Debug.Log ("RestoreAllLocalNotifications - end");
 	}
 
+
+	/// <summary>
+	/// FUEL DYNAMICS - SetUserConditions
+	/// 
+	/// </summary>
+	/// <returns>
+	/// True if the call to the SDK succeeded.
+	/// </returns>
+	/// <param name='conditions'>
+	/// A dictionary filled with values the SDK needs to use to properly pass the result to the Propeller servers. Examples: score, tournamentID, matchID, etc.
+	/// </param>
+	public static bool SetUserConditions (Dictionary<string, object> conditions)
+	{
+		Debug.Log ("SetUserConditions - start");
+		
+		bool succeeded = false;
+		
+		if (!Application.isEditor)
+		{
+			JSONClass conditionsJSON = toJSONClass (conditions);
+
+			if (conditionsJSON == null)
+			{
+				Debug.Log ("SetUserConditions - conditions parse error");
+			}
+			else
+			{
+#if UNITY_IPHONE
+				succeeded = iOSSetUserConditions( conditionsJSON.ToString () );
+#elif UNITY_ANDROID
+				using (AndroidJavaObject conditionsJSONString = new AndroidJavaObject("java.lang.String", conditionsJSON.ToString ()))
+				{
+					m_jniPropellerUnity.CallStatic("SetUserConditions", conditionsJSONString);
+				}
+#endif
+			}
+		}
+		
+		Debug.Log ("SetUserConditions - end");
+		
+		return succeeded;
+	}
+
+	/// <summary>
+	/// Begins an asynchronous operation to request the user values from Propeller.
+	/// </summary>
+	public static void GetUserValues ()
+	{
+		Debug.Log ("GetUserValues - start");
+
+		if (!Application.isEditor) {
+#if UNITY_IPHONE
+            iOSGetUserValues();
+#elif UNITY_ANDROID
+			m_jniPropellerUnity.CallStatic("GetUserValues");
+#endif
+		}
+
+		Debug.Log ("GetUserValues - end");
+	}
+
 	#endregion
 
 	#region Unity Functions
@@ -552,7 +613,7 @@ public class PropellerSDK : MonoBehaviour
 				gameHandleInvite = iOSGameHandleInvite;
 				gameHandleShare = iOSGameHandleShare;
 #elif UNITY_ANDROID
-				m_jniPropellerUnity = new AndroidJavaClass( "org.grantoo.propellersdkunity.PropellerSDKUnitySingleton" );
+				m_jniPropellerUnity = new AndroidJavaClass( "com.fuelpowered.lib.propeller.unity.PropellerSDKUnitySingleton" );
 
 				gameHandleLogin = AndroidGameHandleLogin;
 				gameHandleInvite = AndroidGameHandleInvite;
@@ -561,6 +622,7 @@ public class PropellerSDK : MonoBehaviour
 				Initialize (GameKey, GameSecret, Orientation.ToString (), UseTestServers, gameHandleLogin, gameHandleInvite, gameHandleShare);
 
 #if UNITY_ANDROID
+				m_jniPropellerUnity.CallStatic<bool>("SetNotificationIcon", AndroidNotificationIcon);
 				m_jniPropellerUnity.CallStatic("InitializeGCM", AndroidGCMSenderID);
 #endif
 				if (!string.IsNullOrEmpty(HostGameObjectName)) {
@@ -987,6 +1049,38 @@ public class PropellerSDK : MonoBehaviour
 		
 		m_notificationListener.SdkOnNotificationDisabled(notificationType);
 	}
+
+	private void FuelDynamicsUserValues (string message)
+    {
+		Debug.Log ("########__FuelDynamicsUserValues__##########");
+
+		if (string.IsNullOrEmpty (message)) {
+			Debug.Log ("FuelDynamicsUserValues - null or empty message");
+			return;
+        }
+
+		Debug.Log ("FuelDynamicsUserValues - " + message);
+
+        const char kDelimeter = '&';
+		string[] resultsArray = message.Split (kDelimeter);
+
+		if (resultsArray.Length == 0) {
+			Debug.LogError ("FuelDynamicsUserValues - Invalid response from PropellerUnitySDK");
+			return;
+		}
+
+		Dictionary<string, object> userValuesInfo = new Dictionary<string, object> ();
+		userValuesInfo.Add ("friction", resultsArray[0]);
+		userValuesInfo.Add ("geartype", resultsArray[1]);
+
+
+		if (m_hostGameObject == null) {
+			Debug.Log ("FuelDynamicsUserValues - undefined host game object");
+            return;
+		}
+
+		m_hostGameObject.SendMessage("OnFuelDynamicsUserValues", userValuesInfo);
+    }
 
 	#endregion
 	

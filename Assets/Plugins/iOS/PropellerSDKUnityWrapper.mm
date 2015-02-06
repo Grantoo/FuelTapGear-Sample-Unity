@@ -194,8 +194,6 @@ extern "C"
 
     void iOSInitialize(const char* key, const char* secret, const char* screenOrientation, bool useTestServers, bool hasLogin, bool hasInvite, bool hasShare)
     {
-        UIViewController* pUIViewController = UnityGetGLViewController();
-
         if ( useTestServers )
         {
             [PropellerSDK useSandbox];
@@ -203,7 +201,6 @@ extern "C"
 
         [PropellerSDK setNotificationDelegate:[PropellerUnityNotificationListener alloc]];
 
-        [PropellerSDK setRootViewController:pUIViewController];
         [PropellerSDK initialize:[NSString stringWithUTF8String:key] gameSecret:[NSString stringWithUTF8String:secret] gameHasLogin:(BOOL)hasLogin gameHasInvite:(BOOL)hasInvite gameHasShare:(BOOL)hasShare];
 
         if (0 == strcmp(screenOrientation, "landscape")) {
@@ -228,13 +225,14 @@ extern "C"
     {
         validateOrientation();
         
+        UIViewController* pUIViewController = UnityGetGLViewController();
+        [PropellerSDK setRootViewController:pUIViewController];
+
         return [[PropellerSDK instance] launch:gsPropellerUnityListener];
     }
 
-    BOOL iOSLaunchWithMatchResult(const char* data)
+    BOOL iOSSubmitMatchResult(const char* data)
     {
-        validateOrientation();
-        
         NSError *error = nil;
         NSString* matchResultString = [NSString stringWithFormat:@"%s" , data];
         NSData* matchResultData = [matchResultString dataUsingEncoding:NSUTF8StringEncoding];
@@ -254,7 +252,7 @@ extern "C"
 
         PropellerSDK *gSDK = [PropellerSDK instance];
 
-        return [gSDK launchWithMatchResult:matchResult delegate:gsPropellerUnityListener];
+        return [gSDK submitMatchResult:matchResult];
     }
 
     void iOSSyncChallengeCounts()
@@ -356,6 +354,37 @@ extern "C"
         }
     }
 
+    BOOL iOSSetUserConditions(const char* data)
+    {
+        validateOrientation();
+        
+        NSError *error = nil;
+        NSString* conditionsString = [NSString stringWithFormat:@"%s" , data];
+        NSData* conditionsData = [conditionsString dataUsingEncoding:NSUTF8StringEncoding];
+        NSDictionary *conditions = [NSJSONSerialization JSONObjectWithData:conditionsData
+                                                                    options:NSJSONReadingMutableContainers
+                                                                      error:&error];
+
+        if (error != nil) {
+            return false;
+        }
+
+        conditions = (NSDictionary*)normalizeJSONDictionary(conditions);
+
+        if (conditions == nil) {
+            return false;
+        }
+
+        PropellerSDK *gSDK = [PropellerSDK instance];
+
+        return [gSDK setUserConditions:conditions];
+    }
+
+    void iOSGetUserValues()
+    {
+        [[PropellerSDK instance] getUserValues];
+    }
+    
 	NSObject* normalizeJSONDictionary(NSDictionary *dictionary)
 	{
 		if (dictionary == nil) {
