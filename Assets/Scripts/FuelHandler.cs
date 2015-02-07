@@ -301,9 +301,10 @@ public class FuelHandler : MonoBehaviour
 		Debug.Log ("-----------OnFuelDynamicsUserValues----------------");
 
 		//Game Values - defined int the CSV
-		String _friction = "friction";
-		String _greartype = "geartype";
-		//String _conditions = "conditions";
+		String _friction = "key0";
+		String _greartype = "key1";
+		String _status = "key2";
+		String statusresult = "notset";
 
 		foreach(KeyValuePair<string, object> entry in userValuesInfo)
 		{
@@ -320,21 +321,13 @@ public class FuelHandler : MonoBehaviour
 				string geartype = (string) entry.Value;
 				gearShapeType = int.Parse(geartype);
 			}
-			//else if(_conditions.Equals( entry.Key ))
-			//{
-			//	dynamicConditions = (string) entry.Value;
-			//}
+			else if(_status.Equals( entry.Key ))
+			{
+				statusresult = (string) entry.Value;
+			}
 		}
 
-		//string friction = (string) userValuesInfo["friction"];
-		//string geartype = (string) userValuesInfo["geartype"];
-		//gearFriction = float.Parse(friction);
-		//gearShapeType = int.Parse(geartype);
-
-		Debug.Log ("__Final: gearFriction = " + gearFriction);
-		Debug.Log ("__Final: gearShapeType = " + gearShapeType);
-
-		//Debug.Log ("__based on: = " + dynamicConditions);
+		Debug.Log ("__Final: friction = " + gearFriction + ", geartype = " + gearShapeType + ", statusresult = " + statusresult);
 
 		GameObject _mainmenu = GameObject.Find("InitMainMenu");
 		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
@@ -342,7 +335,6 @@ public class FuelHandler : MonoBehaviour
 		{
 			throw new Exception();
 		}
-		
 	}
 
 
@@ -490,6 +482,8 @@ public class FuelHandler : MonoBehaviour
 			PlayerPrefs.SetInt("numLaunches", numLaunches);
 		}
 
+
+		setUserConditions ();
 
 		Debug.Log ("<----- Start Done ----->");
 

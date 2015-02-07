@@ -42,7 +42,7 @@ public class InitMainMenu : MonoBehaviour
 
 
 		//try launch fuelSDK
-		_fuelHandlerScript.setUserConditions();
+		//_fuelHandlerScript.setUserConditions();
 		_fuelHandlerScript.getUserValues ();
 
 		//Hi Score

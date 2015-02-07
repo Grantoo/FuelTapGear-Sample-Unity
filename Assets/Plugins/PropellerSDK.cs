@@ -1070,8 +1070,15 @@ public class PropellerSDK : MonoBehaviour
 		}
 
 		Dictionary<string, object> userValuesInfo = new Dictionary<string, object> ();
-		userValuesInfo.Add ("friction", resultsArray[0]);
-		userValuesInfo.Add ("geartype", resultsArray[1]);
+		for(int i = 0; i < resultsArray.Length; i++) {
+
+			string keyStr = "key" + i.ToString() ;
+
+			userValuesInfo.Add (keyStr, resultsArray[i]);	
+		}
+
+		//userValuesInfo.Add ("friction", resultsArray[0]);
+		//userValuesInfo.Add ("geartype", resultsArray[1]);
 
 
 		if (m_hostGameObject == null) {
