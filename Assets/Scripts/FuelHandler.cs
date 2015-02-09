@@ -301,9 +301,9 @@ public class FuelHandler : MonoBehaviour
 		Debug.Log ("-----------OnFuelDynamicsUserValues----------------");
 
 		//Game Values - defined int the CSV
-		String _friction = "key0";
-		String _greartype = "key1";
-		String _status = "key2";
+		String _friction = "friction";
+		String _greartype = "geartype";
+		String _status = "status";
 		String statusresult = "notset";
 
 		foreach(KeyValuePair<string, object> entry in userValuesInfo)

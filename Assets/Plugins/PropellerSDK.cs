@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using PropellerSDKSimpleJSON;
 	
 public class PropellerSDK : MonoBehaviour
@@ -1052,14 +1053,12 @@ public class PropellerSDK : MonoBehaviour
 
 	private void FuelDynamicsUserValues (string message)
     {
-		Debug.Log ("########__FuelDynamicsUserValues__##########");
-
 		if (string.IsNullOrEmpty (message)) {
 			Debug.Log ("FuelDynamicsUserValues - null or empty message");
 			return;
         }
 
-		Debug.Log ("FuelDynamicsUserValues - " + message);
+		Debug.Log ("FuelDynamicsUserValues = " + message);
 
         const char kDelimeter = '&';
 		string[] resultsArray = message.Split (kDelimeter);
@@ -1070,16 +1069,9 @@ public class PropellerSDK : MonoBehaviour
 		}
 
 		Dictionary<string, object> userValuesInfo = new Dictionary<string, object> ();
-		for(int i = 0; i < resultsArray.Length; i++) {
-
-			string keyStr = "key" + i.ToString() ;
-
-			userValuesInfo.Add (keyStr, resultsArray[i]);	
+		for(int i = 0; i < resultsArray.Length; i+=2) {
+			userValuesInfo.Add (resultsArray[i], resultsArray[i+1]);	
 		}
-
-		//userValuesInfo.Add ("friction", resultsArray[0]);
-		//userValuesInfo.Add ("geartype", resultsArray[1]);
-
 
 		if (m_hostGameObject == null) {
 			Debug.Log ("FuelDynamicsUserValues - undefined host game object");

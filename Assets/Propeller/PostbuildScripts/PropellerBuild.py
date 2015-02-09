@@ -39,7 +39,7 @@ unityApiLevel = int(sys.argv[5].strip())
 # 15 - UNITY_4_5
 
 # only supporting Unity 3.5 and up
-if unityApiLevel < 9:
+if unityApiLevel < 15:
 	exitWithError('Unsupported Unity version')
 
 def checkPath(path, libname):
@@ -452,7 +452,8 @@ def addExtraFunctions():
 	print '\t\t} else {'
 	print '\t\t\tNSMutableArray *paramList = [[NSMutableArray alloc] init];'
 	print ''
-	print '\t\t\tfor (id item in data) {'
+	print '\t\t\tfor (id item in data){'
+	print '\t\t\t\t[paramList addObject:item];'
 	print '\t\t\t\t[paramList addObject:[data objectForKey:item]];'
 	print '\t\t\t}'
 	print ''
