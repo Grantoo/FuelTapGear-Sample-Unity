@@ -21,8 +21,8 @@ public class startButton : MonoBehaviour
 		{
 			Debug.Log ("FBLogoutButton - left click.");
 			
-			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+			//GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+			//FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
 			
 			//_fuelHandlerScript.LogoutButtonPressed();
@@ -30,8 +30,8 @@ public class startButton : MonoBehaviour
 			//_fuelHandlerScript.SyncVirtualGoods();
 
 
-			GameObject _mainmenu = GameObject.Find("InitMainMenu");
-			InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
+			//GameObject _mainmenu = GameObject.Find("InitMainMenu");
+			//InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
 
 			//_mainmenuScript.VirtualGoodsFanFare();
 

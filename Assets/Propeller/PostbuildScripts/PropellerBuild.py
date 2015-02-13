@@ -20,6 +20,7 @@ projectPath = sys.argv[3]
 dataPath = sys.argv[4]
 unityApiLevel = int(sys.argv[5].strip())
 
+
 # Unity API levels
 # 0 - UNSUPPORTED
 # 1 - UNITY_2_6,
@@ -460,10 +461,14 @@ def addExtraFunctions():
 	print '\t\t\tmessage = [paramList componentsJoinedByString:@"&"];'
 	print '\t\t}'
 	print ''
-	print '\t\tUnitySendMessage("PropellerSDK", "FuelDynamicsUserValues", [message UTF8String]);'
+	print '\t\tbool hasCompete = [PropellerSDK getHasCompete];'
+	print '\t\tif(hasCompete == true) {'
+	print '\t\t\tUnitySendMessage("PropellerSDK", "FuelDynamicsUserValues", [message UTF8String]);'
+	print '\t\t} else {'
+	print '\t\t\tUnitySendMessage("FuelDynamics", "FuelDynamicsUserValues", [message UTF8String]);'
+	print '\t\t}'
 	print '\t}'
 	print '}'
-
 	print ''
 	print '// *** END PROPELLER BUILD SCRIPT INSERTION ***'
 	print ''
@@ -546,6 +551,7 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 		elif injectExtraFunctions and '}' not in line:
 			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
 				addExtraFunctions()
+				
 			injectExtraFunctions = False
 
 	lastNonBlankLine = line

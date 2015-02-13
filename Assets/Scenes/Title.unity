@@ -196,11 +196,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameKey: 542b3bec636f62427de7ac00
   GameSecret: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
+  FuelDynamicsOnly: 0
   Orientation: 1
   HostGameObjectName: FuelHandlerObject
   iOSGameHandleLogin: 1
   iOSGameHandleInvite: 1
   iOSGameHandleShare: 1
+  AndroidNotificationIcon: notify_icon
   AndroidGCMSenderID: 
   AndroidGameHandleLogin: 1
   AndroidGameHandleInvite: 1
@@ -300,6 +302,46 @@ Transform:
   - {fileID: 1446534100}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!1 &1228401991
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1228401993}
+  - 114: {fileID: 1228401992}
+  m_Layer: 0
+  m_Name: FuelDynamicsHandlerObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1228401992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1228401991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8681694547fa4cb6956bdc034cbf9c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dynamicConditions: 
+--- !u!4 &1228401993
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1228401991}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
 --- !u!1 &1446534095
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,6 +595,49 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
+--- !u!1 &1901338415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 100000, guid: 1926d6ca010e64e96bea400f2acde29d, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1901338417}
+  - 114: {fileID: 1901338416}
+  m_Layer: 0
+  m_Name: FuelDynamics
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1901338416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 11400000, guid: 1926d6ca010e64e96bea400f2acde29d,
+    type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1901338415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5a7f3bcb182a4ddb808f36f41450ad0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameKey: 542b3bec636f62427de7ac00
+  GameSecret: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
+  HostGameObjectName: FuelDynamicsHandlerObject
+--- !u!4 &1901338417
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 400000, guid: 1926d6ca010e64e96bea400f2acde29d, type: 2}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1901338415}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.77407813, y: -3.25816274, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
 --- !u!1 &1906362746
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,11 +678,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mFBState: 0
+  useFaceBook: 0
+  useFuelCompete: 0
+  useFuelDynamics: 0
   get_data: 
   fbname: 
   fbfirstname: 
   fbemail: 
   fbgender: 
+  dynamicConditions: 
 --- !u!1001 &2043665255
 Prefab:
   m_ObjectHideFlags: 0
@@ -680,6 +769,10 @@ Prefab:
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: HostGameObjectName
       value: FuelHandlerObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
+      propertyPath: FuelDynamicsOnly
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}

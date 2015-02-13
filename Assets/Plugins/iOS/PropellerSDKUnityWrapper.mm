@@ -216,6 +216,12 @@ extern "C"
         gsPropellerUnityListener = [PropellerUnityListener alloc];
     }
 
+    void iOSInitializeDynamicsOnly(const char* key, const char* secret)
+    {
+        [PropellerSDK initializeDynamicsOnly:[NSString stringWithUTF8String:key] gameSecret:[NSString stringWithUTF8String:secret]];
+   	}
+
+
     void iOSSetLanguageCode(const char* languageCode)
     {
         [[PropellerSDK instance] setLanguageCode:[NSString stringWithUTF8String:languageCode]];

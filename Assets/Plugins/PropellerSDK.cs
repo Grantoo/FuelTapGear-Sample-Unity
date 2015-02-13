@@ -61,9 +61,9 @@ public class PropellerSDK : MonoBehaviour
 	[DllImport ("__Internal")]
 	private static extern void iOSInitialize(string key, string secret, string screenOrientation, bool useTestServers, bool gameHasLogin, bool gameHasInvite, bool gameHasShare);
 	[DllImport ("__Internal")]
-	private static extern void iOSSetLanguageCode(string languageCode);
-	[DllImport ("__Internal")]
 	private static extern bool iOSLaunch();
+	[DllImport ("__Internal")]
+	public static extern void iOSSetLanguageCode(string languageCode);
 	[DllImport ("__Internal")]
 	private static extern bool iOSSubmitMatchResult(string delimitedMatchInfo);
 	[DllImport ("__Internal")]
@@ -88,10 +88,6 @@ public class PropellerSDK : MonoBehaviour
 	private static extern void iOSSdkSocialShareCompleted();
 	[DllImport ("__Internal")]
 	private static extern void iOSRestoreAllLocalNotifications();
-	[DllImport ("__Internal")]
-	private static extern bool iOSSetUserConditions(string conditions);
-	[DllImport ("__Internal")]
-	private static extern void iOSGetUserValues();
 #elif UNITY_ANDROID
 	private static AndroidJavaClass m_jniPropellerUnity = null;
 #endif
@@ -564,7 +560,7 @@ public class PropellerSDK : MonoBehaviour
 			else
 			{
 #if UNITY_IPHONE
-				succeeded = iOSSetUserConditions( conditionsJSON.ToString () );
+				succeeded = PropellerImports.iOSSetUserConditions( conditionsJSON.ToString () );
 #elif UNITY_ANDROID
 				using (AndroidJavaObject conditionsJSONString = new AndroidJavaObject("java.lang.String", conditionsJSON.ToString ()))
 				{
@@ -588,7 +584,7 @@ public class PropellerSDK : MonoBehaviour
 
 		if (!Application.isEditor) {
 #if UNITY_IPHONE
-            iOSGetUserValues();
+			PropellerImports.iOSGetUserValues();
 #elif UNITY_ANDROID
 			m_jniPropellerUnity.CallStatic("GetUserValues");
 #endif
