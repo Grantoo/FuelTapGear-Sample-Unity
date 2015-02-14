@@ -348,9 +348,9 @@ public class FuelHandler : MonoBehaviour
 
 			fbdata_ready = false;
 
-			useFaceBook = false;
-			useFuelCompete = false; 
-			useFuelDynamics = false; 
+			useFaceBook = true;
+			useFuelCompete = true; 
+			useFuelDynamics = true; 
 
 
 			if(useFaceBook)

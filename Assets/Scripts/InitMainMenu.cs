@@ -10,21 +10,26 @@ public class InitMainMenu : MonoBehaviour
 		Debug.Log ("InitMainMenu!");
 
 		//init particles to off
+		Debug.Log ("Start Particles!");
 		GameObject particleObj = GameObject.Find ("VirtualGoodsParticles");
 		ParticleSystem psystem = (ParticleSystem)particleObj.GetComponent (typeof(ParticleSystem)); 
 		psystem.Stop();
 
 		//GAME TOKENS
-		RefreshGameTokenCount(0);
+		Debug.Log ("Start RefreshGameTokenCount!");
+		//RefreshGameTokenCount(0);
 
 		//GOLD
+		Debug.Log ("Start RefreshGoldCount!");
 		RefreshGoldCount(0);
 
 		//DIAMONDS
+		Debug.Log ("Start RefreshDiamondCount!");
 		RefreshDiamondCount(0);
 
 
 		//hide challenge count pieces
+		Debug.Log ("Start hide challenge count pieces!");
 		GameObject gameObj = GameObject.Find("ccbacking");
 		gameObj.renderer.enabled = false;
 
@@ -33,6 +38,7 @@ public class InitMainMenu : MonoBehaviour
 		tmesh.renderer.enabled = false;
 
 		//hide trophy
+		Debug.Log ("Start hide trophy!");
 		gameObj = GameObject.Find ("Trophy");
 		gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
 
@@ -41,12 +47,14 @@ public class InitMainMenu : MonoBehaviour
 		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
 		//get Fuel Dynamics Handler
-		GameObject _fuelDynamicsHandler = GameObject.Find("FuelDynamicsHandlerObject");
-		FuelDynamicsHandler _fuelDynamicsHandlerScript = _fuelDynamicsHandler.GetComponent<FuelDynamicsHandler>();
+		//GameObject _fuelDynamicsHandler = GameObject.Find("FuelDynamicsHandlerObject");
+		//FuelDynamicsHandler _fuelDynamicsHandlerScript = _fuelDynamicsHandler.GetComponent<FuelDynamicsHandler>();
+
+		Debug.Log ("try launch fuelSDK");
 
 		//try launch fuelSDK
-		//_fuelHandlerScript.setUserConditions();
-		_fuelDynamicsHandlerScript.getUserValues ();
+		_fuelHandlerScript.setUserConditions();
+		//_fuelDynamicsHandlerScript.getUserValues ();
 
 		//Hi Score
 		_fuelHandlerScript.tryRefreshHiScore();
@@ -168,9 +176,9 @@ public class InitMainMenu : MonoBehaviour
 				PlayerPrefs.SetInt("hiScore", _score);
 			}
 			
-			GameObject gameObj = GameObject.Find ("HiScore");
-			TextMesh t = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-			t.text = "Hi Score: " + _score.ToString();
+			//GameObject gameObj = GameObject.Find ("HiScore");
+			//TextMesh t = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+			//t.text = "Hi Score: " + _score.ToString();
 		}
 	}
 
