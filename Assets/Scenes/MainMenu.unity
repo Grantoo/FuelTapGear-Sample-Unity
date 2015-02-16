@@ -330,7 +330,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 7.55324173
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -349,7 +349,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 59874061}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.0783407688, y: .843850732, z: -20}
+  m_LocalPosition: {x: -.0783407688, y: 1.34537721, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1354492684}
@@ -2707,6 +2707,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a443df9734a134062943633c66702532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imgDown: {fileID: 21300000, guid: 1ccab84edae204591aa375ebc48a5c54, type: 3}
 --- !u!212 &1365093667
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2900,6 +2901,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4710cd1ba42944ad593f6511103501a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  imgDown: {fileID: 21300000, guid: db1216e5c81c8433d86e163f06d8fe58, type: 3}
 --- !u!61 &1451664220
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2920,6 +2922,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1579308842}
   - 212: {fileID: 1579308843}
+  - 114: {fileID: 1579308844}
   m_Layer: 0
   m_Name: OrangeGear
   m_TagString: Untagged
@@ -2962,6 +2965,20 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c296b0d3401cc45cd8c9c61aced66aa3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1579308844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1579308841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: .100000001
+  direction: 0
+  relativegamevelocity: 1
 --- !u!1001 &1719977326
 Prefab:
   m_ObjectHideFlags: 0
@@ -3139,6 +3156,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1878420779}
   - 212: {fileID: 1878420780}
+  - 114: {fileID: 1878420781}
   m_Layer: 0
   m_Name: BlueGear
   m_TagString: Untagged
@@ -3181,6 +3199,20 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 03eaa5001c5e2430ea78b43201e49ef5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1878420781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1878420778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: .5
+  direction: 0
+  relativegamevelocity: 1
 --- !u!1001 &1936274745
 Prefab:
   m_ObjectHideFlags: 0

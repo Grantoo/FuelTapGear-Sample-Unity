@@ -3,7 +3,8 @@ using System.Collections;
 
 public class playButton : MonoBehaviour 
 {
-	
+	public Sprite imgDown;
+
 	void Start () 
 	{
 		
@@ -23,10 +24,8 @@ public class playButton : MonoBehaviour
 			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
-			
-			//_mainmenuScript.LaunchDashBoardWithResults();
-			
-			
+			gameObject.GetComponent<SpriteRenderer>().sprite = imgDown;
+
 			_fuelHandlerScript.launchSinglePlayerGame();
 		}
 	}

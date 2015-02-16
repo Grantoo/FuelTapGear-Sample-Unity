@@ -11,6 +11,7 @@ public class gearAction : MonoBehaviour
 	public float minTapDelta = 0.5f;
 	public float spinvelocity = 0.0f;
 	public float maxspinvelocity = 0.0f;
+	public string velocityStr = "0mps";
 	private float angle = 0.0f;
 	private float friction = 0.995f;
 
@@ -62,6 +63,10 @@ public class gearAction : MonoBehaviour
 
 	void Start () 
 	{
+
+		GameObject MultTimesTwo = GameObject.Find ("MultTimesTwo");
+		GameObject bonus = (GameObject) Instantiate(MultTimesTwo, transform.position, transform.rotation);
+
 	}
 	
 	void Update () 
@@ -78,14 +83,63 @@ public class gearAction : MonoBehaviour
 		GameObject shadow = GameObject.Find ("GearShadow");
 		shadow.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-		updateSpinText ( spinvelocity.ToString ("0.00") + " mps" );
-
+		//updateSpinText ( spinvelocity.ToString ("0.00") + " mps" );
+		velocityStr = maxspinvelocity.ToString ("0.00") + " mps";
 
 
 		spinvelocity *= friction;
 
+
+		UpdateBackGroundGears ();
+
 	}
 
+	void UpdateBackGroundGears () 
+	{
+		GameObject gear = GameObject.Find ("OrangeGear");
+		gearMount _gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+		gear = GameObject.Find ("SmBlueGear");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+		gear = GameObject.Find ("SmBlueGear2");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+		gear = GameObject.Find ("BlueGear");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+		gear = GameObject.Find ("BlueGear2");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+		gear = GameObject.Find ("SmOrangeGear");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+		
+		gear = GameObject.Find ("SmOrangeGear2");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+		gear = GameObject.Find ("SmOrangeGearTrans");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+		gear = GameObject.Find ("BlueGearTrans");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+		gear = GameObject.Find ("BlueGearTrans2");
+		_gearMountScript = gear.GetComponent<gearMount>();
+		_gearMountScript.SetGameVelocity (spinvelocity);
+
+
+
+
+	}
 
 
 	void OnMouseOver () 
@@ -103,7 +157,7 @@ public class gearAction : MonoBehaviour
 				if(_gameState == MainLoop.eGameState.Ready)
 				{
 					//first tap, tell mainloop to start
-					_mainloopScript.mGameState = MainLoop.eGameState.Running;
+					_mainloopScript.mGameState = MainLoop.eGameState.FirstTap;
 					_gameState = _mainloopScript.mGameState;
 
 					_mainloopScript.setStartButtonText("Tap! Fast, fast, faster!!");

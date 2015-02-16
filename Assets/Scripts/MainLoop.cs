@@ -8,6 +8,7 @@ public class MainLoop : MonoBehaviour
 	{
 		Init,
 		Ready, 
+		FirstTap, 
 		Running,
 		Done,
 	};
@@ -135,7 +136,9 @@ public class MainLoop : MonoBehaviour
 		GameObject _backObj = GameObject.Find("backButton");
 		_backObj.renderer.enabled = false;
 
-
+		//GameObject _OilCanObj = GameObject.Find("OilCan");
+		//Animator _oilCanController = _OilCanObj.GetComponent<Animator>();
+		//_oilCanController.StopPlayback ();
 	}
 
 	IEnumerator DownloadImage(string url, Texture2D tex) 
@@ -195,10 +198,26 @@ public class MainLoop : MonoBehaviour
 			}
 			break;
 
+			case eGameState.FirstTap:
+			{
+				GameObject _tapsCounter = GameObject.Find("TapsCounter");
+				Animator _Animator = _tapsCounter.GetComponent<Animator>();
+				_Animator.Play ("tapCountDisplayAnim2");
+					
+				mGameState = eGameState.Running;
+			}
+			break;
+
+
+
 			case eGameState.Running:
 			{
 				//update gameTimer
 				gameTimerValue -= Time.deltaTime;
+
+
+				GameObject _gearAction = GameObject.Find("GearProxy1");
+				gearAction _gearActionScript = _gearAction.GetComponent<gearAction>();
 
 				if(gameTimerValue <= 0)
 				{
@@ -208,8 +227,6 @@ public class MainLoop : MonoBehaviour
 
 					//stuff score & speed
 
-					GameObject _gearAction = GameObject.Find("GearProxy1");
-					gearAction _gearActionScript = _gearAction.GetComponent<gearAction>();
 					int maxspeed = (int)_gearActionScript.maxspinvelocity;
 
 
@@ -221,6 +238,11 @@ public class MainLoop : MonoBehaviour
 					GameObject _backObj = GameObject.Find("backButton");
 					_backObj.renderer.enabled = true;
 
+
+					//reset animations
+					GameObject _tapsCounter = GameObject.Find("TapsCounter");
+					Animator _Animator = _tapsCounter.GetComponent<Animator>();
+					_Animator.Play ("tapCountDisplayAnim");
 
 					//another complete game session
 					if (PlayerPrefs.HasKey ("numSessions")) 
@@ -236,6 +258,12 @@ public class MainLoop : MonoBehaviour
 		
 				//update tap score
 				updateScoreText ( scoreValue.ToString() );
+
+
+				GameObject spinTextObj = GameObject.Find ("speedTextMesh");
+				TextMesh tmesh = (TextMesh)spinTextObj.GetComponent (typeof(TextMesh)); 
+				tmesh.text = _gearActionScript.velocityStr;
+
 
 			}
 			break;

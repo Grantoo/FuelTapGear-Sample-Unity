@@ -3,7 +3,8 @@ using System.Collections;
 
 public class multiplayerButton : MonoBehaviour 
 {
-	
+	public Sprite imgDown;
+
 	void Start () 
 	{
 		
@@ -11,8 +12,7 @@ public class multiplayerButton : MonoBehaviour
 	
 	void Update () 
 	{
-		
-		
+			
 	}
 	
 	void OnMouseOver () 
@@ -24,7 +24,8 @@ public class multiplayerButton : MonoBehaviour
 			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
-			
+			gameObject.GetComponent<SpriteRenderer>().sprite = imgDown;
+
 			_fuelHandlerScript.launchPropeller();
 		}
 	}
