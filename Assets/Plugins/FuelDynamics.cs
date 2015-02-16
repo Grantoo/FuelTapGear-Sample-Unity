@@ -8,22 +8,6 @@ using PropellerSDKSimpleJSON;
 	
 public class FuelDynamics : MonoBehaviour
 {
-	/*
-	public enum ContentOrientation
-	{
-		landscape,
-		portrait,
-		auto
-	};
-
-	public enum NotificationType
-	{
-		none = 0x0,
-		all = 0x3,
-		push = 1 << 0,
-		local = 1 << 1
-	};
-	*/
 	private enum DataType
 	{
 		intType,

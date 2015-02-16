@@ -113,7 +113,7 @@ PlayerSettings:
       m_Size: 128
   - m_BuildTarget: iPhone
     m_Icons:
-    - m_Icon: {fileID: 2800000, guid: ace98ab2acbfa47af8c454eb8cf96433, type: 3}
+    - m_Icon: {fileID: 2800000, guid: 2a50e253184724805b0c8806ec153259, type: 3}
       m_Size: 152
     - m_Icon: {fileID: 0}
       m_Size: 144
@@ -133,7 +133,6 @@ PlayerSettings:
     m_DynamicBatching: 0
   webPlayerTemplate: APPLICATION:Default
   m_TemplateCustomTags: {}
-  locationUsageDescription: 
   XboxTitleId: 
   XboxImageXexPath: 
   XboxSpaPath: 
@@ -266,12 +265,6 @@ PlayerSettings:
   tizenGPSPermissions: 0
   tizenMicrophonePermissions: 0
   stvDeviceAddress: 
-  wp8UnprocessedPlugins: []
-  intPropertyNames:
-  - iOS::Architecture
-  - iOS::ScriptingBackend
-  iOS::Architecture: 2
-  iOS::ScriptingBackend: 0
   firstStreamedLevelWithResources: 0
   unityRebuildLibraryVersion: 9
   unityForwardCompatibleVersion: 39
