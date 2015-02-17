@@ -5,7 +5,7 @@ public class PositionCamera : MonoBehaviour
 {
 	//just for testing
 
-	public float fWidth = 20.0f; // Desired width
+	public float fWidth = 30.0f; // Desired width
 
 	void Start () 
 	{
@@ -19,7 +19,7 @@ public class PositionCamera : MonoBehaviour
 	
 	void Update () 
 	{
-		
+		camera.orthographicSize = 8.111f;
 
 	}
 }
