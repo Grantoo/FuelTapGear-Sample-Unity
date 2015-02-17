@@ -5,21 +5,42 @@ public class PositionCamera : MonoBehaviour
 {
 	//just for testing
 
-	public float fWidth = 30.0f; // Desired width
+	public float OthorMult = 1.2f; // Desired scale for iPhone
+
+	private bool firstPass;
 
 	void Start () 
 	{
-		float fT = fWidth / Screen.width * Screen.height;
-		fT = fT / (2.0f * Mathf.Tan (0.5f * Camera.main.fieldOfView * Mathf.Deg2Rad));
-		Vector3 v3T = Camera.main.transform.position;
-		v3T.z = -fT;
-		transform.position = v3T;
-
+		firstPass = true;
 	}
 	
 	void Update () 
 	{
-		camera.orthographicSize = 8.111f;
+		if (firstPass == true) 
+		{
+
+			#if UNITY_IPHONE
+
+			if ((iPhone.generation.ToString ()).IndexOf ("iPad") > -1) 
+			{
+				
+			} else {
+				float orthoSize = camera.orthographicSize;
+				camera.orthographicSize = orthoSize * OthorMult;
+			}
+		
+
+			#elif UNITY_ANDROID
+				float orthoSize = camera.orthographicSize;
+				camera.orthographicSize = orthoSize * OthorMult;
+
+			#endif
+
+
+			firstPass = false;
+		}
+
+
 
 	}
 }
