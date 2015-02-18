@@ -53,8 +53,8 @@ public class InitMainMenu : MonoBehaviour
 		Debug.Log ("try launch fuelSDK");
 
 		//try launch fuelSDK
-		_fuelHandlerScript.setUserConditions();
-		//_fuelDynamicsHandlerScript.getUserValues ();
+		//_fuelHandlerScript.setUserConditions();
+		_fuelHandlerScript.getUserValues();
 
 		//Hi Score
 		_fuelHandlerScript.tryRefreshHiScore();

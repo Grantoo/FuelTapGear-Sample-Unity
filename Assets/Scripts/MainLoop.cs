@@ -31,6 +31,11 @@ public class MainLoop : MonoBehaviour
 		TextMesh tmesh = (TextMesh)startbuttonObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = str;
 	}
+	public void hideStartButtonText () 
+	{
+		startbuttonObj = GameObject.Find ("startTextMesh");
+		startbuttonObj.renderer.enabled = false;
+	}
 
 	public void updateScoreText (string str) 
 	{
@@ -223,7 +228,9 @@ public class MainLoop : MonoBehaviour
 				{
 					mGameState = eGameState.Done;
 					gameTimerValue = 0.0f;
-					setStartButtonText ("< Match Results.");
+
+					hideStartButtonText();
+					//setStartButtonText ("< Match Results.");
 
 					//stuff score & speed
 

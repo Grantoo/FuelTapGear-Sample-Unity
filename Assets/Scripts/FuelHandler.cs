@@ -1080,7 +1080,7 @@ public class FuelHandler : MonoBehaviour
 		{
 			return;
 		}
-		Debug.Log ("setUserConditions");
+		Debug.Log ("!##### setUserConditions #####!");
 		
 		String isTablet = "FALSE";
 		
@@ -1136,9 +1136,12 @@ public class FuelHandler : MonoBehaviour
 		String _friction = "friction";
 		String _greartype = "geartype";
 		String _status = "status";
+		String _variables = "variables";
 		String statusresult = "notset";
 
 		Dictionary<string, string> analyticResult = new Dictionary<string, string> ();
+
+
 
 		foreach(KeyValuePair<string, object> entry in userValuesInfo)
 		{
@@ -1159,6 +1162,61 @@ public class FuelHandler : MonoBehaviour
 			{
 				statusresult = (string) entry.Value;
 			}
+			else if(_variables.Equals( entry.Key ))
+			{
+				//String variables = (string)entry.Value;
+
+				Dictionary<string, object> variablesDict = ObjectToDictionary(entry.Value);
+				if(variablesDict != null)
+				{
+					foreach(KeyValuePair<string, object> v in variablesDict)
+					{
+						string valueData = (string) v.Value;
+						Debug.Log ("valueData = " + valueData);
+					}
+				}
+				else
+				{
+					Debug.Log ("variablesDict = null");
+				}
+
+				//KeyValuePair<String, Object> variablesDict = entry.Value;
+
+				//String value = variablesDict["friction"] as String;
+					
+				//gearFriction = float.Parse(value);
+					
+
+
+
+
+				/*
+				if(variablesDict.ContainsKey ("friction"))
+				{
+					String value = variablesDict["friction"] as String;
+
+					gearFriction = float.Parse(value);
+
+				}
+				foreach(KeyValuePair<string, object> variable in variablesDict)
+				{
+					if(_friction.Equals( variable.Key ))
+					{
+						string friction = (string) variable.Value;
+						gearFriction = float.Parse(friction);
+					}
+					else if(_greartype.Equals( variable.Key ))
+					{
+						string geartype = (string) variable.Value;
+						gearShapeType = int.Parse(geartype);
+					}
+					else if(_status.Equals( variable.Key ))
+					{
+						statusresult = (string) entry.Value;
+					}
+				}
+				*/
+			}
 
 			analyticResult.Add (entry.Key, (string)entry.Value);
 		}
@@ -1176,6 +1234,28 @@ public class FuelHandler : MonoBehaviour
 			throw new Exception();
 		}
 	}
+
+
+
+	public static Dictionary<string, object> ObjectToDictionary(object value)
+	{
+		Dictionary<string, object> dictionary = new Dictionary<string, object> ();
+		if (value != null) {
+						foreach (System.ComponentModel.PropertyDescriptor descriptor in System.ComponentModel.TypeDescriptor.GetProperties(value)) {
+								if (descriptor != null && descriptor.Name != null) {
+										object propValue = descriptor.GetValue (value);
+										if (propValue != null)
+												dictionary.Add (descriptor.Name, String.Format ("{0}", propValue));
+								}
+						}
+				}
+		return dictionary;
+	}
+
+
+
+
+
 
 	
 }

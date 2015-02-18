@@ -32,6 +32,9 @@ public class gearAction : MonoBehaviour
 
 		GameObject shadow = GameObject.Find ("GearShadow");
 
+		Debug.Log ("________________________________________________gearAction:Reset - friction = " + friction + ", geartype = " + _gearType);
+
+
 		switch (_gearType) 
 		{
 			case 0:
