@@ -4,6 +4,7 @@ using System.Collections;
 public class playButton : MonoBehaviour 
 {
 	public Sprite imgDown;
+	public AudioSource clickSound;
 
 	void Start () 
 	{
@@ -20,6 +21,8 @@ public class playButton : MonoBehaviour
 		if (Input.GetMouseButtonDown (0)) 
 		{
 			Debug.Log ("playButton - left click.");
+
+			clickSound.Play();
 			
 			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();

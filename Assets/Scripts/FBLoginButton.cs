@@ -26,6 +26,9 @@ public class FBLoginButton : MonoBehaviour
 
 			
 			_fuelHandlerScript.LoginButtonPressed();
+
+			_fuelHandlerScript.updateLoginText();
+
 		}
 	}
 	

@@ -29,7 +29,6 @@ public class InitMainMenu : MonoBehaviour
 
 
 		//hide challenge count pieces
-		Debug.Log ("Start hide challenge count pieces!");
 		GameObject gameObj = GameObject.Find("ccbacking");
 		gameObj.renderer.enabled = false;
 
@@ -38,7 +37,6 @@ public class InitMainMenu : MonoBehaviour
 		tmesh.renderer.enabled = false;
 
 		//hide trophy
-		Debug.Log ("Start hide trophy!");
 		gameObj = GameObject.Find ("Trophy");
 		gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
 
@@ -50,9 +48,6 @@ public class InitMainMenu : MonoBehaviour
 		//GameObject _fuelDynamicsHandler = GameObject.Find("FuelDynamicsHandlerObject");
 		//FuelDynamicsHandler _fuelDynamicsHandlerScript = _fuelDynamicsHandler.GetComponent<FuelDynamicsHandler>();
 
-		Debug.Log ("try launch fuelSDK");
-
-		//try launch fuelSDK
 		//_fuelHandlerScript.setUserConditions();
 		_fuelHandlerScript.getUserValues();
 
@@ -70,6 +65,8 @@ public class InitMainMenu : MonoBehaviour
 
 		//try launch fuelSDK
 		_fuelHandlerScript.tryLaunchFuelSDK();
+
+		_fuelHandlerScript.updateLoginText();
 
 	}
 
@@ -168,17 +165,18 @@ public class InitMainMenu : MonoBehaviour
 		if (PlayerPrefs.HasKey ("hiScore")) 
 		{
 			Debug.Log ("_getting hiScore");
-			var _score = PlayerPrefs.GetInt("hiScore");
+			var _score = PlayerPrefs.GetInt ("hiScore");
 			
-			if(score > _score)
+			if (score > _score) 
 			{
 				_score = score;
-				PlayerPrefs.SetInt("hiScore", _score);
+				PlayerPrefs.SetInt ("hiScore", _score);
 			}
 			
-			//GameObject gameObj = GameObject.Find ("HiScore");
-			//TextMesh t = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-			//t.text = "Hi Score: " + _score.ToString();
+			GameObject gameObj = GameObject.Find ("HiScore");
+			TextMesh t = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+			t.text = _score.ToString ();
+				
 		}
 	}
 

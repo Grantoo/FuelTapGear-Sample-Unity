@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 12311441}
   - 212: {fileID: 12311440}
+  - 95: {fileID: 12311442}
   m_Layer: 0
   m_Name: TapGearTitle
   m_TagString: Untagged
@@ -174,6 +175,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 126777176}
   m_RootOrder: 1
+--- !u!95 &12311442
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 12311439}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c5c64f7295d404f0d82857ecabdc83f7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1001 &36526977
 Prefab:
   m_ObjectHideFlags: 0
@@ -232,6 +248,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 54853025}
   - 212: {fileID: 54853026}
+  - 114: {fileID: 54853027}
   m_Layer: 0
   m_Name: BlueGearTrans
   m_TagString: Untagged
@@ -274,6 +291,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: febf2ce72db744e5e928114e309231a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &54853027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 54853024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 3
+  direction: 0
+  relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1 &59874061
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,7 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 636fc3ffcae864f628e19b65e6b3b87c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fWidth: 9
+  OthorMult: 1.20000005
 --- !u!1 &81188720
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,7 +437,7 @@ TextMesh:
   m_FontSize: 120
   m_FontStyle: 1
   m_RichText: 1
-  m_Font: {fileID: 12800000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  m_Font: {fileID: 12800000, guid: 34ad0302a4c384e07b714aff93baab64, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
@@ -421,7 +453,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  - {fileID: 2100000, guid: 34ad0302a4c384e07b714aff93baab64, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -436,7 +468,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 81188720}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.269699991, y: 9.29780006, z: .108499996}
+  m_LocalPosition: {x: -.317493439, y: 9.34559345, z: .108499996}
   m_LocalScale: {x: .0930000022, y: .0930000022, z: .0930000022}
   m_Children: []
   m_Father: {fileID: 126777176}
@@ -480,6 +512,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 86031043}
   - 212: {fileID: 86031044}
+  - 114: {fileID: 86031045}
   m_Layer: 0
   m_Name: SmOrangeGear
   m_TagString: Untagged
@@ -522,6 +555,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b6b1bfaebd528487f8f6c264fa5d8301, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &86031045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 86031042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 6
+  direction: 1
+  relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1 &86174807
 GameObject:
   m_ObjectHideFlags: 0
@@ -531,6 +579,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 86174809}
   - 212: {fileID: 86174808}
+  - 114: {fileID: 86174810}
   m_Layer: 0
   m_Name: SmBlueGear
   m_TagString: Untagged
@@ -573,6 +622,49 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2090708899}
   m_RootOrder: 6
+--- !u!114 &86174810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 86174807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 5
+  direction: 1
+  relativegamevelocity: 1
+  passivefriction: 1
+--- !u!1 &116091154
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 116091155}
+  m_Layer: 0
+  m_Name: Audio
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &116091155
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 116091154}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.84910321, y: .381008267, z: 19.4020996}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 282945015}
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
 --- !u!1 &126777175
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +850,7 @@ TextMesh:
   m_FontSize: 100
   m_FontStyle: 1
   m_RichText: 1
-  m_Font: {fileID: 12800000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  m_Font: {fileID: 12800000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
@@ -774,7 +866,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  - {fileID: 2100000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -782,6 +874,92 @@ Renderer:
   m_ScaleInLightmap: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
+--- !u!1 &282945013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 282945015}
+  - 82: {fileID: 282945014}
+  m_Layer: 0
+  m_Name: ClickSound1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &282945014
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 282945013}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 8300000, guid: c657930cbc6964982a2f5f504deac85f, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+--- !u!4 &282945015
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 282945013}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 116091155}
+  m_RootOrder: 0
 --- !u!1 &361770960
 GameObject:
   m_ObjectHideFlags: 0
@@ -1101,7 +1279,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 739971573}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.11999989, y: -7.5, z: 5}
+  m_LocalPosition: {x: -5.30713654, y: -7.00735617, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 126777176}
@@ -1164,7 +1342,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 886614080}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.40999985, y: -7.26000023, z: 5}
+  m_LocalPosition: {x: 5.12912369, y: -7.01368093, z: 5}
   m_LocalScale: {x: .75, y: .75, z: 1}
   m_Children: []
   m_Father: {fileID: 126777176}
@@ -1225,7 +1403,7 @@ TextMesh:
   m_FontSize: 80
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 12800000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  m_Font: {fileID: 12800000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
@@ -1241,7 +1419,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  - {fileID: 2100000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1292,10 +1470,10 @@ TextMesh:
   m_Anchor: 1
   m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 32
+  m_FontSize: 48
   m_FontStyle: 1
   m_RichText: 1
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Font: {fileID: 12800000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
@@ -1311,7 +1489,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2100000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1326,7 +1504,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 982332679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.6599998, y: -3.69000006, z: 4}
+  m_LocalPosition: {x: 5.13578892, y: -5.48172903, z: 4}
   m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
   m_Children: []
   m_Father: {fileID: 126777176}
@@ -1445,6 +1623,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1071286180}
   - 212: {fileID: 1071286179}
+  - 114: {fileID: 1071286181}
   m_Layer: 0
   m_Name: SmOrangeGearTrans
   m_TagString: Untagged
@@ -1486,6 +1665,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2090708899}
   m_RootOrder: 9
+--- !u!114 &1071286181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1071286178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 8
+  direction: 0
+  relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1001 &1109272193
 Prefab:
   m_ObjectHideFlags: 0
@@ -1663,6 +1857,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1317550877}
   - 212: {fileID: 1317550878}
+  - 114: {fileID: 1317550879}
   m_Layer: 0
   m_Name: BlueGear
   m_TagString: Untagged
@@ -1705,6 +1900,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e86e43f07a63d4df090fbce74a1ba00f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1317550879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1317550876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 3
+  direction: 0
+  relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1 &1318055630
 GameObject:
   m_ObjectHideFlags: 0
@@ -2866,6 +3076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imgDown: {fileID: 21300000, guid: 1ccab84edae204591aa375ebc48a5c54, type: 3}
+  clickSound: {fileID: 282945014}
 --- !u!212 &1365093667
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3176,6 +3387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imgDown: {fileID: 21300000, guid: db1216e5c81c8433d86e163f06d8fe58, type: 3}
+  clickSound: {fileID: 282945014}
 --- !u!61 &1451664220
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3250,9 +3462,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: .100000001
+  spinvelocity: 2
   direction: 0
   relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1001 &1719977326
 Prefab:
   m_ObjectHideFlags: 0
@@ -3355,6 +3568,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1832603170}
   - 212: {fileID: 1832603171}
+  - 114: {fileID: 1832603172}
   m_Layer: 0
   m_Name: SmBlueGear
   m_TagString: Untagged
@@ -3397,6 +3611,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8f7fe0b0930e74baa90078afdfaf511e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1832603172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1832603169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 4
+  direction: 1
+  relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1 &1849208655
 GameObject:
   m_ObjectHideFlags: 0
@@ -3489,9 +3718,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: .5
-  direction: 0
+  spinvelocity: 2
+  direction: 1
   relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1001 &1936274745
 Prefab:
   m_ObjectHideFlags: 0
@@ -3607,6 +3837,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1980814936}
   - 212: {fileID: 1980814937}
+  - 114: {fileID: 1980814938}
   m_Layer: 0
   m_Name: BlueGearTrans
   m_TagString: Untagged
@@ -3649,6 +3880,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: febf2ce72db744e5e928114e309231a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1980814938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1980814935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 5
+  direction: 0
+  relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1 &2027776993
 GameObject:
   m_ObjectHideFlags: 0
@@ -3683,7 +3929,7 @@ TextMesh:
   m_FontSize: 100
   m_FontStyle: 1
   m_RichText: 1
-  m_Font: {fileID: 12800000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  m_Font: {fileID: 12800000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
@@ -3699,7 +3945,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  - {fileID: 2100000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -3765,6 +4011,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 2104229579}
   - 212: {fileID: 2104229580}
+  - 114: {fileID: 2104229581}
   m_Layer: 0
   m_Name: SmOrangeGear
   m_TagString: Untagged
@@ -3807,6 +4054,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b6b1bfaebd528487f8f6c264fa5d8301, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &2104229581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2104229578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 7
+  direction: 1
+  relativegamevelocity: 1
+  passivefriction: 1
 --- !u!1 &2107061429
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,7 @@ public class gearMount : MonoBehaviour
 	public float spinvelocity = 0.0f;
 	public int direction = 0;
 	public float relativegamevelocity = 1.0f;
+	public float passivefriction = 1.0f;
 	private float gamevelocity = 0.0f;
 	private float angle = 0.0f;
 
@@ -30,6 +31,9 @@ public class gearMount : MonoBehaviour
 		}
 
 		transform.rotation = Quaternion.Euler(0, 0, angle);
+
+
+		spinvelocity *= passivefriction;
 
 	}
 }

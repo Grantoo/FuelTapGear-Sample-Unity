@@ -127,8 +127,7 @@ public class FuelHandler : MonoBehaviour
 	public string fbemail;
 	public string fbgender;
 	private bool fbdata_ready; 
-
-
+	
 	public const int MATCH_TYPE_SINGLE = 0;
 	public const int MATCH_TYPE_MULTI = 1;
 
@@ -284,13 +283,25 @@ public class FuelHandler : MonoBehaviour
 	}
 
 
-	public void updateLoginText (string str) 
+	public void updateLoginText () 
 	{
 		GameObject gameObj = GameObject.Find ("LoginStatusText");
-		if (gameObj) 
+
+		if (FB.IsLoggedIn) 
 		{
-			TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-			tmesh.text = str;
+			if (gameObj) 
+			{
+				TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+				tmesh.text = "LogOut";
+			}
+		} 
+		else 
+		{
+			if (gameObj) 
+			{
+				TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+				tmesh.text = "Log In";
+			}
 		}
 	}
 	
@@ -389,8 +400,8 @@ public class FuelHandler : MonoBehaviour
 			Debug.Log ("fuelEnabled NotificationEnabled!");
 		}
 
-		gearFriction = 0.98f;
-		gearShapeType = 0;
+		gearFriction = 0.995f;
+		gearShapeType = 1;
 
 		if (PlayerPrefs.HasKey ("numLaunches")) 
 		{
@@ -425,9 +436,8 @@ public class FuelHandler : MonoBehaviour
 		switch (mFBState) 
 		{
 			case eFBState.WaitForInit:
-					if (fbdata_ready) //deprecated? probably
+					if (fbdata_ready) 
 					{
-						//PushFBDataToFuel();	
 						mFBState = eFBState.DataRetrived;
 					}
 			break;
@@ -694,9 +704,9 @@ public class FuelHandler : MonoBehaviour
 		}
 		else
 		{
-			updateLoginText("Already Logged In");
+			//Logout?
+			FB.Logout();
 		}
-		
 	}
 	public void LogoutButtonPressed()
 	{
@@ -757,7 +767,7 @@ public class FuelHandler : MonoBehaviour
 		fbfirstname = dict ["first_name"].ToString();
 
 
-		//fbdata_ready = true;
+		fbdata_ready = true;
 
 
 		PushFBDataToFuel ();
@@ -846,12 +856,8 @@ public class FuelHandler : MonoBehaviour
 		if (FB.IsLoggedIn)                                                                       
 		{                                                                                        
 			Debug.Log("....Already logged in");
-			
-			//set onscreen button text
-			updateLoginText ("Logged In");
-			
+
 			OnLoggedIn();
-			
 		}   
 		                                                                                     
 	} 

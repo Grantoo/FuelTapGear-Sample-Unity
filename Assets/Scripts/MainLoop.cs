@@ -98,7 +98,7 @@ public class MainLoop : MonoBehaviour
 		updateScoreText ( "0" );
 
 		//init game timer
-		updateGameTimerText ( "5.00" );
+		updateGameTimerText ( "10 sec" );
 
 		//init start button text
 		//setStartButtonText ("Start");
@@ -187,7 +187,7 @@ public class MainLoop : MonoBehaviour
 			case eGameState.Init:
 			{
 				scoreValue = 0;
-				gameTimerValue = 5.0f;
+				gameTimerValue = 10.0f;
 
 				InitTextMeshObjs();
 
@@ -207,6 +207,10 @@ public class MainLoop : MonoBehaviour
 			{
 				GameObject _tapsCounter = GameObject.Find("TapsCounter");
 				Animator _Animator = _tapsCounter.GetComponent<Animator>();
+				_Animator.Play ("tapCountDisplayAnim2");
+
+				_tapsCounter = GameObject.Find("MPSCounter");
+				_Animator = _tapsCounter.GetComponent<Animator>();
 				_Animator.Play ("tapCountDisplayAnim2");
 					
 				mGameState = eGameState.Running;
@@ -251,6 +255,15 @@ public class MainLoop : MonoBehaviour
 					Animator _Animator = _tapsCounter.GetComponent<Animator>();
 					_Animator.Play ("tapCountDisplayAnim");
 
+					_tapsCounter = GameObject.Find("MPSCounter");
+					_Animator = _tapsCounter.GetComponent<Animator>();
+					_Animator.Play ("tapCountDisplayAnim");
+
+
+					//bring the system to a grinding halt
+					_gearActionScript.SetFriction(0.96f);
+					_gearActionScript.ClearActiveBonuses();
+
 					//another complete game session
 					if (PlayerPrefs.HasKey ("numSessions")) 
 					{
@@ -261,7 +274,13 @@ public class MainLoop : MonoBehaviour
 				}
 
 				//update game timer
-				updateGameTimerText ( gameTimerValue.ToString("0.00") );
+
+				if(_gearActionScript.Check5secBonus() == true)
+				{
+					gameTimerValue += 5.0f;
+				}
+
+				updateGameTimerText ( gameTimerValue.ToString("0") + " sec" );
 		
 				//update tap score
 				updateScoreText ( scoreValue.ToString() );

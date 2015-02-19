@@ -83,6 +83,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 27711255}
   - 212: {fileID: 27711256}
+  - 114: {fileID: 27711257}
   m_Layer: 0
   m_Name: SmOrangeGearTrans
   m_TagString: Untagged
@@ -97,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 27711254}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.36539924, y: -6.09991264, z: -9}
+  m_LocalPosition: {x: 1.36539936, y: -6.05864191, z: -9}
   m_LocalScale: {x: .768341601, y: .768341601, z: .768341601}
   m_Children: []
   m_Father: {fileID: 1588793377}
@@ -124,6 +125,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 577e6b0288c1a4652bea296f8e8d4754, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &27711257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 27711254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 14
+  direction: 0
+  relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!1 &54394815
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,7 +164,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 54394815}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: .0200231075, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1710301626}
@@ -240,6 +256,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 127158981}
   - 212: {fileID: 127158982}
+  - 114: {fileID: 127158983}
   m_Layer: 0
   m_Name: BlueGearTrans
   m_TagString: Untagged
@@ -282,6 +299,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: febf2ce72db744e5e928114e309231a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &127158983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 127158980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 8
+  direction: 0
+  relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!1 &139464901
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,9 +511,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: .100000001
+  spinvelocity: 8
   direction: 0
   relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!212 &421659614
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -586,6 +619,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 737850553}
   - 212: {fileID: 737850554}
+  - 114: {fileID: 737850555}
   m_Layer: 0
   m_Name: SmOrangeGear
   m_TagString: Untagged
@@ -628,6 +662,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b6b1bfaebd528487f8f6c264fa5d8301, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &737850555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 737850552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 8
+  direction: 1
+  relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!1 &817702306
 GameObject:
   m_ObjectHideFlags: 0
@@ -637,6 +686,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 817702307}
   - 212: {fileID: 817702308}
+  - 114: {fileID: 817702309}
   m_Layer: 0
   m_Name: SmBlueGear
   m_TagString: Untagged
@@ -679,6 +729,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8f7fe0b0930e74baa90078afdfaf511e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &817702309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 817702306}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 10
+  direction: 1
+  relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!1 &843402034
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,6 +753,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 843402035}
   - 212: {fileID: 843402036}
+  - 114: {fileID: 843402037}
   m_Layer: 0
   m_Name: BlueGearTrans
   m_TagString: Untagged
@@ -730,6 +796,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: febf2ce72db744e5e928114e309231a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &843402037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 843402034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 6
+  direction: 0
+  relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!1 &885672965
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,6 +904,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 956876164}
   - 212: {fileID: 956876165}
+  - 114: {fileID: 956876166}
   m_Layer: 0
   m_Name: SmBlueGear
   m_TagString: Untagged
@@ -865,6 +947,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 8f7fe0b0930e74baa90078afdfaf511e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &956876166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 956876163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 12
+  direction: 1
+  relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!1 &1023443249
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,6 +971,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1023443251}
   - 212: {fileID: 1023443250}
+  - 95: {fileID: 1023443252}
   m_Layer: 0
   m_Name: Title_Logo
   m_TagString: Untagged
@@ -915,6 +1013,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+--- !u!95 &1023443252
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1023443249}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: df3bc5914acb4403ab46530e11418c2f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1 &1196619026
 GameObject:
   m_ObjectHideFlags: 0
@@ -924,6 +1037,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1196619027}
   - 212: {fileID: 1196619028}
+  - 114: {fileID: 1196619029}
   m_Layer: 0
   m_Name: SmOrangeGear
   m_TagString: Untagged
@@ -966,6 +1080,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b6b1bfaebd528487f8f6c264fa5d8301, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1196619029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1196619026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 18
+  direction: 1
+  relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!1 &1446534095
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,6 +1323,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1728263416}
   - 212: {fileID: 1728263417}
+  - 114: {fileID: 1728263418}
   m_Layer: 0
   m_Name: BlueGear
   m_TagString: Untagged
@@ -1236,6 +1366,21 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: e86e43f07a63d4df090fbce74a1ba00f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &1728263418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1728263415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinvelocity: 11
+  direction: 0
+  relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!1 &1840239610
 GameObject:
   m_ObjectHideFlags: 0
@@ -1247,7 +1392,7 @@ GameObject:
   - 23: {fileID: 1840239613}
   - 102: {fileID: 1840239612}
   m_Layer: 0
-  m_Name: titleTextMesh
+  m_Name: tapToContinueText
   m_TagString: Untagged
   m_Icon: {fileID: -1077886335, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1282,7 +1427,7 @@ TextMesh:
   m_FontSize: 80
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 12800000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  m_Font: {fileID: 12800000, guid: 34ad0302a4c384e07b714aff93baab64, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
@@ -1298,7 +1443,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: cefdf0de98fda4103b0b6d860878c439, type: 3}
+  - {fileID: 2100000, guid: 34ad0302a4c384e07b714aff93baab64, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1340,7 +1485,7 @@ TextMesh:
   m_FontSize: 64
   m_FontStyle: 0
   m_RichText: 1
-  m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+  m_Font: {fileID: 12800000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4288059030
@@ -1356,7 +1501,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 10100, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2100000, guid: 01b18cd3836e84d9892f5261099aac27, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -1371,7 +1516,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1855987303}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.670000017, y: -8.28999996, z: 4}
+  m_LocalPosition: {x: .196020752, y: -8.30295086, z: 4}
   m_LocalScale: {x: .100000001, y: .100000001, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1429,6 +1574,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1906362747}
   - 114: {fileID: 1906362748}
+  - 82: {fileID: 1906362749}
   m_Layer: 0
   m_Name: FuelHandlerObject
   m_TagString: Untagged
@@ -1443,7 +1589,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1906362746}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.71987677, y: .944518626, z: 15.4020996}
+  m_LocalPosition: {x: -.0432765484, y: -.0872353911, z: 15.4020996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1469,6 +1615,64 @@ MonoBehaviour:
   fbemail: 
   fbgender: 
   dynamicConditions: 
+--- !u!82 &1906362749
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1906362746}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_audioClip: {fileID: 8300000, guid: ec7e428ea69a24d4cb231b12a3813f68, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!1001 &1979193876
 Prefab:
   m_ObjectHideFlags: 0
@@ -1641,9 +1845,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: .5
-  direction: 0
+  spinvelocity: 6
+  direction: 1
   relativegamevelocity: 1
+  passivefriction: .995000005
 --- !u!212 &2046303785
 SpriteRenderer:
   m_ObjectHideFlags: 0

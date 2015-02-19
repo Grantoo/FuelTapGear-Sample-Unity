@@ -3,7 +3,8 @@ using System.Collections;
 
 public class gameBackButton : MonoBehaviour 
 {
-	
+	public AudioSource clickSound;
+
 	void Start () 
 	{
 
@@ -21,6 +22,7 @@ public class gameBackButton : MonoBehaviour
 		{
 			Debug.Log ("gameBackButton - left click.");
 			
+			clickSound.Play();
 			//get main loop game state
 			
 			GameObject _mainLoop = GameObject.Find("MainLoop");
