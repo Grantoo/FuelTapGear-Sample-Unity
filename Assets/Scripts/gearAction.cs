@@ -5,7 +5,7 @@ public class gearAction : MonoBehaviour
 {
 	public Sprite img0, img1, img2, img3, img4, img5;
 
-	public AudioSource bonusSound1, bonusSound2, bonusSound3, bonusSound4, bonusSound5, GameOverSFX;
+	public AudioSource bonusSound1, bonusSound2, bonusSound3, bonusSound4, bonusSound5;
 
 
 	public GameObject spinTextObj;

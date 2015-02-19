@@ -13,6 +13,8 @@ public class MainLoop : MonoBehaviour
 		Done,
 	};
 
+	public AudioSource GameOverSFX;
+
 	public bool scoreSet;
 	public int scoreValue = 0;
 	public float gameTimerValue = 5.0f;
@@ -263,6 +265,8 @@ public class MainLoop : MonoBehaviour
 					//bring the system to a grinding halt
 					_gearActionScript.SetFriction(0.96f);
 					_gearActionScript.ClearActiveBonuses();
+
+					GameOverSFX.Play();
 
 					//another complete game session
 					if (PlayerPrefs.HasKey ("numSessions")) 
