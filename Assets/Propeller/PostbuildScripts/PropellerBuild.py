@@ -19,7 +19,7 @@ xcodePath = sys.argv[2]
 projectPath = sys.argv[3]
 dataPath = sys.argv[4]
 unityApiLevel = int(sys.argv[5].strip())
-
+xcodeVersion = sys.argv[6]
 
 # Unity API levels
 # 0 - UNSUPPORTED
@@ -37,10 +37,11 @@ unityApiLevel = int(sys.argv[5].strip())
 # 12 - UNITY_4_1,
 # 13 - UNITY_4_2,
 # 14 - UNITY_4_3,
-# 15 - UNITY_4_5
+# 15 - UNITY_4_5,
+# 16 - UNITY_4_6
 
 # only supporting Unity 3.5 and up
-if unityApiLevel < 15:
+if unityApiLevel < 9:
 	exitWithError('Unsupported Unity version')
 
 def checkPath(path, libname):
@@ -145,14 +146,17 @@ project.add_file_if_doesnt_exist( projectPath + '/Libraries/PropellerSDKUnityWra
 
 project.saveFormat3_2()
 
-print 'Injecting Propeller script into AppController'
-
 # Unity 4.2 changed the name of the AppController.mm file to UnityAppController.mm
-controllerFile = projectPath + '/Classes/'
+controllerFilename = ''
+
 if unityApiLevel < 13:
-    controllerFile += 'AppController.mm'
+    controllerFilename = 'AppController.mm'
 else:
-    controllerFile += 'UnityAppController.mm'
+    controllerFilename = 'UnityAppController.mm'
+
+controllerFile = projectPath + '/Classes/' + controllerFilename
+
+print 'Injecting Propeller script into ' + controllerFilename
 
 # inject code into AppController.mm or UnityAppController.m
 
@@ -207,7 +211,7 @@ def addLaunchOptionLines():
 	print '\t{'
 	print '\t\tif (![PropellerSDK handleRemoteNotification:remoteNotificationDict newLaunch:YES])'
 	print '\t\t{'
-	print '\t\t\t// This is not a Grantoo remote notification, I should handle it'
+	print '\t\t\t// This is not a Fuel remote notification, I should handle it'
 	print '\t\t}'
 	print '\t}'
 	print ''
@@ -217,7 +221,7 @@ def addLaunchOptionLines():
 	print '\t{'
 	print '\t\tif (![PropellerSDK handleLocalNotification:localNotification newLaunch:YES])'
 	print '\t\t{'
-	print '\t\t\t// This is not a Grantoo local notification, I should handle it'
+	print '\t\t\t// This is not a Fuel local notification, I should handle it'
 	print '\t\t}'
 	print '\t}'
 	print ''
@@ -468,7 +472,7 @@ def addExtraFunctions():
 	print '\t\t\tmessage = [paramList componentsJoinedByString:@"&"];'
 	print '\t\t}'
 	print ''
-	print '\t\tbool hasCompete = [PropellerSDK getHasCompete];'
+	print '\t\tbool hasCompete = [[PropellerSDK instance] getHasCompete];'
 	print '\t\tif(hasCompete == true) {'
 	print '\t\t\tUnitySendMessage("PropellerSDK", "FuelDynamicsUserValues", [message UTF8String]);'
 	print '\t\t} else {'
@@ -558,7 +562,6 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 		elif injectExtraFunctions and '}' not in line:
 			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
 				addExtraFunctions()
-				
 			injectExtraFunctions = False
 
 	lastNonBlankLine = line
@@ -634,14 +637,44 @@ def addWrapperHeader(headerFile):
 
 	fileinput.close()
 
-print 'Injecting compatibility shim into PropellerSDKUnityWrapper'
+def addImport(sourceFile, headerFile):
+	headerCorrect = False
+
+	for line in fileinput.input( projectPath + '/' + sourceFile, inplace=1 ):
+		if not headerCorrect:
+			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
+				print '// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
+				print ''
+				print '#import ' + headerFile
+				print ''
+				print '// *** END PROPELLER BUILD SCRIPT INSERTION ***'
+				print ''
+			headerCorrect = True
+
+		print line,
+
+	fileinput.close()
+
+print 'Injecting compatibility shim into PropellerSDKUnityWrapper.mm'
 
 if unityApiLevel >= 15:
 	addWrapperHeader('UI/UnityViewControllerBase.h')
 elif unityApiLevel >= 10:
 	addWrapperHeader('iPhone_View.h')
 else:
-	addGLViewControllerExport()
 	addWrapperHeader('AppController.h')
+
+print 'Injecting additional compatibility shims'
+
+if (unityApiLevel == 13) or (unityApiLevel == 14):
+	xcodeMajorVersionIndex = xcodeVersion.find('.')
+	xcodeMajorVersionString = xcodeVersion[0:xcodeMajorVersionIndex]
+	xcodeMajorVersion = int(xcodeMajorVersionString)
+
+	if xcodeMajorVersion >= 6:
+		addImport('Classes/Unity/CMVideoSampling.mm', '<OpenGLES/ES2/glext.h>')
+
+if unityApiLevel < 10:
+	addGLViewControllerExport()
 
 print 'Propeller SDK code injection completed!'

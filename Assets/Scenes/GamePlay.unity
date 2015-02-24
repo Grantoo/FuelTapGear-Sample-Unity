@@ -3376,11 +3376,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   img0: {fileID: 21300000, guid: 2a50e253184724805b0c8806ec153259, type: 3}
-  img1: {fileID: 21300000, guid: c73a461a3f3bf407594d358acff3d386, type: 3}
-  img2: {fileID: 21300000, guid: f34ba7afbb1424f7c94b7af0f2b8556d, type: 3}
-  img3: {fileID: 21300000, guid: 15784e39476c84fa68e5a85ca8b348c2, type: 3}
+  img1: {fileID: 21300000, guid: 15784e39476c84fa68e5a85ca8b348c2, type: 3}
+  img2: {fileID: 21300000, guid: c73a461a3f3bf407594d358acff3d386, type: 3}
+  img3: {fileID: 21300000, guid: f34ba7afbb1424f7c94b7af0f2b8556d, type: 3}
   img4: {fileID: 21300000, guid: 2d1d9e07feb664b38a0d0e4a94e0a07d, type: 3}
-  img5: {fileID: 21300000, guid: f2984e77f22f648d7850c6e0dc818b0a, type: 3}
+  img5: {fileID: 21300000, guid: cedc3b0678f584f7cae26387b5e7c38f, type: 3}
   bonusSound1: {fileID: 1985804635}
   bonusSound2: {fileID: 2047134696}
   bonusSound3: {fileID: 1111069089}
@@ -9296,7 +9296,7 @@ TextMesh:
   m_FontSize: 40
   m_FontStyle: 1
   m_RichText: 1
-  m_Font: {fileID: 12800000, guid: fcd17cbfe2c6f4a2c973fea425820942, type: 3}
+  m_Font: {fileID: 12800000, guid: 34ad0302a4c384e07b714aff93baab64, type: 3}
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
@@ -9312,7 +9312,7 @@ Renderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 2100000, guid: fcd17cbfe2c6f4a2c973fea425820942, type: 3}
+  - {fileID: 2100000, guid: 34ad0302a4c384e07b714aff93baab64, type: 3}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0

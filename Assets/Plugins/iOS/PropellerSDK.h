@@ -2,7 +2,7 @@
 //  PropellerSDK.h
 //  libPropellerSDK
 //
-//  Copyright (c) 2015 Fuel. All rights reserved.
+//  Copyright (c) 2015 Fuel Powered, Inc. All rights reserved.
 //
 // PropellerSDK is implemented as a singleton that is accessible
 // via an static instance factory method. One may use this class
@@ -198,6 +198,6 @@ typedef enum
 // Request and Dynamic variables
 - (BOOL)setUserConditions:(NSDictionary *)conditions;
 - (BOOL)getUserValues;
-+ (BOOL)getHasCompete;
+- (BOOL)getHasCompete;
 
 @end

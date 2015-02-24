@@ -155,8 +155,11 @@ public class FuelHandler : MonoBehaviour
 
 	public void tryLaunchFuelSDK()
 	{
+		Debug.Log ("-------tryLaunchFuelSDK---------");
+
 		if (m_matchData.MatchComplete == true && m_matchData.MatchType == MATCH_TYPE_MULTI) 
 		{
+			Debug.Log ("-------LaunchDashBoardWithResults---------");
 			LaunchDashBoardWithResults();
 		}
 	}
@@ -214,7 +217,7 @@ public class FuelHandler : MonoBehaviour
 	
 	private void sendMatchResult (long score)
 	{
-		Debug.Log ("sendMatchResult");
+		Debug.Log ("#########__sendMatchResult__##########");
 
 		long visualScore = score;
 		
@@ -222,7 +225,7 @@ public class FuelHandler : MonoBehaviour
 		matchResult.Add ("tournamentID", m_matchData.TournamentID);
 		matchResult.Add ("matchID", m_matchData.MatchID);
 		matchResult.Add ("score", m_matchData.MatchScore);
-		string visualScoreStr = visualScore.ToString() + " taps : " + m_matchData.MatchMaxSpeed.ToString() + " mps";
+		string visualScoreStr = visualScore.ToString() + " : " + m_matchData.MatchMaxSpeed.ToString() + " mps";
 		matchResult.Add ("visualScore", visualScoreStr);
 
 		PropellerSDK.SubmitMatchResult (matchResult);
