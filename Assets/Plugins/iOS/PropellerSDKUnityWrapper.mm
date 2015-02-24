@@ -388,7 +388,7 @@ extern "C"
 
     void iOSGetUserValues()
     {
-        [[PropellerSDK instance] getUserValues];
+        [[PropellerSDK instance] syncUserValues];
     }
     
 	NSObject* normalizeJSONDictionary(NSDictionary *dictionary)

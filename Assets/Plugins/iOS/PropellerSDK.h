@@ -89,8 +89,6 @@ typedef enum
 // kind of parameters.
 + (void)setRootViewController:(UIViewController*)rootViewController;
 + (void)useSandbox;
-
-+ (void)initializeDynamicsOnly:(NSString*)gameID gameSecret:(NSString*)gameSecret;
 + (void)initialize:(NSString*)gameID gameSecret:(NSString*)gameSecret;
 + (void)initialize:(NSString*)gameID gameSecret:(NSString*)gameSecret gameHasLogin:(BOOL)gameHasLogin gameHasInvite:(BOOL)gameHasInvite gameHasShare:(BOOL)gameHasShare;
 
@@ -197,7 +195,6 @@ typedef enum
 
 // Request and Dynamic variables
 - (BOOL)setUserConditions:(NSDictionary *)conditions;
-- (BOOL)getUserValues;
-- (BOOL)getHasCompete;
+- (BOOL)syncUserValues;
 
 @end

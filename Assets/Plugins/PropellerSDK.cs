@@ -580,17 +580,17 @@ public class PropellerSDK : MonoBehaviour
 	/// </summary>
 	public static void GetUserValues ()
 	{
-		Debug.Log ("GetUserValues - start");
+		Debug.Log ("SyncUserValues - start");
 
 		if (!Application.isEditor) {
 #if UNITY_IPHONE
 			PropellerImports.iOSGetUserValues();
 #elif UNITY_ANDROID
-			m_jniPropellerUnity.CallStatic("GetUserValues");
+			m_jniPropellerUnity.CallStatic("SyncUserValues");
 #endif
 		}
 
-		Debug.Log ("GetUserValues - end");
+		Debug.Log ("SyncUserValues - end");
 	}
 
 	#endregion
