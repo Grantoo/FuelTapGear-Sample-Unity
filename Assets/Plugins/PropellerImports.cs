@@ -10,7 +10,7 @@ public class PropellerImports : MonoBehaviour
 	[DllImport ("__Internal")]
 	public static extern bool iOSSetUserConditions(string conditions);
 	[DllImport ("__Internal")]
-	public static extern void iOSGetUserValues();
+	public static extern void iOSSyncUserValues();
 #endif
 
 	static PropellerImports ()

@@ -146,6 +146,11 @@ public class FuelHandler : MonoBehaviour
 		return gearShapeType;
 	}
 
+	private int gearGameTime;
+	public int getGearGameTime() 
+	{	
+		return gearGameTime;
+	}
 
 	public GameMatchData getMatchData()
 	{
@@ -369,6 +374,7 @@ public class FuelHandler : MonoBehaviour
 
 			if(useFaceBook)
 			{
+				Debug.Log ("FB.Init");
 				// Initialize FB SDK 
 				FB.Init(SetInit, OnHideUnity);  
 			}
@@ -403,8 +409,9 @@ public class FuelHandler : MonoBehaviour
 			Debug.Log ("fuelEnabled NotificationEnabled!");
 		}
 
-		gearFriction = 0.995f;
+		gearFriction = 0.999f;
 		gearShapeType = 0;
+		gearGameTime = 10;
 
 		if (PlayerPrefs.HasKey ("numLaunches")) 
 		{
@@ -701,18 +708,21 @@ public class FuelHandler : MonoBehaviour
 		}
 
 		if (!FB.IsLoggedIn) 
-		{                                                                                                                
+		{   
+			Debug.Log("FB.Login(email, publish_actions, LoginCallback);");                                                          
+
 			FB.Login("email, publish_actions", LoginCallback); 
 			//FB.Login ("public_profile, user_friends, email, publish_actions", LoginCallback); 
 		}
 		else
 		{
 			//Logout?
-			FB.Logout();
+			//FB.Logout();
 		}
 	}
 	public void LogoutButtonPressed()
 	{
+		/*
 		if (useFaceBook == false) 
 		{
 			return;
@@ -724,6 +734,7 @@ public class FuelHandler : MonoBehaviour
 
 			FB.Logout();
 		}
+		*/
 	}
 
 	void LoginCallback(FBResult result)                                                        
@@ -742,6 +753,7 @@ public class FuelHandler : MonoBehaviour
 	
 	void OnLoggedIn()                                                                          
 	{        
+		Debug.Log("Face book : OnLoggedIn");                                                          
 		//get additional data from facebook
 
 		FB.API("me?fields=name,email,gender,first_name", Facebook.HttpMethod.GET, UserCallBack);
@@ -783,8 +795,8 @@ public class FuelHandler : MonoBehaviour
 		{    
 			Debug.Log("trySocialLogin::::Logout - Login");                                                          
 
-			FB.Logout();
-			FB.Login("email, publish_actions", LoginCallback); 
+			//FB.Logout();
+			//FB.Login("email, publish_actions", LoginCallback); 
 
 			//return to sdk
 			//PropellerSDK.SdkSocialLoginCompleted (null);
@@ -856,12 +868,17 @@ public class FuelHandler : MonoBehaviour
 	{                                                                                            
 		Debug.Log("Facebook SetInit"); 
 		    
-		if (FB.IsLoggedIn)                                                                       
+		if (FB.IsLoggedIn) 
 		{                                                                                        
-			Debug.Log("....Already logged in");
+			Debug.Log ("....Already logged in");
 
-			OnLoggedIn();
-		}   
+			OnLoggedIn ();
+
+		} else {
+
+			Debug.Log ("....Already logged in");
+
+		}
 		                                                                                     
 	} 
 	
@@ -1122,14 +1139,14 @@ public class FuelHandler : MonoBehaviour
 		PropellerSDK.SetUserConditions (conditions);	
 	}
 	
-	public void getUserValues()
+	public void syncUserValues()
 	{
 		if (useFuelDynamics == false) 
 		{
 			return;
 		}
 
-		PropellerSDK.GetUserValues();
+		PropellerSDK.SyncUserValues();
 	}
 	
 	public void OnFuelDynamicsUserValues (Dictionary<string, object> userValuesInfo)

@@ -380,9 +380,9 @@ MonoBehaviour:
   iOSGameHandleShare: 1
   AndroidNotificationIcon: notify_icon
   AndroidGCMSenderID: 
-  AndroidGameHandleLogin: 1
-  AndroidGameHandleInvite: 1
-  AndroidGameHandleShare: 1
+  AndroidGameHandleLogin: 0
+  AndroidGameHandleInvite: 0
+  AndroidGameHandleShare: 0
 --- !u!4 &210982528
 Transform:
   m_ObjectHideFlags: 0
@@ -1790,15 +1790,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: AndroidGameHandleLogin
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: AndroidGameHandleInvite
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: AndroidGameHandleShare
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: UseTestServers

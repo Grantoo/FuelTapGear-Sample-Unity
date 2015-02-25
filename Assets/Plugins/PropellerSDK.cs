@@ -578,13 +578,13 @@ public class PropellerSDK : MonoBehaviour
 	/// <summary>
 	/// Begins an asynchronous operation to request the user values from Propeller.
 	/// </summary>
-	public static void GetUserValues ()
+	public static void SyncUserValues ()
 	{
 		Debug.Log ("SyncUserValues - start");
 
 		if (!Application.isEditor) {
 #if UNITY_IPHONE
-			PropellerImports.iOSGetUserValues();
+			PropellerImports.iOSSyncUserValues();
 #elif UNITY_ANDROID
 			m_jniPropellerUnity.CallStatic("SyncUserValues");
 #endif
@@ -1047,7 +1047,7 @@ public class PropellerSDK : MonoBehaviour
 		m_notificationListener.SdkOnNotificationDisabled(notificationType);
 	}
 
-	private void FuelDynamicsUserValues (string message)
+	private void PropellerOnFuelDynamicsUserValues (string message)
     {
 		if (string.IsNullOrEmpty (message)) {
 			Debug.Log ("FuelDynamicsUserValues - null or empty message");

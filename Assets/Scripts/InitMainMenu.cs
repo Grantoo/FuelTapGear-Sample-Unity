@@ -49,7 +49,7 @@ public class InitMainMenu : MonoBehaviour
 		//FuelDynamicsHandler _fuelDynamicsHandlerScript = _fuelDynamicsHandler.GetComponent<FuelDynamicsHandler>();
 
 		//_fuelHandlerScript.setUserConditions();
-		_fuelHandlerScript.getUserValues();
+		_fuelHandlerScript.syncUserValues();
 
 		//Hi Score
 		_fuelHandlerScript.tryRefreshHiScore();
