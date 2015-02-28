@@ -1149,14 +1149,14 @@ public class FuelHandler : MonoBehaviour
 		PropellerSDK.SyncUserValues();
 	}
 	
-	public void OnFuelDynamicsUserValues (Dictionary<string, object> userValuesInfo)
+	public void OnUserValues (Dictionary<string, object> userValuesInfo)
 	{
 		if (useFuelDynamics == false) 
 		{
 			return;	
 		}
 
-		Debug.Log ("-----------OnFuelDynamicsUserValues----------------");
+		Debug.Log ("-----------OnUserValues----------------");
 		
 		//Game Values - defined int the CSV
 		String _friction = "friction";

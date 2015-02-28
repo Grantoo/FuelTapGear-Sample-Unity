@@ -472,7 +472,7 @@ def addExtraFunctions():
 	print '\t\t\tmessage = [paramList componentsJoinedByString:@"&"];'
 	print '\t\t}'
 	print ''
-	print '\t\tUnitySendMessage("PropellerSDK", "PropellerOnFuelDynamicsUserValues", [message UTF8String]);'
+	print '\t\tUnitySendMessage("PropellerSDK", "PropellerOnUserValues", [message UTF8String]);'
 	print '\t}'
 	print '}'
 	print ''

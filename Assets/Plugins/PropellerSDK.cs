@@ -1047,7 +1047,7 @@ public class PropellerSDK : MonoBehaviour
 		m_notificationListener.SdkOnNotificationDisabled(notificationType);
 	}
 
-	private void PropellerOnFuelDynamicsUserValues (string message)
+	private void PropellerOnUserValues (string message)
     {
 		if (string.IsNullOrEmpty (message)) {
 			Debug.Log ("FuelDynamicsUserValues - null or empty message");
@@ -1059,7 +1059,7 @@ public class PropellerSDK : MonoBehaviour
         const char kDelimeter = '&';
 		string[] resultsArray = message.Split (kDelimeter);
 
-		if (resultsArray.Length == 0) {
+		if (resultsArray.Length == 0 || resultsArray.Length%2 == 1) {
 			Debug.LogError ("FuelDynamicsUserValues - Invalid response from PropellerUnitySDK");
 			return;
 		}
@@ -1074,7 +1074,7 @@ public class PropellerSDK : MonoBehaviour
             return;
 		}
 
-		m_hostGameObject.SendMessage("OnFuelDynamicsUserValues", userValuesInfo);
+		m_hostGameObject.SendMessage("OnUserValues", userValuesInfo);
     }
 
 	#endregion

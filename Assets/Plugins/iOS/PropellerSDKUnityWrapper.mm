@@ -369,6 +369,7 @@ extern "C"
             return false;
         }
 
+        //TODO: this is needed or crashes - investigate
         conditions = (NSDictionary*)normalizeJSONDictionary(conditions);
 
         if (conditions == nil) {
