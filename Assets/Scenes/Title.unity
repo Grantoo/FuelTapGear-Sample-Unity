@@ -379,7 +379,7 @@ MonoBehaviour:
   iOSGameHandleInvite: 1
   iOSGameHandleShare: 1
   AndroidNotificationIcon: notify_icon
-  AndroidGCMSenderID: 
+  AndroidGCMSenderID: 316280768328
   AndroidGameHandleLogin: 0
   AndroidGameHandleInvite: 0
   AndroidGameHandleShare: 0
@@ -1811,6 +1811,10 @@ Prefab:
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: HostGameObjectName
       value: FuelHandlerObject
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
+      propertyPath: AndroidGCMSenderID
+      value: 316280768328
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
