@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class MainLoop : MonoBehaviour 
 {
@@ -26,6 +27,25 @@ public class MainLoop : MonoBehaviour
 
 	public eGameState mGameState = eGameState.Init;
 
+
+
+	/*
+	 -----------------------------------------------------
+			Access to FuelHandler this pointer
+	 -----------------------------------------------------
+	*/
+	private FuelHandler getFuelHandlerClass()
+	{
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		if (_fuelHandler != null) {
+			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler> ();
+			if(_fuelHandlerScript != null) {
+				return _fuelHandlerScript;
+			}
+			throw new Exception();
+		}
+		throw new Exception();
+	}
 
 	public void setStartButtonText (string str) 
 	{
@@ -74,24 +94,19 @@ public class MainLoop : MonoBehaviour
 	}
 
 
-	void resetGear () 
+	void resetDynamicData () 
 	{
-		//get Fuel Handler
-		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+		FuelHandler _fuelHandlerScript = getFuelHandlerClass();
 
-		int _gearShapeType = _fuelHandlerScript.getGearShapeType ();
-		float _gearFriction = _fuelHandlerScript.getGearFriction ();
+		gameTimerValue = (float)_fuelHandlerScript.GameTime;
+
+		int _gearShapeType = _fuelHandlerScript.GearShapeType;
+		float _gearFriction = _fuelHandlerScript.GearFriction;
 
 		GameObject _gearAction = GameObject.Find("GearProxy1");
 		gearAction _gearActionScript = _gearAction.GetComponent<gearAction>();
-
-
-
 		_gearActionScript.Reset (_gearShapeType, _gearFriction);
 	}
-
-
 
 
 	void InitTextMeshObjs () 
@@ -100,11 +115,9 @@ public class MainLoop : MonoBehaviour
 		updateScoreText ( "0" );
 
 		//init game timer
-		updateGameTimerText ( "10 sec" );
-
-		//init start button text
-		//setStartButtonText ("Start");
+		updateGameTimerText ( gameTimerValue.ToString() + " sec" );
 	}
+
 
 	void Start () 
 	{
@@ -115,12 +128,11 @@ public class MainLoop : MonoBehaviour
 		scoreSet = false;
 
 		//set match data
-		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+		FuelHandler _fuelHandlerScript = getFuelHandlerClass();
 
 		GameMatchData _data = _fuelHandlerScript.getMatchData();
 
-		if (_data.MatchDataReady == true) 
+		if (_data.ValidMatchData == true) 
 		{
 			updateYourAvatarText (_data.YourNickname);
 			updateTheirAvatarText (_data.TheirNickname);
@@ -132,20 +144,15 @@ public class MainLoop : MonoBehaviour
 			_gameObj = GameObject.Find("theirAvatar");
 			StartCoroutine(downloadImgX(_data.TheirAvatarURL, _gameObj));
 		} 
-		else 
+		else //Single Player
 		{
 			updateYourAvatarText ("You");
 			updateTheirAvatarText ("Computer");
 			updateMatchRoundText ("Round - X");
 		}
 
-		//InitTextMeshObjs();
 		GameObject _backObj = GameObject.Find("backButton");
 		_backObj.renderer.enabled = false;
-
-		//GameObject _OilCanObj = GameObject.Find("OilCan");
-		//Animator _oilCanController = _OilCanObj.GetComponent<Animator>();
-		//_oilCanController.StopPlayback ();
 	}
 
 	IEnumerator DownloadImage(string url, Texture2D tex) 
@@ -191,12 +198,13 @@ public class MainLoop : MonoBehaviour
 				scoreValue = 0;
 				gameTimerValue = 10.0f;
 
+
+				resetDynamicData();
+
 				InitTextMeshObjs();
 
-				//reset with friction and geartype
-				resetGear();
-
-				mGameState = eGameState.Ready;
+			
+			mGameState = eGameState.Ready;
 			}
 			break;
 
@@ -236,17 +244,12 @@ public class MainLoop : MonoBehaviour
 					gameTimerValue = 0.0f;
 
 					hideStartButtonText();
-					//setStartButtonText ("< Match Results.");
-
-					//stuff score & speed
 
 					int maxspeed = (int)_gearActionScript.maxspinvelocity;
 
+					FuelHandler _fuelHandlerScript = getFuelHandlerClass();
 
-					GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-					FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
-
-					_fuelHandlerScript.StuffScore(scoreValue, maxspeed);
+					_fuelHandlerScript.SetMatchScore(scoreValue, maxspeed);
 
 					GameObject _backObj = GameObject.Find("backButton");
 					_backObj.renderer.enabled = true;
@@ -278,7 +281,6 @@ public class MainLoop : MonoBehaviour
 				}
 
 				//update game timer
-
 				if(_gearActionScript.Check5secBonus() == true)
 				{
 					gameTimerValue += 5.0f;

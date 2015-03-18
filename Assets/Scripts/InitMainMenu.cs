@@ -9,6 +9,8 @@ public class InitMainMenu : MonoBehaviour
 	{
 		Debug.Log ("InitMainMenu!");
 
+		AddNotificationObservers ();
+
 		//init particles to off
 		Debug.Log ("Start Particles!");
 		GameObject particleObj = GameObject.Find ("VirtualGoodsParticles");
@@ -49,30 +51,54 @@ public class InitMainMenu : MonoBehaviour
 		//FuelDynamicsHandler _fuelDynamicsHandlerScript = _fuelDynamicsHandler.GetComponent<FuelDynamicsHandler>();
 
 		//_fuelHandlerScript.setUserConditions();
+
 		_fuelHandlerScript.syncUserValues();
 
-		//Hi Score
 		_fuelHandlerScript.tryRefreshHiScore();
 
-		//challenge count
 		_fuelHandlerScript.SyncChallengeCounts();
 
-		//Tournament Info
 		_fuelHandlerScript.SyncTournamentInfo();
 
-		//Virtual Goods
 		_fuelHandlerScript.SyncVirtualGoods();
-
-		//try launch fuelSDK
-		_fuelHandlerScript.tryLaunchFuelSDK();
 
 		_fuelHandlerScript.updateLoginText();
 
+		_fuelHandlerScript.tryLaunchFuelSDK();
 	}
 
-	
-	public void RefreshChallengeCount(int ccount)
+
+
+
+	public void AddNotificationObservers()
 	{
+		NotificationCenter.DefaultCenter.AddObserver(this, "LaunchGamePlay");
+		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshDebugText");
+		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshChallengeCount");
+	}
+	public void RemoveNotificationObservers()
+	{
+		NotificationCenter.DefaultCenter.RemoveObserver(this, "LaunchGamePlay");
+		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshDebugText");
+		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshChallengeCount");
+	}
+
+
+	
+	public void LaunchGamePlay()
+	{
+		RemoveNotificationObservers ();
+		
+		Application.LoadLevel("GamePlay");
+	}
+	
+
+
+	public void RefreshChallengeCount(Hashtable ccTable)
+	{
+		// retrieve a value for the given key
+		int ccount = (int)ccTable["cc"];    
+
 		//show challenge count pieces and set count values
 		GameObject gameObj = GameObject.Find("ccbacking");
 		gameObj.renderer.enabled = true;
@@ -186,6 +212,28 @@ public class InitMainMenu : MonoBehaviour
 		ParticleSystem psystem = (ParticleSystem)gameObj.GetComponent (typeof(ParticleSystem)); 
 
 		psystem.Play();
+	}
+
+
+	public void RefreshDebugText()
+	{
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+		
+		int _gearShapeType = _fuelHandlerScript.GearShapeType;
+		float _gearFriction = _fuelHandlerScript.GearFriction;
+
+		GameObject textMesh = GameObject.Find ("DebugText1");
+		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+
+		tmesh.text = "friction = " + _gearFriction.ToString();
+		tmesh.renderer.enabled = true;
+
+		textMesh = GameObject.Find ("DebugText2");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		
+		tmesh.text = "geartype = " + _gearShapeType.ToString();
+		tmesh.renderer.enabled = true;
 	}
 
 

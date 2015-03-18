@@ -379,7 +379,7 @@ MonoBehaviour:
   iOSGameHandleInvite: 1
   iOSGameHandleShare: 1
   AndroidNotificationIcon: notify_icon
-  AndroidGCMSenderID: 316280768328
+  AndroidGCMSenderID: 
   AndroidGameHandleLogin: 0
   AndroidGameHandleInvite: 0
   AndroidGameHandleShare: 0
@@ -1605,16 +1605,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d173cc15f3f0d4f3c95b1c0f7da1add3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mFBState: 0
-  useFaceBook: 0
-  useFuelCompete: 0
-  useFuelDynamics: 0
-  get_data: 
   fbname: 
   fbfirstname: 
   fbemail: 
   fbgender: 
-  dynamicConditions: 
 --- !u!82 &1906362749
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1814,7 +1808,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: AndroidGCMSenderID
-      value: 316280768328
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}

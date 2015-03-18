@@ -15,82 +15,19 @@ using Analytics;
 
 public struct GameMatchData 
 {
-	private bool matchDataReady;
-	private bool matchComplete;
-	private string tournamentID;
-	private string matchID;
-	private int matchType;
-	private int matchRound;
-	private int matchScore;
-	private int matchMaxSpeed;
-	private string yourNickname;
-	private string yourAvatarURL;
-	private string theirNickname;
-	private string theirAvatarURL;
-	
-	public bool MatchDataReady 
-	{	
-		get { return matchDataReady; }	
-		set { matchDataReady = value; }
-	}
-	public bool MatchComplete 
-	{	
-		get { return matchComplete; }	
-		set { matchComplete = value; }
-	}
-	public string TournamentID 
-	{	
-		get { return tournamentID; }	
-		set { tournamentID = value; }
-	}
-	public string MatchID 
-	{	
-		get { return matchID; }	
-		set { matchID = value; }
-	}
-	public int MatchType 
-	{	
-		get { return matchType; }	
-		set { matchType = value; }
-	}
-	public int MatchRound 
-	{	
-		get { return matchRound; }	
-		set { matchRound = value; }
-	}
-	public int MatchScore 
-	{	
-		get { return matchScore; }	
-		set { matchScore = value; }
-	}
-	public int MatchMaxSpeed 
-	{	
-		get { return matchMaxSpeed; }	
-		set { matchMaxSpeed = value; }
-	}
-	public string YourNickname 
-	{	
-		get { return yourNickname; }	
-		set { yourNickname = value; }
-	}
-	public string YourAvatarURL 
-	{	
-		get { return yourAvatarURL; }	
-		set { yourAvatarURL = value; }
-	}
-	public string TheirNickname 
-	{	
-		get { return theirNickname; }	
-		set { theirNickname = value; }
-	}
-	public string TheirAvatarURL 
-	{	
-		get { return theirAvatarURL; }	
-		set { theirAvatarURL = value; }
-	}	
+	public bool ValidMatchData { get; set; }
+	public bool MatchComplete { get; set; }
+	public int MatchType { get; set; }
+	public int MatchRound { get; set; }
+	public int MatchScore { get; set; }
+	public int MatchMaxSpeed { get; set; }
+	public string TournamentID { get; set; }
+	public string MatchID { get; set; }
+	public string YourNickname { get; set; }
+	public string YourAvatarURL { get; set; }
+	public string TheirNickname { get; set; }
+	public string TheirAvatarURL { get; set; }
 }
-
-
 
 
 
@@ -107,50 +44,21 @@ public class FuelHandler : MonoBehaviour
 
 	private fuelSDKListener m_listener;
 	private GameMatchData m_matchData;
+	
+	private bool useFaceBook; 
+	private bool useFuelCompete; 
 
-	public enum eFBState 
-	{
-		WaitForInit, 
-		DataRetrived,
-		LaunchWithResults,
-		SystemSettled
-	};
-	public eFBState mFBState = eFBState.WaitForInit;
-
-	public bool useFaceBook; 
-	public bool useFuelCompete; 
-	public bool useFuelDynamics; 
-
-	public string get_data; 
 	public string fbname;
 	public string fbfirstname;//use this as nickname for now
 	public string fbemail;
 	public string fbgender;
-	private bool fbdata_ready; 
-	
+
 	public const int MATCH_TYPE_SINGLE = 0;
 	public const int MATCH_TYPE_MULTI = 1;
-
-
-	public string dynamicConditions;
-
-	private float gearFriction;
-	public float getGearFriction()
-	{	
-		return gearFriction;	
-	}
-
-	private int gearShapeType;
-	public int getGearShapeType() 
-	{	
-		return gearShapeType;
-	}
-
-	private int gearGameTime;
-	public int getGearGameTime() 
-	{	
-		return gearGameTime;
-	}
+	
+	public float GearFriction { get; set; }
+	public int GearShapeType { get; set; }
+	public int GameTime { get; set; }
 
 	public GameMatchData getMatchData()
 	{
@@ -158,13 +66,158 @@ public class FuelHandler : MonoBehaviour
 	}
 
 
+
+
+
+
+	/*
+	 -----------------------------------------------------
+							Awake
+	 -----------------------------------------------------
+	*/
+	void Awake ()
+	{
+		Debug.Log ("Awake");
+
+		if (Instance != null && Instance != this) 
+		{
+			//destroy other instances
+			Destroy (gameObject);
+		} 
+		else if( Instance == null )
+		{
+			#if USE_ANALYTICS
+			flurryService = Flurry.Instance;
+				//AssertNotNull(service, "Unable to create Flurry instance!", this);
+				//Assert(!string.IsNullOrEmpty(_iosApiKey), "_iosApiKey is empty!", this);
+				//Assert(!string.IsNullOrEmpty(_androidApiKey), "_androidApiKey is empty!", this);
+			flurryService.StartSession(_iosApiKey, _androidApiKey);
+			#endif
+
+			m_listener = new fuelSDKListener ();
+			if(m_listener == null) 
+			{
+				throw new Exception();
+			}
+			
+			m_matchData = new GameMatchData ();
+			m_matchData.ValidMatchData = false;
+			m_matchData.MatchComplete = false;
+			
+			useFaceBook = true;
+			useFuelCompete = true; 
+
+			if(useFaceBook)
+			{
+				Debug.Log ("FB.Init");
+				FB.Init(SetInit, OnHideUnity);  
+			}
+		}
+		
+		Instance = this;
+		
+		DontDestroyOnLoad(gameObject);
+	}
+	
+
+	/*
+	 -----------------------------------------------------
+							Start
+	 -----------------------------------------------------
+	*/
+	void Start () 
+	{
+		Debug.Log ("Start");
+		
+		// enable push notifications
+		PropellerSDK.EnableNotification ( PropellerSDK.NotificationType.push );
+		
+		// disable local notifications
+		//PropellerSDK.DisableNotification ( PropellerSDK.NotificationType.local );
+		
+		// validate enabled notifications - result is false since local notifications are disabled
+		bool fuelEnabled = PropellerSDK.IsNotificationEnabled( PropellerSDK.NotificationType.all );	
+		if (fuelEnabled) 
+		{
+			Debug.Log ("fuelEnabled NotificationEnabled!");
+		}
+		
+		GearFriction = 0.999f;
+		GearShapeType = 0;
+		GameTime = 10;
+		
+		if (PlayerPrefs.HasKey ("numLaunches")) 
+		{
+			int numLaunches = PlayerPrefs.GetInt ("numLaunches");
+			numLaunches++;
+			PlayerPrefs.SetInt("numLaunches", numLaunches);
+		}
+		
+		setUserConditions ();
+
+	}
+	
+
+	void OnApplicationPause(bool paused)
+	{
+		// application entering background
+		if (paused) 
+		{
+			#if UNITY_IPHONE
+			NotificationServices.ClearLocalNotifications ();
+			NotificationServices.ClearRemoteNotifications ();
+			#endif
+		}
+	}
+
+
+	/*
+	 -----------------------------------------------------
+							Update
+	 -----------------------------------------------------
+	*/
+	void Update () 
+	{
+		
+
+	}
+
+	/*
+	 -----------------------------------------------------
+			Access to mainmenu this pointer
+	 -----------------------------------------------------
+	*/
+	private InitMainMenu getMainMenuClass()
+	{
+		GameObject _mainmenu = GameObject.Find("InitMainMenu");
+		if (_mainmenu != null) {
+			InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu> ();
+			if(_mainmenuScript != null) {
+				return _mainmenuScript;
+			}
+			throw new Exception();
+		}
+		throw new Exception();
+	}
+
+
+	/*
+	 -----------------------------------------------------
+						Launch Routines
+	 -----------------------------------------------------
+	*/
+	private void LaunchDashBoardWithResults()
+	{
+		Debug.Log ("LaunchDashBoardWithResults");
+		sendMatchResult (m_matchData.MatchScore);
+	}
+
+	
 	public void tryLaunchFuelSDK()
 	{
-		Debug.Log ("-------tryLaunchFuelSDK---------");
-
+		Debug.Log ("tryLaunchFuelSDK");
 		if (m_matchData.MatchComplete == true && m_matchData.MatchType == MATCH_TYPE_MULTI) 
 		{
-			Debug.Log ("-------LaunchDashBoardWithResults---------");
 			LaunchDashBoardWithResults();
 		}
 	}
@@ -173,16 +226,16 @@ public class FuelHandler : MonoBehaviour
 	public void launchSinglePlayerGame()
 	{
 		m_matchData.MatchType = MATCH_TYPE_SINGLE;
-		m_matchData.MatchDataReady = false;
+		m_matchData.ValidMatchData = false;
 
-		Application.LoadLevel("GamePlay");
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "LaunchGamePlay");
 	}
 
+	
 	public void LaunchMultiplayerGame(Dictionary<string, string> matchResult)
 	{
 		m_matchData.MatchType = MATCH_TYPE_MULTI;
-
-		m_matchData.MatchDataReady = true;
+		m_matchData.ValidMatchData = true;
 
 		m_matchData.TournamentID = matchResult ["tournamentID"];
 		m_matchData.MatchID = matchResult ["matchID"];
@@ -202,7 +255,7 @@ public class FuelHandler : MonoBehaviour
 		m_matchData.TheirAvatarURL = them ["avatar"];
 
 		Debug.Log (	"__LaunchMultiplayerGame__" + "\n" +
-		           "MatchDataReady = " + m_matchData.MatchDataReady + "\n" +
+		           "ValidMatchData = " + m_matchData.ValidMatchData + "\n" +
 		           "TournamentID = " + m_matchData.TournamentID + "\n" +
 		           "MatchID = " + m_matchData.MatchID + "\n" +
 		           "MatchRound = " + m_matchData.MatchRound + "\n" +
@@ -217,12 +270,13 @@ public class FuelHandler : MonoBehaviour
 
 		m_matchData.MatchComplete = false;
 
-		Application.LoadLevel("GamePlay");
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "LaunchGamePlay");
 	}
-	
+
+
 	private void sendMatchResult (long score)
 	{
-		Debug.Log ("#########__sendMatchResult__##########");
+		Debug.Log ("sendMatchResult");
 
 		long visualScore = score;
 		
@@ -237,10 +291,7 @@ public class FuelHandler : MonoBehaviour
 		PropellerSDK.Launch (m_listener);	
 	}
 
-
-
-
-
+	
 	private void sendCustomMatchResult (long score, float visualScore)
 	{
 		Debug.Log ("sendCustomMatchResult");
@@ -270,9 +321,6 @@ public class FuelHandler : MonoBehaviour
 		PropellerSDK.Launch (m_listener);	
 	}
 
-	/*
-	 * Functions called from other scripts
-	*/
 	public void launchPropeller ()
 	{
 		if (useFuelCompete == false) 
@@ -281,7 +329,6 @@ public class FuelHandler : MonoBehaviour
 		}
 
 		Debug.Log ("launchPropeller");
-
 		if (m_listener == null) 
 		{
 			throw new Exception();
@@ -314,163 +361,21 @@ public class FuelHandler : MonoBehaviour
 	}
 	
 	
-	public void StuffScore(int scoreValue, int speedValue)
+	public void SetMatchScore(int scoreValue, int speedValue)
 	{
-		Debug.Log ("StuffScore = " + scoreValue);
+		Debug.Log ("SetMatchScore = " + scoreValue);
 
 		m_matchData.MatchScore = scoreValue;
 		m_matchData.MatchMaxSpeed = speedValue;
 
 		//hmmm, better clean up this check
-		if (m_matchData.MatchDataReady == true) 
+		if (m_matchData.ValidMatchData == true) 
 		{
 			m_matchData.MatchComplete = true;
 		}
 	}
-
-
-
-
-
-
-	/*
-	 * Awake
-	*/
-	void Awake ()
-	{
-		if (Instance != null && Instance != this) 
-		{
-			//destroy other instances
-			Destroy (gameObject);
-		} 
-		else if( Instance == null )
-		{
-#if USE_ANALYTICS
-			flurryService = Flurry.Instance;
-			
-			//AssertNotNull(service, "Unable to create Flurry instance!", this);
-			//Assert(!string.IsNullOrEmpty(_iosApiKey), "_iosApiKey is empty!", this);
-			//Assert(!string.IsNullOrEmpty(_androidApiKey), "_androidApiKey is empty!", this);
-			flurryService.StartSession(_iosApiKey, _androidApiKey);
-#endif
-
-
-			m_listener = new fuelSDKListener ();
-			if(m_listener == null) 
-			{
-				throw new Exception();
-			}
-
-			m_matchData = new GameMatchData ();
-			m_matchData.MatchDataReady = false;
-			m_matchData.MatchComplete = false;
-
-			fbdata_ready = false;
-
-			useFaceBook = true;
-			useFuelCompete = true; 
-			useFuelDynamics = true; 
-
-
-			if(useFaceBook)
-			{
-				Debug.Log ("FB.Init");
-				// Initialize FB SDK 
-				FB.Init(SetInit, OnHideUnity);  
-			}
-
-		}
-		
-		Instance = this;
-		
-		DontDestroyOnLoad(gameObject);
-
-	}
 	
-	
-	
-	/*
-	 * Start
-	*/
-	void Start () 
-	{
-		Debug.Log ("<----- Start ----->");
 
-		// enable push notifications
-		PropellerSDK.EnableNotification ( PropellerSDK.NotificationType.push );
-		
-		// disable local notifications
-		//PropellerSDK.DisableNotification ( PropellerSDK.NotificationType.local );
-		
-		// validate enabled notifications - result is false since local notifications are disabled
-		bool fuelEnabled = PropellerSDK.IsNotificationEnabled( PropellerSDK.NotificationType.all );	
-		if (fuelEnabled) 
-		{
-			Debug.Log ("fuelEnabled NotificationEnabled!");
-		}
-
-		gearFriction = 0.999f;
-		gearShapeType = 0;
-		gearGameTime = 10;
-
-		if (PlayerPrefs.HasKey ("numLaunches")) 
-		{
-			int numLaunches = PlayerPrefs.GetInt ("numLaunches");
-			numLaunches++;
-			PlayerPrefs.SetInt("numLaunches", numLaunches);
-		}
-
-		if (useFuelDynamics == true) 
-		{
-			setUserConditions ();
-		}
-
-		Debug.Log ("<----- Start Done ----->");
-
-	}
-	
-	public void LaunchDashBoardWithResults()
-	{
-		sendMatchResult (m_matchData.MatchScore);
-		//sendCustomMatchResult (m_matchData.MatchScore, 44);
-	}
-
-	
-	/*
-	 * Update
-	*/
-	void Update () 
-	{
-
-		//change this to a message
-		switch (mFBState) 
-		{
-			case eFBState.WaitForInit:
-					if (fbdata_ready) 
-					{
-						mFBState = eFBState.DataRetrived;
-					}
-			break;
-			
-			case eFBState.DataRetrived:
-				break;
-
-
-			case eFBState.LaunchWithResults:
-				break;
-
-			case eFBState.SystemSettled:
-
-				break;
-
-			
-		}
-		//-------------------------
-
-	}
-
-
-	
 	/*
 	 -----------------------------------------------------
 						Challenge Counts
@@ -478,8 +383,7 @@ public class FuelHandler : MonoBehaviour
 	*/
 	public void SyncChallengeCounts ()
 	{
-		if (useFuelCompete == false) 
-		{
+		if (useFuelCompete == false) {
 			return;
 		}
 
@@ -488,32 +392,19 @@ public class FuelHandler : MonoBehaviour
 	
 	public void OnPropellerSDKChallengeCountUpdated (string count)
 	{
-		int countInt;
-
-		Debug.Log ("OnPropellerSDKChallengeCountUpdated : count = " + count);
-
-		if (!int.TryParse(count, out countInt))
-		{
+		int countValue;
+		if (!int.TryParse(count, out countValue)) {
 			return;
 		}
 
-		Debug.Log ("OnPropellerSDKChallengeCountUpdated : countInt = " + countInt);
+		Debug.Log ("OnPropellerSDKChallengeCountUpdated : countValue = " + countValue);
 
-		// Update the UI with the count
-		tryRefreshChallengeCount (countInt);
+		Hashtable ccTable = new Hashtable();                 
+		ccTable["cc"] = countValue;                          
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshChallengeCount", ccTable );
 	}
-	
-	public void tryRefreshChallengeCount(int ccount)
-	{
-		GameObject _mainmenu = GameObject.Find("InitMainMenu");
-		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
 
-		if(_mainmenuScript)
-		{
-			_mainmenuScript.RefreshChallengeCount(ccount);
-		}
-	}
-	
+
 	/*
 	 -----------------------------------------------------
 						Tournament Info
@@ -671,22 +562,7 @@ public class FuelHandler : MonoBehaviour
 
 
 	
-	void OnApplicationPause(bool paused)
-	{
-		// application entering background
 
-		if (paused) 
-		{
-			#if UNITY_IPHONE
-
-			NotificationServices.ClearLocalNotifications ();
-			NotificationServices.ClearRemoteNotifications ();
-
-			#endif
-		}
-
-	}
-	
 	
 	
 	
@@ -695,9 +571,7 @@ public class FuelHandler : MonoBehaviour
 	
 	/*
 	 ---------------------------------------------------------------------
-	 ---------------------------------------------------------------------
 							Face Book Unity Plugin
-	 ---------------------------------------------------------------------
 	 ---------------------------------------------------------------------
 	*/
 	public void LoginButtonPressed()
@@ -739,7 +613,7 @@ public class FuelHandler : MonoBehaviour
 
 	void LoginCallback(FBResult result)                                                        
 	{                                                                                          
-		Debug.Log("___Login_Callback___");                                                          
+		Debug.Log("LoginCallback");                                                          
 
 		if (FB.IsLoggedIn) 
 		{                                                                                      
@@ -753,27 +627,20 @@ public class FuelHandler : MonoBehaviour
 	
 	void OnLoggedIn()                                                                          
 	{        
-		Debug.Log("Face book : OnLoggedIn");                                                          
-		//get additional data from facebook
-
+		Debug.Log("OnLoggedIn");                                                          
 		FB.API("me?fields=name,email,gender,first_name", Facebook.HttpMethod.GET, UserCallBack);
-
 	}  
 	
 	
 	
 	void UserCallBack(FBResult result) 
 	{
-
-		if (result.Error != null)
-		{
+		string get_data;
+		if (result.Error != null) {
+			get_data = result.Text;
+		} else {
 			get_data = result.Text;
 		}
-		else
-		{
-			get_data = result.Text;
-		}
-
 
 		var dict = Json.Deserialize(get_data) as IDictionary;
 		fbname = dict ["name"].ToString();
@@ -781,35 +648,26 @@ public class FuelHandler : MonoBehaviour
 		fbgender = dict ["gender"].ToString();
 		fbfirstname = dict ["first_name"].ToString();
 
-
-		fbdata_ready = true;
-
-
 		PushFBDataToFuel ();
-
 	}
 	
 	public void trySocialLogin(bool allowCache)                                                                       
 	{
+		Debug.Log("trySocialLogin");                                                          
 		if (FB.IsLoggedIn && allowCache == false) 
 		{    
-			Debug.Log("trySocialLogin::::Logout - Login");                                                          
-
 			//FB.Logout();
 			//FB.Login("email, publish_actions", LoginCallback); 
 
 			//return to sdk
 			//PropellerSDK.SdkSocialLoginCompleted (null);
-
 		}
 		else if (FB.IsLoggedIn) 
 		{    
-			Debug.Log("trySocialLogin::::PushFBDataToFuel");                                                          
-			PushFBDataToFuel();//is this needed
+			PushFBDataToFuel();//is this needed?
 		}
 		else 
 		{
-			Debug.Log("trySocialLogin::::Login");                                                          
 			FB.Login("email, publish_actions", LoginCallback); 
 		}
 
@@ -818,6 +676,8 @@ public class FuelHandler : MonoBehaviour
 	
 	public void PushFBDataToFuel()                                                                       
 	{
+		Debug.Log("PushFBDataToFuel"); 
+
 		string provider = "facebook";
 		string email = fbemail;
 		string id = FB.UserId;
@@ -826,7 +686,6 @@ public class FuelHandler : MonoBehaviour
 		string nickname = fbfirstname;//not available from FB using first name
 		string name = fbname;
 		string gender = fbgender;
-
 
 		Dictionary<string, string> loginInfo = null;
 		loginInfo = new Dictionary<string, string> ();
@@ -838,23 +697,20 @@ public class FuelHandler : MonoBehaviour
 		loginInfo.Add ("name", name);
 		loginInfo.Add ("gender", gender);
 
-		//string localTime = 
-
-
-		Debug.Log ("__PushFBDataToFuel__" + "\n" +
-				"*** loginInfo ***" + "\n" +
-				"provider = " + loginInfo ["provider"].ToString () + "\n" +
-				"email = " + loginInfo ["email"].ToString () + "\n" +
-				"id = " + loginInfo ["id"].ToString () + "\n" +
-				"token = " + loginInfo ["token"].ToString () + "\n" +
-				"nickname = " + loginInfo ["nickname"].ToString () + "\n" +
-				"name = " + loginInfo ["name"].ToString () + "\n" +
-				"gender = " + loginInfo ["gender"].ToString () + "\n" +
-				"expireDate = " + expireDate.ToLongDateString ());
+		Debug.Log 
+		(
+			"*** loginInfo ***" + "\n" +
+			"provider = " + loginInfo ["provider"].ToString () + "\n" +
+			"email = " + loginInfo ["email"].ToString () + "\n" +
+			"id = " + loginInfo ["id"].ToString () + "\n" +
+			"token = " + loginInfo ["token"].ToString () + "\n" +
+			"nickname = " + loginInfo ["nickname"].ToString () + "\n" +
+			"name = " + loginInfo ["name"].ToString () + "\n" +
+			"gender = " + loginInfo ["gender"].ToString () + "\n" +
+			"expireDate = " + expireDate.ToLongDateString ()
+		);
 
 		PropellerSDK.SdkSocialLoginCompleted (loginInfo);
-
-
 	}
 	
 	
@@ -878,8 +734,7 @@ public class FuelHandler : MonoBehaviour
 
 			Debug.Log ("....Already logged in");
 
-		}
-		                                                                                     
+		}                                                                                     
 	} 
 	
 	
@@ -1021,12 +876,10 @@ public class FuelHandler : MonoBehaviour
 	}                                                                                                                              
 	private void appFeedCallback (FBResult result)                                                                              
 	{     
-		
 		Debug.Log("appFeedCallback");  
 		
 		if (result != null)                                                                                                        
 		{    
-			
 			var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;                                      
 			object obj = 0;                                                                                                        
 			if (responseObject.TryGetValue ("cancelled", out obj))                                                                 
@@ -1040,23 +893,14 @@ public class FuelHandler : MonoBehaviour
 			} 
 			
 			PropellerSDK.SdkSocialShareCompleted();
-
 		}  
-		
 	}  
 
 
-
-
-
-
-
-
+	
 	/*
 	 ---------------------------------------------------------------------
-	 ---------------------------------------------------------------------
 								Fuel Dynamics
-	 ---------------------------------------------------------------------
 	 ---------------------------------------------------------------------
     */
 	private int getNumLaunches ()
@@ -1102,11 +946,7 @@ public class FuelHandler : MonoBehaviour
 	
 	public void setUserConditions ()
 	{
-		if (useFuelDynamics == false) 
-		{
-			return;
-		}
-		Debug.Log ("!##### setUserConditions #####!");
+		Debug.Log ("setUserConditions");
 		
 		String isTablet = "FALSE";
 		
@@ -1141,63 +981,48 @@ public class FuelHandler : MonoBehaviour
 	
 	public void syncUserValues()
 	{
-		if (useFuelDynamics == false) 
-		{
-			return;
-		}
-
 		PropellerSDK.SyncUserValues();
 	}
 	
 	public void OnUserValues (Dictionary<string, object> userValuesInfo)
 	{
-		if (useFuelDynamics == false) 
-		{
-			return;	
-		}
-
-		Debug.Log ("-----------OnUserValues----------------");
-		
-		//Game Values - defined int the CSV
+		//Game Values - defined in the CSV
 		String _friction = "friction";
-		String _greartype = "geartype";
-		String _status = "status";
-		String statusresult = "notset";
+		String _geartype = "geartype";
+		String _gametime = "gametime";
 
 		Dictionary<string, string> analyticResult = new Dictionary<string, string> ();
 
 		foreach(KeyValuePair<string, object> entry in userValuesInfo)
 		{
-			Debug.Log ("....Key = " + entry.Key + " : Value = " + entry.Value);
-			
 			if(_friction.Equals( entry.Key ))
 			{
 				string friction = (string) entry.Value;
-				gearFriction = float.Parse(friction);
+				GearFriction = float.Parse(friction);
 			}
-			else if(_greartype.Equals( entry.Key ))
+			else if(_geartype.Equals( entry.Key ))
 			{
-				string geartype = (string) entry.Value;
-				gearShapeType = int.Parse(geartype);
+				string geartypeStr = (string) entry.Value;
+				GearShapeType = int.Parse(geartypeStr);
 			}
-			else if(_status.Equals( entry.Key ))
+			else if(_gametime.Equals( entry.Key ))
 			{
-				statusresult = (string) entry.Value;
+				string gametimeStr = (string) entry.Value;
+				GameTime = int.Parse(gametimeStr);
 			}
 
 			analyticResult.Add (entry.Key, (string)entry.Value);
 		}
-		
-		Debug.Log ("__Final: friction = " + gearFriction + ", geartype = " + gearShapeType + ", statusresult = " + statusresult);
+		Debug.Log ("friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
+
+		NotificationCenter.DefaultCenter.PostNotification(getMainMenuClass(), "RefreshDebugText");
 
 #if USE_ANALYTICS
 		flurryService.LogEvent("OnFuelDynamicsUserValues", analyticResult);
 #endif
 
 	}
-
-
-	
+		
 }
 
 
