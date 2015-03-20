@@ -21,20 +21,14 @@ public class gearMount : MonoBehaviour
 	
 	void Update () 
 	{
-		if (direction == 1) 
-		{
+		if (direction == 1) {
 			angle -= (spinvelocity + gamevelocity);
-		} 
-		else 
-		{
+		} else {
 			angle += (spinvelocity + gamevelocity);
 		}
 
 		transform.rotation = Quaternion.Euler(0, 0, angle);
-
-
 		spinvelocity *= passivefriction;
-
 	}
 }
 

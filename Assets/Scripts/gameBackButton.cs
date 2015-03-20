@@ -14,27 +14,20 @@ public class gameBackButton : MonoBehaviour
 	{
 
 	}
-	
-	
+
 	void OnMouseOver () 
 	{
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			Debug.Log ("gameBackButton - left click.");
-			
 			clickSound.Play();
-			//get main loop game state
-			
+		
 			GameObject _mainLoop = GameObject.Find("MainLoop");
 			MainLoop _mainloopScript = _mainLoop.GetComponent<MainLoop>();
-			
-			var _gameState = _mainloopScript.mGameState;
-			
-			if(_gameState == MainLoop.eGameState.Done)
+
+			if(_mainloopScript.isGameOver() == true)
 			{
 				Application.LoadLevel("MainMenu");
 			}
-			
 		}
 	}
 	

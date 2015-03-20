@@ -36,7 +36,7 @@ public class PropellerSDK : MonoBehaviour
 	#region Unity Editor Fields
 	public string GameKey;
 	public string GameSecret;
-	private bool UseTestServers = false;
+	public bool UseTestServers = true;
 	public ContentOrientation Orientation = ContentOrientation.landscape;
 	public string HostGameObjectName;
 	public bool iOSGameHandleLogin;

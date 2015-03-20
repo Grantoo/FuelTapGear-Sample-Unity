@@ -1,90 +1,60 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class InitMainMenu : MonoBehaviour 
 {
-
-
+	
 	void Start () 
 	{
 		Debug.Log ("InitMainMenu!");
 
-		AddNotificationObservers ();
+		AddNotificationObservers();
 
-		//init particles to off
-		Debug.Log ("Start Particles!");
-		GameObject particleObj = GameObject.Find ("VirtualGoodsParticles");
-		ParticleSystem psystem = (ParticleSystem)particleObj.GetComponent (typeof(ParticleSystem)); 
-		psystem.Stop();
+		ClearGraphics();
 
-		//GAME TOKENS
-		Debug.Log ("Start RefreshGameTokenCount!");
-		//RefreshGameTokenCount(0);
-
-		//GOLD
-		Debug.Log ("Start RefreshGoldCount!");
-		RefreshGoldCount(0);
-
-		//DIAMONDS
-		Debug.Log ("Start RefreshDiamondCount!");
-		RefreshDiamondCount(0);
-
-
-		//hide challenge count pieces
-		GameObject gameObj = GameObject.Find("ccbacking");
-		gameObj.renderer.enabled = false;
-
-		GameObject ccountObj = GameObject.Find ("ChallengeCount");
-		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
-		tmesh.renderer.enabled = false;
-
-		//hide trophy
-		gameObj = GameObject.Find ("Trophy");
-		gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
-
-		//get Fuel Handler
-		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+		ResetDebugText();
 
 		//get Fuel Dynamics Handler
 		//GameObject _fuelDynamicsHandler = GameObject.Find("FuelDynamicsHandlerObject");
 		//FuelDynamicsHandler _fuelDynamicsHandlerScript = _fuelDynamicsHandler.GetComponent<FuelDynamicsHandler>();
-
 		//_fuelHandlerScript.setUserConditions();
 
+		RefreshGoldCount(0);
+		RefreshOilCount(0);
+		RefreshHiScore();
+
+		FuelHandler _fuelHandlerScript = getFuelHandlerClass();
 		_fuelHandlerScript.syncUserValues();
-
-		_fuelHandlerScript.tryRefreshHiScore();
-
 		_fuelHandlerScript.SyncChallengeCounts();
-
 		_fuelHandlerScript.SyncTournamentInfo();
-
 		_fuelHandlerScript.SyncVirtualGoods();
-
 		_fuelHandlerScript.updateLoginText();
-
 		_fuelHandlerScript.tryLaunchFuelSDK();
 	}
 
-
-
-
+	
 	public void AddNotificationObservers()
 	{
 		NotificationCenter.DefaultCenter.AddObserver(this, "LaunchGamePlay");
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshDebugText");
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshChallengeCount");
+		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshTournamentInfo");
+		NotificationCenter.DefaultCenter.AddObserver(this, "AddTransOverlay");
+		NotificationCenter.DefaultCenter.AddObserver(this, "SubTransOverlay");
 	}
+
 	public void RemoveNotificationObservers()
 	{
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "LaunchGamePlay");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshDebugText");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshChallengeCount");
+		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshTournamentInfo");
+		NotificationCenter.DefaultCenter.RemoveObserver(this, "AddTransOverlay");
+		NotificationCenter.DefaultCenter.RemoveObserver(this, "SetTransOverlay");
 	}
 
 
-	
 	public void LaunchGamePlay()
 	{
 		RemoveNotificationObservers ();
@@ -92,8 +62,7 @@ public class InitMainMenu : MonoBehaviour
 		Application.LoadLevel("GamePlay");
 	}
 	
-
-
+	
 	public void RefreshChallengeCount(Hashtable ccTable)
 	{
 		// retrieve a value for the given key
@@ -109,52 +78,44 @@ public class InitMainMenu : MonoBehaviour
 		tmesh.renderer.enabled = true;
 	}
 
-	public void RefreshTournamentInfo(bool enabled, string tournamentName, int timeRemaining)
-	{
-		GameObject gameObj = GameObject.Find ("Trophy");
 
-		if(enabled == false)
-		{
+	public void RefreshTournamentInfo(Hashtable tournyTable)
+	{
+		bool enabled = (bool)tournyTable["enabled"]; 
+
+		/* need to add screen elements for the following: */
+		//string tournyname = (string)tournyTable["tournyname"];    
+		//string startDate = (string)tournyTable["startDate"];    
+		//string endDate = (string)tournyTable["endDate"];    
+
+		GameObject gameObj = GameObject.Find ("Trophy");
+		
+		if(enabled == false){
 			gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
-		}
-		else
-		{
+		} else {
 			gameObj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
 		}
 	}
 
 
-	public void RefreshGameTokenCount(int addAmount)
+	public void RefreshVirtualGoods(Hashtable goodsTable)
 	{
-		//GAME TOKEN
-		if (PlayerPrefs.HasKey ("gameTokens")) 
-		{
-			Debug.Log ("_getting gameTokens");
-			var _tokens = PlayerPrefs.GetInt("gameTokens");
-			
-			if(addAmount > 0)
-			{
-				_tokens += addAmount;
-				PlayerPrefs.SetInt("gameTokens", _tokens);
-			}
-			
-			GameObject gameObj = GameObject.Find ("gameTokenTextMesh");
-			TextMesh t = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-			t.text = "x" + _tokens.ToString();
-		}
+		int addGold = (int)goodsTable["addGold"]; 
+		int addOil= (int)goodsTable["addOil"]; 
+
+		RefreshGoldCount(addGold);
+		RefreshOilCount(addOil);
+
+		VirtualGoodsFanFare ();
 	}
 
-
+	
 	public void RefreshGoldCount(int addAmount)
 	{
-		//GOLD
-		if (PlayerPrefs.HasKey ("userGold")) 
-		{
-			Debug.Log ("_getting userGold");
+		if (PlayerPrefs.HasKey ("userGold")) {
 			var _gold = PlayerPrefs.GetInt("userGold");
 
-			if(addAmount > 0)
-			{
+			if(addAmount > 0) {
 				_gold += addAmount;
 				PlayerPrefs.SetInt("userGold", _gold);
 			}
@@ -165,36 +126,32 @@ public class InitMainMenu : MonoBehaviour
 		}
 	}
 
-	public void RefreshDiamondCount(int addAmount)
+
+	public void RefreshOilCount(int addAmount)
 	{
-		//GOLD
-		if (PlayerPrefs.HasKey ("diamonds")) 
-		{
-			Debug.Log ("_getting userGold");
-			var _diamonds = PlayerPrefs.GetInt("diamonds");
+		if (PlayerPrefs.HasKey ("oildrops")) {
+			var _oildrops = PlayerPrefs.GetInt("oildrops");
 			
-			if(addAmount > 0)
-			{
-				_diamonds += addAmount;
-				PlayerPrefs.SetInt("diamonds", _diamonds);
+			if(addAmount > 0) {
+				_oildrops += addAmount;
+				PlayerPrefs.SetInt("oildrops", _oildrops);
 			}
 			
-			GameObject gameObj = GameObject.Find ("diamondTextMesh");
+			GameObject gameObj = GameObject.Find ("oilTextMesh");
 			TextMesh t = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-			t.text = "x" + _diamonds.ToString();
+			t.text = "x" + _oildrops.ToString();
 		}
 	}
 
-	public void RefreshHiScore(int score)
+
+	public void RefreshHiScore()
 	{
-		//SCORE
-		if (PlayerPrefs.HasKey ("hiScore")) 
-		{
-			Debug.Log ("_getting hiScore");
+		if (PlayerPrefs.HasKey ("hiScore")) {
+			FuelHandler _fuelHandlerScript = getFuelHandlerClass();
+			int score = _fuelHandlerScript.getMatchData().MatchScore;
 			var _score = PlayerPrefs.GetInt ("hiScore");
-			
-			if (score > _score) 
-			{
+
+			if (score > _score) {
 				_score = score;
 				PlayerPrefs.SetInt ("hiScore", _score);
 			}
@@ -202,16 +159,35 @@ public class InitMainMenu : MonoBehaviour
 			GameObject gameObj = GameObject.Find ("HiScore");
 			TextMesh t = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
 			t.text = _score.ToString ();
-				
 		}
 	}
 
-	public void VirtualGoodsFanFare()
+
+	private void VirtualGoodsFanFare()
 	{
 		GameObject gameObj = GameObject.Find ("VirtualGoodsParticles");
 		ParticleSystem psystem = (ParticleSystem)gameObj.GetComponent (typeof(ParticleSystem)); 
 
 		psystem.Play();
+	}
+
+	
+	public void ResetDebugText()
+	{
+		GameObject textMesh = GameObject.Find ("DebugText1");
+		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.text = "Dynamics";
+		tmesh.renderer.enabled = true;
+		
+		textMesh = GameObject.Find ("DebugText2");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.text = "returning";
+		tmesh.renderer.enabled = true;
+		
+		textMesh = GameObject.Find ("DebugText3");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.text = "null";
+		tmesh.renderer.enabled = true;
 	}
 
 
@@ -222,17 +198,21 @@ public class InitMainMenu : MonoBehaviour
 		
 		int _gearShapeType = _fuelHandlerScript.GearShapeType;
 		float _gearFriction = _fuelHandlerScript.GearFriction;
+		int _gameTime = _fuelHandlerScript.GameTime;
 
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
-
 		tmesh.text = "friction = " + _gearFriction.ToString();
 		tmesh.renderer.enabled = true;
 
 		textMesh = GameObject.Find ("DebugText2");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
-		
 		tmesh.text = "geartype = " + _gearShapeType.ToString();
+		tmesh.renderer.enabled = true;
+
+		textMesh = GameObject.Find ("DebugText3");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.text = "gametime = " + _gameTime.ToString();
 		tmesh.renderer.enabled = true;
 	}
 
@@ -241,4 +221,60 @@ public class InitMainMenu : MonoBehaviour
 	{
 
 	}
+
+
+	void AddTransOverlay () 
+	{
+		GameObject gameObj = GameObject.Find("transoverlay");
+		gameObj.transform.position = new Vector3(2.0f, 1.0f, 0.0f);
+		gameObj.renderer.enabled = true;
+	}
+
+
+	void SubTransOverlay () 
+	{
+		GameObject gameObj = GameObject.Find("transoverlay");
+		gameObj.transform.position = new Vector3 (-24.0f, 1.0f, 0.0f);
+		gameObj.renderer.enabled = false;
+	}
+
+
+	private FuelHandler getFuelHandlerClass()
+	{
+		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
+		if (_fuelHandler != null) {
+			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler> ();
+			if(_fuelHandlerScript != null) {
+				return _fuelHandlerScript;
+			}
+			throw new Exception();
+		}
+		throw new Exception();
+	}
+	
+
+	private void ClearGraphics()
+	{
+		//trans overlay
+		GameObject gameObj = GameObject.Find("transoverlay");
+		gameObj.renderer.enabled = false;
+
+		//init particles to off
+		GameObject particleObj = GameObject.Find ("VirtualGoodsParticles");
+		ParticleSystem psystem = (ParticleSystem)particleObj.GetComponent (typeof(ParticleSystem)); 
+		psystem.Stop();
+
+		//hide challenge count pieces
+		gameObj = GameObject.Find("ccbacking");
+		gameObj.renderer.enabled = false;
+		
+		GameObject ccountObj = GameObject.Find ("ChallengeCount");
+		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = false;
+		
+		//hide trophy
+		gameObj = GameObject.Find ("Trophy");
+		gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
+	}
+
 }

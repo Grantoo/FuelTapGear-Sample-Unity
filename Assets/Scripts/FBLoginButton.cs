@@ -19,8 +19,6 @@ public class FBLoginButton : MonoBehaviour
 	{
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			Debug.Log ("FBLoginButton - left click.");
-			
 			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
@@ -28,9 +26,7 @@ public class FBLoginButton : MonoBehaviour
 			_fuelHandlerScript.LoginButtonPressed();
 
 			_fuelHandlerScript.updateLoginText();
-
 		}
 	}
-	
 	
 }

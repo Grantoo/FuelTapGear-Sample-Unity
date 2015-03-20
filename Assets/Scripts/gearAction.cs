@@ -6,18 +6,14 @@ public class gearAction : MonoBehaviour
 	public Sprite img0, img1, img2, img3, img4, img5;
 
 	public AudioSource bonusSound1, bonusSound2, bonusSound3, bonusSound4, bonusSound5;
-
-
-	public GameObject spinTextObj;
-
+	
 	public int buttonDebounce = 0;
 	public float minTapDelta = 0.5f;
 	public float spinvelocity = 0.0f;
 	public float maxspinvelocity = 0.0f;
 	public string velocityStr = "0";
 	private float angle = 0.0f;
-	private float friction = 0.995f;
-
+	private float friction = 0.8f;
 	private int addBonusTap;
 	private bool add5sec;
 
@@ -39,12 +35,14 @@ public class gearAction : MonoBehaviour
 		friction = f;
 	}
 
+
 	public void updateSpinText (string str) 
 	{
-		spinTextObj = GameObject.Find ("speedTextMesh");
+		GameObject spinTextObj = GameObject.Find ("speedTextMesh");
 		TextMesh tmesh = (TextMesh)spinTextObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = str;
 	}
+
 
 	public void Reset (int _gearType, float _friction) 
 	{
@@ -55,8 +53,7 @@ public class gearAction : MonoBehaviour
 
 		GameObject shadow = GameObject.Find ("GearShadow");
 
-		Debug.Log ("________________________________________________gearAction:Reset - friction = " + friction + ", geartype = " + _gearType);
-
+		Debug.Log ("gearAction:Reset - friction = " + friction + ", geartype = " + _gearType);
 
 		switch (_gearType) 
 		{
@@ -87,20 +84,16 @@ public class gearAction : MonoBehaviour
 		}
 	}
 
+
 	void Start () 
 	{
-
-		//GameObject MultTimesTwo = GameObject.Find ("MultTimesTwo");
-		//GameObject bonus = (GameObject) Instantiate(MultTimesTwo, transform.position, transform.rotation);
-
-
 		ClearActiveBonuses ();
 	}
-	
+
+
 	void Update () 
 	{
-		if (Input.GetMouseButtonUp (0)) 
-		{
+		if (Input.GetMouseButtonUp (0)) {
 			buttonDebounce = 0;
 		}
 
@@ -124,8 +117,7 @@ public class gearAction : MonoBehaviour
 
 			case eBonusState.BaseLevel:
 			{
-				if(spinvelocity >= 6.0f)
-				{
+				if(spinvelocity >= 6.0f) {
 					bonusSound1.Play();
 
 					SpeedFanFareLevel1();
@@ -137,8 +129,7 @@ public class gearAction : MonoBehaviour
 
 			case eBonusState.Level1:
 			{
-				if(spinvelocity >= 10.0f)
-				{
+				if(spinvelocity >= 10.0f) {
 					bonusSound2.Play();
 
 					SpeedFanFareLevelTimes2();
@@ -151,8 +142,7 @@ public class gearAction : MonoBehaviour
 
 			case eBonusState.Level2:
 			{
-				if(spinvelocity >= 14.0f)
-				{
+				if(spinvelocity >= 14.0f) {
 					bonusSound3.Play();
 
 					friction += 0.005f;
@@ -165,8 +155,7 @@ public class gearAction : MonoBehaviour
 
 			case eBonusState.Level3:
 			{
-				if(spinvelocity >= 20.0f)
-				{
+				if(spinvelocity >= 20.0f) {
 					bonusSound4.Play();
 
 					SpeedFanFareLevelTimes3();
@@ -179,8 +168,7 @@ public class gearAction : MonoBehaviour
 			
 			case eBonusState.Level4:
 			{
-				if(spinvelocity >= 26.0f)
-				{
+				if(spinvelocity >= 26.0f) {
 					bonusSound5.Play();
 
 					SpeedFanFareLevelPlus5();
@@ -193,8 +181,7 @@ public class gearAction : MonoBehaviour
 
 			case eBonusState.Level5:
 			{
-				if(spinvelocity >= 32.0f)
-				{
+				if(spinvelocity >= 32.0f) {
 					bonusSound1.Play();
 
 					mBonusState = eBonusState.MaxedOut;
@@ -206,52 +193,28 @@ public class gearAction : MonoBehaviour
 			break;
 		}
 
-
-
 	}
+
 
 	void UpdateBackGroundGears () 
 	{
-		GameObject gear = GameObject.Find ("OrangeGear");
-		gearMount _gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
+		string[] backgears = new string[10] 
+		{
+			"OrangeGear", "SmBlueGear", 
+			"SmBlueGear2", "BlueGear",
+			"BlueGear2", "SmOrangeGear",
+			"SmOrangeGear2", "SmOrangeGearTrans", 
+			"BlueGearTrans", "BlueGearTrans2"
+		};
+		GameObject gear;
+		gearMount _gearMountScript;
 
-		gear = GameObject.Find ("SmBlueGear");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-
-		gear = GameObject.Find ("SmBlueGear2");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-
-		gear = GameObject.Find ("BlueGear");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-
-		gear = GameObject.Find ("BlueGear2");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-
-		gear = GameObject.Find ("SmOrangeGear");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-		
-		gear = GameObject.Find ("SmOrangeGear2");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-
-		gear = GameObject.Find ("SmOrangeGearTrans");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-
-		gear = GameObject.Find ("BlueGearTrans");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-
-		gear = GameObject.Find ("BlueGearTrans2");
-		_gearMountScript = gear.GetComponent<gearMount>();
-		_gearMountScript.SetGameVelocity (spinvelocity);
-
+		for (int i = 0; i < 10; i++) 
+		{
+			gear = GameObject.Find (backgears[i]);
+			_gearMountScript = gear.GetComponent<gearMount>();
+			_gearMountScript.SetGameVelocity (spinvelocity);
+		}
 	}
 
 
@@ -264,14 +227,14 @@ public class gearAction : MonoBehaviour
 				GameObject _mainLoop = GameObject.Find("MainLoop");
 				MainLoop _mainloopScript = _mainLoop.GetComponent<MainLoop>();
 			
-				var _gameState = _mainloopScript.mGameState;
+				var _gameState = _mainloopScript.getGameState();
 
 
 				if(_gameState == MainLoop.eGameState.Ready)
 				{
 					//first tap, tell mainloop to start
-					_mainloopScript.mGameState = MainLoop.eGameState.FirstTap;
-					_gameState = _mainloopScript.mGameState;
+					_mainloopScript.setGameState( MainLoop.eGameState.FirstTap );
+					_gameState = _mainloopScript.getGameState();
 
 					_mainloopScript.setStartButtonText("Tap! Fast, fast, faster!!");
 				}
@@ -286,32 +249,23 @@ public class gearAction : MonoBehaviour
 					var currentTime = Time.deltaTime;
 					var increase = minTapDelta - currentTime;
 
-					if(currentTime < minTapDelta)
-					{
+					if(currentTime < minTapDelta) {
 						increase = minTapDelta - currentTime;
-					}
-					else
-					{
+					} else {
 						increase = 0.0f;
 					}
 
 					spinvelocity += increase;
 
-					if(spinvelocity > maxspinvelocity)
-					{
+					if(spinvelocity > maxspinvelocity) {
 						maxspinvelocity = spinvelocity;
 					}
-
-					//Debug.Log ("Gear Tap - spinvelocity = " + spinvelocity);
 				}
 			}
 		}
 	}
 
-
-
-
-
+	
 	public void SpeedFanFareLevel1()
 	{
 		GameObject gameObj = GameObject.Find ("GearBonusParticlesLevel1");
@@ -338,7 +292,6 @@ public class gearAction : MonoBehaviour
 		gameObj = GameObject.Find ("GearBonusParticlesLevel2");
 		psystem = (ParticleSystem)gameObj.GetComponent (typeof(ParticleSystem)); 
 		psystem.Stop();
-
 	}
 
 	public void SpeedFanFareLevelFminus1()
@@ -379,10 +332,8 @@ public class gearAction : MonoBehaviour
 		psystem = (ParticleSystem)particleObj.GetComponent (typeof(ParticleSystem)); 
 		psystem.Stop();
 
-
 		addBonusTap = 0;
 		add5sec = false;
-
 	}
 
 	public bool Check5secBonus()
@@ -395,12 +346,9 @@ public class gearAction : MonoBehaviour
 			result = true;
 		}
 
-
 		return result;
 	}
-
-
-
+	
 }
 
 

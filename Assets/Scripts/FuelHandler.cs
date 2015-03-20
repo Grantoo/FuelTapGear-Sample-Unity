@@ -65,11 +65,7 @@ public class FuelHandler : MonoBehaviour
 		return m_matchData;
 	}
 
-
-
-
-
-
+	
 	/*
 	 -----------------------------------------------------
 							Awake
@@ -86,6 +82,8 @@ public class FuelHandler : MonoBehaviour
 		} 
 		else if( Instance == null )
 		{
+			Input.location.Start();
+
 			#if USE_ANALYTICS
 			flurryService = Flurry.Instance;
 				//AssertNotNull(service, "Unable to create Flurry instance!", this);
@@ -141,11 +139,23 @@ public class FuelHandler : MonoBehaviour
 		{
 			Debug.Log ("fuelEnabled NotificationEnabled!");
 		}
-		
-		GearFriction = 0.999f;
-		GearShapeType = 0;
-		GameTime = 10;
-		
+
+		GearFriction = 0.666f;
+		GearShapeType = 5;
+		GameTime = 7;
+
+		//get stored dynamic values
+		if (PlayerPrefs.HasKey ("gearfriction")) {
+			GearFriction = PlayerPrefs.GetFloat("gearfriction");
+		}
+		if (PlayerPrefs.HasKey ("geartype")) {
+			GearShapeType = PlayerPrefs.GetInt("geartype");
+		}
+		if (PlayerPrefs.HasKey ("gametime")) {
+			GameTime = PlayerPrefs.GetInt("gametime");
+		}
+
+
 		if (PlayerPrefs.HasKey ("numLaunches")) 
 		{
 			int numLaunches = PlayerPrefs.GetInt ("numLaunches");
@@ -181,6 +191,7 @@ public class FuelHandler : MonoBehaviour
 		
 
 	}
+
 
 	/*
 	 -----------------------------------------------------
@@ -288,6 +299,7 @@ public class FuelHandler : MonoBehaviour
 		matchResult.Add ("visualScore", visualScoreStr);
 
 		PropellerSDK.SubmitMatchResult (matchResult);
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "AddTransOverlay");
 		PropellerSDK.Launch (m_listener);	
 	}
 
@@ -317,7 +329,7 @@ public class FuelHandler : MonoBehaviour
 		matchResult.Add ("matchData", matchData);
 
 		PropellerSDK.SubmitMatchResult (matchResult);
-
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "AddTransOverlay");
 		PropellerSDK.Launch (m_listener);	
 	}
 
@@ -333,6 +345,9 @@ public class FuelHandler : MonoBehaviour
 		{
 			throw new Exception();
 		}
+		
+		
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "AddTransOverlay");
 		
 		PropellerSDK.Launch (m_listener);
 	}
@@ -423,66 +438,40 @@ public class FuelHandler : MonoBehaviour
 	{
 		Debug.Log ("OnPropellerSDKTournamentInfo");
 
-		bool tournyRunning = false;
-
 		if ((tournamentInfo == null) || (tournamentInfo.Count == 0)) 
 		{
-			// there is no tournament currently running
 			Debug.Log ("....no tournaments currently running");
 		} 
 		else 
 		{
-			string name = tournamentInfo["name"];
+			string tournyname = tournamentInfo["name"];
 			string campaignName = tournamentInfo["campaignName"];
 			string sponsorName = tournamentInfo["sponsorName"];
 			string startDate = tournamentInfo["startDate"];
 			string endDate = tournamentInfo["endDate"];
 			string logo = tournamentInfo["logo"];
 
-			Debug.Log ("______________________" + "\n" +
-			           "*** TournamentInfo ***" + "\n" +
-			           "name = " + name + "\n" +
-			           "campaignName = " + campaignName + "\n" +
-			           "sponsorName = " + sponsorName + "\n" +
-			           "startDate = " + startDate + "\n" +
-			           "endDate = " + endDate + "\n" +
-			           "logo = " + logo + "\n"
-					  );
+			Debug.Log 
+			(
+			    "*** TournamentInfo ***" + "\n" +
+			    "tournyname = " + tournyname + "\n" +
+			    "campaignName = " + campaignName + "\n" +
+			    "sponsorName = " + sponsorName + "\n" +
+			    "startDate = " + startDate + "\n" +
+			    "endDate = " + endDate + "\n" +
+			    "logo = " + logo + "\n"
+			);
 
-
-			tournyRunning = true;
-		}
-		
-		// Update the UI with the tournament information
-
-		GameObject _mainmenu = GameObject.Find("InitMainMenu");
-		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
-
-		_mainmenuScript.RefreshTournamentInfo(tournyRunning, "noname", 0);
-	}
-
-	public void tryRefreshTournamentInfo(Dictionary<string, string> tournamentInfo)
-	{
-		GameObject _mainmenu = GameObject.Find("InitMainMenu");
-		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
-		
-		if(_mainmenuScript)
-		{
+			Hashtable tournyTable = new Hashtable();                 
+			tournyTable["running"] = false;                          
+			tournyTable["tournyname"] = tournyname;                          
+			tournyTable["startDate"] = startDate;                          
+			tournyTable["endDate"] = endDate;                          
+			NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshTournamentInfo", tournyTable );
 		}
 	}
 
-	public void tryRefreshHiScore()
-	{
-		GameObject _mainmenu = GameObject.Find("InitMainMenu");
-		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
-		
-		if(_mainmenuScript)
-		{
-			_mainmenuScript.RefreshHiScore(m_matchData.MatchScore);
-		}
-	}
 
-	
 	/*
 	 -----------------------------------------------------
 						Virtual Goods
@@ -506,41 +495,26 @@ public class FuelHandler : MonoBehaviour
 		Debug.Log ("OnPropellerSDKVirtualGoodList: transactionId = " + transactionId);
 
 
-		// Store the virtual goods for consumption
-
-		GameObject _mainmenu = GameObject.Find("InitMainMenu");
-		InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu>();
-		if (_mainmenuScript == null) 
-		{
-			throw new Exception();
-		}
-
+		Hashtable goodsTable = new Hashtable();                 
 		bool virtualGoodsTaken = false;
 		foreach (string vg in virtualGoods)
 		{
-			Debug.Log (">>>>>> vg = " + vg);
+			Debug.Log (">> vg = " + vg);
 
-			if(vg == "gameToken")//Game Token
+			if(vg == "goldPack")
 			{
-				_mainmenuScript.RefreshGameTokenCount(8);
+				goodsTable["addGold"] = 4;                          
 				virtualGoodsTaken = true;
 			}
-			else if(vg == "goldPack")//Bunch of gold
+			else if(vg == "diamondGrade1")
 			{
-				_mainmenuScript.RefreshGoldCount(4);
-				virtualGoodsTaken = true;
-			}
-			else if(vg == "diamondGrade1")//Single Diamond
-			{
-				_mainmenuScript.RefreshDiamondCount(1);
+				goodsTable["addOil"] = 2;                          
 				virtualGoodsTaken = true;
 			}
 		}
 
-		//tell main menu to setup some fan fair
-		if(virtualGoodsTaken == true)
-		{
-			_mainmenuScript.VirtualGoodsFanFare();
+		if(virtualGoodsTaken == true) {
+			NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshVirtualGoods", goodsTable);
 		}
 
 		// Acknowledge the receipt of the virtual goods list
@@ -953,8 +927,15 @@ public class FuelHandler : MonoBehaviour
 		int userAge = getUserAge ();
 		int numLaunches = getNumLaunches ();
 		int numSessions = getNumSessions ();
-		
-		
+
+		float _latitude = 0.0f;
+		float _longitude = 0.0f;
+		if (Input.location.status == LocationServiceStatus.Running) 
+		{
+			_latitude = Input.location.lastData.latitude;
+			_longitude = Input.location.lastData.longitude;
+		}
+
 		Dictionary<string, object> conditions = new Dictionary<string, object> ();
 		
 		//required
@@ -970,13 +951,32 @@ public class FuelHandler : MonoBehaviour
 		conditions.Add ("language", "en");
 		conditions.Add ("gender", "female");
 		conditions.Add ("age", "16");
-		conditions.Add ("gpsLong", "0.0000");
-		conditions.Add ("gpsLat", "0.00000");
+		conditions.Add ("gpsLong", _latitude.ToString());
+		conditions.Add ("gpsLat", _longitude.ToString());
 		
 		//game conditions
 		conditions.Add ("gameVersion", "tapgear v1.1");
 		
-		PropellerSDK.SetUserConditions (conditions);	
+		PropellerSDK.SetUserConditions (conditions);
+
+		Debug.Log 
+		(
+			"*** conditions ***" + "\n" +
+				"userAge = " + userAge.ToString() + "\n" +
+				"numSessions = " + numSessions.ToString() + "\n" +
+				"numLaunches = " + numLaunches.ToString() + "\n" +
+				"isTablet = " + isTablet + "\n" +
+				"orientation = " + "portrait" + "\n" +
+				"daysSinceFirstPayment = " + "-1" + "\n" +
+				"daysSinceLastPayment = " + "-1" + "\n" +
+				"language = " + "en" + "\n" +
+				"gender = " + "female" + "\n" +
+				"age = " + "16" + "\n" +
+				"gpsLong = " + _latitude.ToString() + "\n" +
+				"gpsLat = " + _longitude.ToString() + "\n" +
+				"gameVersion = " + "tapgear v1.1"
+		);
+
 	}
 	
 	public void syncUserValues()
@@ -1014,6 +1014,17 @@ public class FuelHandler : MonoBehaviour
 			analyticResult.Add (entry.Key, (string)entry.Value);
 		}
 		Debug.Log ("friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
+
+		//store values
+		if (PlayerPrefs.HasKey ("gearfriction")) {
+			PlayerPrefs.SetFloat("gearfriction", GearFriction);
+		}
+		if (PlayerPrefs.HasKey ("geartype")) {
+			PlayerPrefs.SetInt("geartype", GearShapeType);
+		}
+		if (PlayerPrefs.HasKey ("gametime")) {
+			PlayerPrefs.SetInt("gametime", GameTime);
+		}
 
 		NotificationCenter.DefaultCenter.PostNotification(getMainMenuClass(), "RefreshDebugText");
 

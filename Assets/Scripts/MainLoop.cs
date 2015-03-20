@@ -15,20 +15,13 @@ public class MainLoop : MonoBehaviour
 	};
 
 	public AudioSource GameOverSFX;
-
-	public bool scoreSet;
 	public int scoreValue = 0;
-	public float gameTimerValue = 5.0f;
 
-	//access to other game objects and their scripts
-	public GameObject scoreObj;
-	public GameObject gameTimerObj;
-	private GameObject startbuttonObj;
+	
+	private float gameTimerValue = 10.0f;
+	private eGameState mGameState = eGameState.Init;
 
-	public eGameState mGameState = eGameState.Init;
-
-
-
+	
 	/*
 	 -----------------------------------------------------
 			Access to FuelHandler this pointer
@@ -49,26 +42,26 @@ public class MainLoop : MonoBehaviour
 
 	public void setStartButtonText (string str) 
 	{
-		startbuttonObj = GameObject.Find ("startTextMesh");
+		GameObject startbuttonObj = GameObject.Find ("startTextMesh");
 		TextMesh tmesh = (TextMesh)startbuttonObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = str;
 	}
 	public void hideStartButtonText () 
 	{
-		startbuttonObj = GameObject.Find ("startTextMesh");
+		GameObject startbuttonObj = GameObject.Find ("startTextMesh");
 		startbuttonObj.renderer.enabled = false;
 	}
 
 	public void updateScoreText (string str) 
 	{
-		scoreObj = GameObject.Find ("Score");
+		GameObject scoreObj = GameObject.Find ("Score");
 		TextMesh tmesh = (TextMesh)scoreObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = str;
 	}
 
 	public void updateGameTimerText (string str) 
 	{
-		gameTimerObj = GameObject.Find ("GameTimer");
+		GameObject gameTimerObj = GameObject.Find ("GameTimer");
 		TextMesh tmesh = (TextMesh)gameTimerObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = str;
 	}
@@ -108,6 +101,24 @@ public class MainLoop : MonoBehaviour
 		_gearActionScript.Reset (_gearShapeType, _gearFriction);
 	}
 
+	public bool isGameOver () 
+	{
+		if(mGameState == eGameState.Done){
+			return true;
+		}
+
+		return false;
+	}
+
+	public eGameState getGameState () 
+	{
+		return mGameState;
+	}
+
+	public void setGameState (eGameState state) 
+	{
+		mGameState = state;
+	}
 
 	void InitTextMeshObjs () 
 	{
@@ -123,9 +134,6 @@ public class MainLoop : MonoBehaviour
 	{
 		mGameState = eGameState.Init;
 
-
-		//may not need this
-		scoreSet = false;
 
 		//set match data
 		FuelHandler _fuelHandlerScript = getFuelHandlerClass();
@@ -177,7 +185,7 @@ public class MainLoop : MonoBehaviour
 		Sprite image = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 		sr.sprite = image;
 
-		if(texture.width == 50)
+		if(texture.width <= 50)
 		{
 			_gameObj.transform.localScale = new Vector3(2.5f, 2.5f, 1.0f);
 		}
@@ -197,19 +205,17 @@ public class MainLoop : MonoBehaviour
 			{
 				scoreValue = 0;
 				gameTimerValue = 10.0f;
-
-
+		
 				resetDynamicData();
-
 				InitTextMeshObjs();
 
-			
-			mGameState = eGameState.Ready;
+				mGameState = eGameState.Ready;
 			}
 			break;
 
 			case eGameState.Ready:
 			{
+				//waiting for first tap
 			}
 			break;
 
@@ -288,14 +294,12 @@ public class MainLoop : MonoBehaviour
 
 				updateGameTimerText ( gameTimerValue.ToString("0") + " sec" );
 		
-				//update tap score
 				updateScoreText ( scoreValue.ToString() );
 
 
 				GameObject spinTextObj = GameObject.Find ("speedTextMesh");
 				TextMesh tmesh = (TextMesh)spinTextObj.GetComponent (typeof(TextMesh)); 
 				tmesh.text = _gearActionScript.velocityStr;
-
 
 			}
 			break;

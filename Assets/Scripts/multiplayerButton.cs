@@ -20,8 +20,6 @@ public class multiplayerButton : MonoBehaviour
 	{
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			Debug.Log ("multiplayerButton - left click.");
-
 			clickSound.Play();
 
 			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");

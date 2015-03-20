@@ -20,8 +20,6 @@ public class playButton : MonoBehaviour
 	{
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			Debug.Log ("playButton - left click.");
-
 			clickSound.Play();
 			
 			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");

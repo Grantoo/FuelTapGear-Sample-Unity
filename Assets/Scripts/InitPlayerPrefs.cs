@@ -33,22 +33,16 @@ public class InitPlayerPrefs : MonoBehaviour
 			PlayerPrefs.SetInt("numSessions", 0);
 		}
 
-		if (PlayerPrefs.HasKey ("gameTokens") == false) 
-		{
-			Debug.Log ("_setting gameTokens");
-			PlayerPrefs.SetInt("gameTokens", 0);
-		}
-
 		if (PlayerPrefs.HasKey ("userGold") == false) 
 		{
 			Debug.Log ("_setting userGold");
 			PlayerPrefs.SetInt("userGold", 0);
 		}
 
-		if (PlayerPrefs.HasKey ("diamonds") == false) 
+		if (PlayerPrefs.HasKey ("oildrops") == false) 
 		{
-			Debug.Log ("_setting diamonds");
-			PlayerPrefs.SetInt("diamonds", 0);
+			Debug.Log ("_setting oildrops");
+			PlayerPrefs.SetInt("oildrops", 0);
 		}
 
 		if (PlayerPrefs.HasKey ("hiScore") == false) 
@@ -57,6 +51,23 @@ public class InitPlayerPrefs : MonoBehaviour
 			PlayerPrefs.SetInt("hiScore", 0);
 		}
 
+		if (PlayerPrefs.HasKey ("gearfriction") == false) 
+		{
+			Debug.Log ("_setting gearfriction");
+			PlayerPrefs.SetFloat("gearfriction", 0.666f);
+		}
+
+		if (PlayerPrefs.HasKey ("geartype") == false) 
+		{
+			Debug.Log ("_setting geartype");
+			PlayerPrefs.SetInt("geartype", 5);
+		}
+
+		if (PlayerPrefs.HasKey ("gametime") == false) 
+		{
+			Debug.Log ("_setting gametime");
+			PlayerPrefs.SetInt("gametime", 7);
+		}
 	}
 	
 	void Update () 

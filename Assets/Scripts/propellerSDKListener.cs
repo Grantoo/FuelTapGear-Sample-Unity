@@ -75,6 +75,7 @@ public class fuelSDKListener : PropellerSDKListener
 	public override void SdkCompletedWithExit ()
 	{
 		// sdk completed gracefully with no further action
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "SubTransOverlay");
 		Debug.Log ("SdkCompletedWithExit");
 	}
 	
@@ -92,6 +93,26 @@ public class fuelSDKListener : PropellerSDKListener
 		// sdk has failed with an unrecoverable error
 		Debug.Log ("SdkFailed" + reason);
 	}
+
+
+	/*
+	 -----------------------------------------------------
+			Access to mainmenu this pointer
+	 -----------------------------------------------------
+	*/
+	private InitMainMenu getMainMenuClass()
+	{
+		GameObject _mainmenu = GameObject.Find("InitMainMenu");
+		if (_mainmenu != null) {
+			InitMainMenu _mainmenuScript = _mainmenu.GetComponent<InitMainMenu> ();
+			if(_mainmenuScript != null) {
+				return _mainmenuScript;
+			}
+			throw new Exception();
+		}
+		throw new Exception();
+	}
+
 }
 
 
