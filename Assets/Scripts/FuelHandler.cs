@@ -877,6 +877,27 @@ public class FuelHandler : MonoBehaviour
 								Fuel Dynamics
 	 ---------------------------------------------------------------------
     */
+	private bool isDeviceTablet ()
+	{
+		bool isTablet = false;
+
+#if UNITY_IPHONE
+		if (Application.platform == RuntimePlatform.IPhonePlayer) {
+			
+			if(iPhone.generation == iPhoneGeneration.iPadUnknown ||
+			   iPhone.generation == iPhoneGeneration.iPad1Gen ||
+			   iPhone.generation == iPhoneGeneration.iPad2Gen ||
+			   iPhone.generation == iPhoneGeneration.iPad3Gen ||
+			   iPhone.generation == iPhoneGeneration.iPad4Gen ||
+			   iPhone.generation == iPhoneGeneration.iPadMini1Gen)
+			{
+				isTablet = true;
+			}
+		}
+#endif
+
+		return isTablet;
+	}
 	private int getNumLaunches ()
 	{
 		int numLaunches = 0;
@@ -921,9 +942,12 @@ public class FuelHandler : MonoBehaviour
 	public void setUserConditions ()
 	{
 		Debug.Log ("setUserConditions");
-		
+
 		String isTablet = "FALSE";
-		
+		if( isDeviceTablet() == true) {
+			isTablet = "TRUE";
+		}
+
 		int userAge = getUserAge ();
 		int numLaunches = getNumLaunches ();
 		int numSessions = getNumSessions ();
