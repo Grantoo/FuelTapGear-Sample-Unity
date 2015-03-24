@@ -24,7 +24,8 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 		UNITY_4_1,
 		UNITY_4_2,
 		UNITY_4_3,
-		UNITY_4_5
+		UNITY_4_5,
+		UNITY_4_6
 	};
 
 	private struct ExecutionResult
@@ -138,7 +139,7 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 	[PostProcessBuild]
 	public static void OnPostprocessBuild (BuildTarget target, string pathToBuiltProject)
 	{
-//#if UNITY_IOS
+#if UNITY_IOS
 		string pluginRootPath = GetPluginRootPath ();
 
 		if (pluginRootPath == null)
@@ -200,6 +201,8 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_4_3;
 #elif UNITY_4_5
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_4_5;
+#elif UNITY_4_6
+        UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_4_6;
 #else
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNSUPPORTED;
 #endif
@@ -221,7 +224,7 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 			UnityEngine.Debug.LogError ("[PropellerSDK] Injection of the Propeller SDK into the Xcode project failed!" + GetExecutionResultOutput (result));
 			return;
 		}
-//#endif
+#endif
 
 	}
 

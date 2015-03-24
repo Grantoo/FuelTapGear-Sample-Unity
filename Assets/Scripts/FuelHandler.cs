@@ -140,7 +140,7 @@ public class FuelHandler : MonoBehaviour
 			Debug.Log ("fuelEnabled NotificationEnabled!");
 		}
 
-		GearFriction = 0.666f;
+		GearFriction = 0.98f;
 		GearShapeType = 5;
 		GameTime = 7;
 
@@ -191,7 +191,7 @@ public class FuelHandler : MonoBehaviour
 		
 
 	}
-
+	
 
 	/*
 	 -----------------------------------------------------
@@ -1008,7 +1008,7 @@ public class FuelHandler : MonoBehaviour
 		PropellerSDK.SyncUserValues();
 	}
 	
-	public void OnUserValues (Dictionary<string, object> userValuesInfo)
+	public void OnPropellerSDKUserValues (Dictionary<string, object> userValuesInfo)
 	{
 		//Game Values - defined in the CSV
 		String _friction = "friction";

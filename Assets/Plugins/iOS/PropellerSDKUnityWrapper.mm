@@ -187,9 +187,9 @@ extern "C"
 #define NORMALIZED_JSON_DATATYPE_BOOL	4
 #define NORMALIZED_JSON_DATATYPE_STRING	5
 
-	static NSObject* normalizeJSONDictionary(NSDictionary *dictionary);
-	static NSObject* normalizeJSONList(NSArray *array);
-	static NSObject* normalizeJSONValue(NSDictionary *valueDictionary);
+    static NSObject* normalizeJSONDictionary(NSDictionary *dictionary);
+    static NSObject* normalizeJSONList(NSArray *array);
+    static NSObject* normalizeJSONValue(NSDictionary *valueDictionary);
     static BOOL isNormalizedJSONValue(NSDictionary *dictionary);
 
     void iOSInitialize(const char* key, const char* secret, const char* screenOrientation, bool useTestServers, bool hasLogin, bool hasInvite, bool hasShare)
@@ -356,8 +356,6 @@ extern "C"
 
     BOOL iOSSetUserConditions(const char* data)
     {
-        validateOrientation();
-        
         NSError *error = nil;
         NSString* conditionsString = [NSString stringWithFormat:@"%s" , data];
         NSData* conditionsData = [conditionsString dataUsingEncoding:NSUTF8StringEncoding];
@@ -369,7 +367,6 @@ extern "C"
             return false;
         }
 
-        //TODO: this is needed or crashes - investigate
         conditions = (NSDictionary*)normalizeJSONDictionary(conditions);
 
         if (conditions == nil) {
@@ -385,162 +382,162 @@ extern "C"
     {
         [[PropellerSDK instance] syncUserValues];
     }
-    
-	NSObject* normalizeJSONDictionary(NSDictionary *dictionary)
-	{
-		if (dictionary == nil) {
-			return nil;
-		}
 
-		if (isNormalizedJSONValue(dictionary)) {		
-			return normalizeJSONValue(dictionary);
-		}
+    NSObject* normalizeJSONDictionary(NSDictionary *dictionary)
+    {
+        if (dictionary == nil) {
+            return nil;
+        }
 
-		NSMutableDictionary *resultDictionary = [[NSMutableDictionary alloc] init];
+        if (isNormalizedJSONValue(dictionary)) {		
+            return normalizeJSONValue(dictionary);
+        }
 
-		for (NSString *key in dictionary) {
-			if (key == nil) {
-				continue;
-			}
+        NSMutableDictionary *resultDictionary = [[NSMutableDictionary alloc] init];
 
-			NSObject *value = [dictionary objectForKey:key];
+        for (NSString *key in dictionary) {
+            if (key == nil) {
+                continue;
+            }
 
-			if (value == nil) {
-				continue;
-			}
+            NSObject *value = [dictionary objectForKey:key];
 
-			NSObject *normalizedValue = nil;
+            if (value == nil) {
+                continue;
+            }
 
-			if ([value isKindOfClass:[NSArray class]]) {
-				normalizedValue = normalizeJSONList((NSArray*) value);
-			} else if ([value isKindOfClass:[NSDictionary class]]) {
-				normalizedValue = normalizeJSONDictionary((NSDictionary*) value);
-			} else {
-				continue;
-			}
+            NSObject *normalizedValue = nil;
 
-			if (normalizedValue == nil) {
-				continue;
-			}
+            if ([value isKindOfClass:[NSArray class]]) {
+                normalizedValue = normalizeJSONList((NSArray*) value);
+            } else if ([value isKindOfClass:[NSDictionary class]]) {
+                normalizedValue = normalizeJSONDictionary((NSDictionary*) value);
+            } else {
+                continue;
+            }
 
-			[resultDictionary setObject:normalizedValue forKey:key];
-		}
+            if (normalizedValue == nil) {
+                continue;
+            }
 
-		return resultDictionary;
-	}
+            [resultDictionary setObject:normalizedValue forKey:key];
+        }
 
-	NSObject* normalizeJSONList(NSArray *array)
-	{
-		if (array == nil) {
-			return nil;
-		}
+        return resultDictionary;
+    }
 
-		NSMutableArray *resultArray = [[NSMutableArray alloc] init];
+    NSObject* normalizeJSONList(NSArray *array)
+    {
+        if (array == nil) {
+            return nil;
+        }
 
-		for (NSObject *value in array) {
-			if (value == nil) {
-				continue;
-			}
+        NSMutableArray *resultArray = [[NSMutableArray alloc] init];
 
-			NSObject *normalizedValue = nil;
+        for (NSObject *value in array) {
+            if (value == nil) {
+                continue;
+            }
 
-			if ([value isKindOfClass:[NSArray class]]) {
-				normalizedValue = normalizeJSONList((NSArray*) value);
-			} else if ([value isKindOfClass:[NSDictionary class]]) {
-				normalizedValue = normalizeJSONDictionary((NSDictionary*) value);
-			} else {
-				continue;
-			}
+            NSObject *normalizedValue = nil;
 
-			if (normalizedValue == nil) {
-				continue;
-			}
+            if ([value isKindOfClass:[NSArray class]]) {
+                normalizedValue = normalizeJSONList((NSArray*) value);
+            } else if ([value isKindOfClass:[NSDictionary class]]) {
+                normalizedValue = normalizeJSONDictionary((NSDictionary*) value);
+            } else {
+                continue;
+            }
 
-			[resultArray addObject:normalizedValue];
-		}
+            if (normalizedValue == nil) {
+                continue;
+            }
 
-		return resultArray;
-	}
+            [resultArray addObject:normalizedValue];
+        }
 
-	NSObject* normalizeJSONValue(NSDictionary *valueDictionary)
-	{
-		if (valueDictionary == nil) {
-			return nil;
-		}
+        return resultArray;
+    }
 
-		NSString *type = (NSString*) [valueDictionary objectForKey:@"type"];
-		NSString *value = (NSString*) [valueDictionary objectForKey:@"value"];
+    NSObject* normalizeJSONValue(NSDictionary *valueDictionary)
+    {
+        if (valueDictionary == nil) {
+            return nil;
+        }
 
-		if ((type == nil) || (value == nil)) {
-			return nil;
-		}
+        NSString *type = (NSString*) [valueDictionary objectForKey:@"type"];
+        NSString *value = (NSString*) [valueDictionary objectForKey:@"value"];
 
-		switch ([type intValue]) {
-			case NORMALIZED_JSON_DATATYPE_INT:
-			case NORMALIZED_JSON_DATATYPE_LONG:
-			case NORMALIZED_JSON_DATATYPE_FLOAT:
-			case NORMALIZED_JSON_DATATYPE_DOUBLE: {
-				NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-				[numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
-				return [numberFormatter numberFromString:value];
-			}
-			case NORMALIZED_JSON_DATATYPE_BOOL: {
-				BOOL boolValue = [value caseInsensitiveCompare:@"true"] == NSOrderedSame;
-				return [NSNumber numberWithBool:boolValue];
-			}
-			case NORMALIZED_JSON_DATATYPE_STRING: {
-				return value;
-			}
-			default:
-				return nil;
-		}	
-	}
+        if ((type == nil) || (value == nil)) {
+            return nil;
+        }
+
+        switch ([type intValue]) {
+            case NORMALIZED_JSON_DATATYPE_INT:
+            case NORMALIZED_JSON_DATATYPE_LONG:
+            case NORMALIZED_JSON_DATATYPE_FLOAT:
+            case NORMALIZED_JSON_DATATYPE_DOUBLE: {
+                NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+                [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+                return [numberFormatter numberFromString:value];
+            }
+            case NORMALIZED_JSON_DATATYPE_BOOL: {
+                BOOL boolValue = [value caseInsensitiveCompare:@"true"] == NSOrderedSame;
+                return [NSNumber numberWithBool:boolValue];
+            }
+            case NORMALIZED_JSON_DATATYPE_STRING: {
+                return value;
+            }
+            default:
+                return nil;
+        }	
+    }
 
     BOOL isNormalizedJSONValue(NSDictionary *dictionary)
     {
-	    if (dictionary == nil) {
-		    return NO;
-	    }
+        if (dictionary == nil) {
+            return NO;
+        }
 
-		NSObject *checksumObject = [dictionary objectForKey:@"checksum"];
+        NSObject *checksumObject = [dictionary objectForKey:@"checksum"];
 
-		if ((checksumObject == nil) || ![checksumObject isKindOfClass:[NSString class]]) {
-			return NO;
-		}
+        if ((checksumObject == nil) || ![checksumObject isKindOfClass:[NSString class]]) {
+            return NO;
+        }
 
-		NSString *checksum = (NSString*) checksumObject;
+        NSString *checksum = (NSString*) checksumObject;
 
-		if (![checksum isEqualToString:@"faddface"]) {
-			return NO;
-		}
+        if (![checksum isEqualToString:@"faddface"]) {
+            return NO;
+        }
 
-		NSObject *typeObject = [dictionary objectForKey:@"type"];
+        NSObject *typeObject = [dictionary objectForKey:@"type"];
 
-		if ((typeObject == nil) || ![typeObject isKindOfClass:[NSString class]]) {
-			return NO;
-		}
+        if ((typeObject == nil) || ![typeObject isKindOfClass:[NSString class]]) {
+            return NO;
+        }
 
-		NSString *type = (NSString*) typeObject;
+        NSString *type = (NSString*) typeObject;
 
-		switch ([type intValue]) {
-			case NORMALIZED_JSON_DATATYPE_INT:
-			case NORMALIZED_JSON_DATATYPE_LONG:
-			case NORMALIZED_JSON_DATATYPE_FLOAT:
-			case NORMALIZED_JSON_DATATYPE_DOUBLE:
-			case NORMALIZED_JSON_DATATYPE_BOOL:
-			case NORMALIZED_JSON_DATATYPE_STRING:
-				break;
-			default:
-				return NO;
-		}
+        switch ([type intValue]) {
+            case NORMALIZED_JSON_DATATYPE_INT:
+            case NORMALIZED_JSON_DATATYPE_LONG:
+            case NORMALIZED_JSON_DATATYPE_FLOAT:
+            case NORMALIZED_JSON_DATATYPE_DOUBLE:
+            case NORMALIZED_JSON_DATATYPE_BOOL:
+            case NORMALIZED_JSON_DATATYPE_STRING:
+                break;
+            default:
+                return NO;
+        }
 
-		NSObject *valueObject = [dictionary objectForKey:@"value"];
+        NSObject *valueObject = [dictionary objectForKey:@"value"];
 
-		if ((valueObject == nil) || ![valueObject isKindOfClass:[NSString class]]) {
-			return NO;
-		}
+        if ((valueObject == nil) || ![valueObject isKindOfClass:[NSString class]]) {
+            return NO;
+        }
 
-		return YES;
+        return YES;
     }
 
 }

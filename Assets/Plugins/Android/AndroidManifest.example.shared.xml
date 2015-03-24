@@ -8,7 +8,7 @@
 
     <uses-sdk
         android:minSdkVersion="10"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="21" />
 
     <uses-permission
         android:name="android.permission.INTERNET" />
@@ -78,7 +78,11 @@
 
 		<meta-data
 		    android:name="com.fuelpowered.lib.propeller.unity.PropellerUnitySharedActivity"
-		    android:value="UnityPlayerActivityProxy"/>
+		    android:value="UnityPlayerActivityProxy" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <activity
             android:name="com.fuelpowered.lib.propeller.PropellerSDKActivity"

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using PropellerSDKSimpleJSON;
 	
 public class PropellerSDK : MonoBehaviour
@@ -13,7 +12,8 @@ public class PropellerSDK : MonoBehaviour
 		landscape,
 		portrait,
 		auto
-	};
+	}
+	;
 
 	public enum NotificationType
 	{
@@ -21,7 +21,8 @@ public class PropellerSDK : MonoBehaviour
 		all = 0x3,
 		push = 1 << 0,
 		local = 1 << 1
-	};
+	}
+	;
 
 	private enum DataType
 	{
@@ -31,12 +32,13 @@ public class PropellerSDK : MonoBehaviour
 		doubleType,
 		boolType,
 		stringType
-	};
+	}
+	;
 
 	#region Unity Editor Fields
 	public string GameKey;
 	public string GameSecret;
-	public bool UseTestServers = true;
+	public bool UseTestServers = false;
 	public ContentOrientation Orientation = ContentOrientation.landscape;
 	public string HostGameObjectName;
 	public bool iOSGameHandleLogin;
@@ -61,9 +63,9 @@ public class PropellerSDK : MonoBehaviour
 	[DllImport ("__Internal")]
 	private static extern void iOSInitialize(string key, string secret, string screenOrientation, bool useTestServers, bool gameHasLogin, bool gameHasInvite, bool gameHasShare);
 	[DllImport ("__Internal")]
-	private static extern bool iOSLaunch();
+	private static extern void iOSSetLanguageCode(string languageCode);
 	[DllImport ("__Internal")]
-	public static extern void iOSSetLanguageCode(string languageCode);
+	private static extern bool iOSLaunch();
 	[DllImport ("__Internal")]
 	private static extern bool iOSSubmitMatchResult(string delimitedMatchInfo);
 	[DllImport ("__Internal")]
@@ -100,6 +102,7 @@ public class PropellerSDK : MonoBehaviour
 	
 	#region Public Functions
 
+
 	/// <summary>
 	/// Sets the language code for the Propeller SDK online content. Must be compliant to ISO 639-1.
 	/// If the language code is not supported, then the content will default to English (en)
@@ -111,8 +114,7 @@ public class PropellerSDK : MonoBehaviour
 	{
 		Debug.Log ("SetLanguageCode - start");
 
-		if (!Application.isEditor)
-		{
+		if (!Application.isEditor) {
 			Debug.Log ("SetLanguageCode - " + languageCode);
 #if UNITY_IPHONE
 			iOSSetLanguageCode(languageCode);
@@ -170,16 +172,12 @@ public class PropellerSDK : MonoBehaviour
 		
 		bool succeeded = false;
 		
-		if (!Application.isEditor)
-		{
+		if (!Application.isEditor) {
 			JSONClass matchResultJSON = toJSONClass (matchResult);
 
-			if (matchResultJSON == null)
-			{
+			if (matchResultJSON == null) {
 				Debug.Log ("SubmitMatchResult - match result parse error");
-			}
-			else
-			{
+			} else {
 #if UNITY_IPHONE
 				succeeded = iOSSubmitMatchResult( matchResultJSON.ToString () );
 #elif UNITY_ANDROID
@@ -280,7 +278,7 @@ public class PropellerSDK : MonoBehaviour
 	/// <param name='listener'>
 	/// Notification listener to set
 	/// </param>
-	public static void SetNotificationListener(PropellerSDKNotificationListener listener)
+	public static void SetNotificationListener (PropellerSDKNotificationListener listener)
 	{
 		m_notificationListener = listener;
 	}
@@ -291,7 +289,7 @@ public class PropellerSDK : MonoBehaviour
 	/// <param name='notificationType'>
 	/// The notification type to enabled
 	/// </param>
-	public static void EnableNotification(NotificationType notificationType)
+	public static void EnableNotification (NotificationType notificationType)
 	{
 		Debug.Log ("EnableNotification - start");
 
@@ -321,7 +319,7 @@ public class PropellerSDK : MonoBehaviour
 	/// <param name='notificationType'>
 	/// The notification type to disable
 	/// </param>
-	public static void DisableNotification(NotificationType notificationType)
+	public static void DisableNotification (NotificationType notificationType)
 	{
 		Debug.Log ("DisableNotification - start");
 
@@ -354,7 +352,7 @@ public class PropellerSDK : MonoBehaviour
 	/// <param name='notificationType'>
 	/// The notification type validate
 	/// </param>
-	public static bool IsNotificationEnabled(NotificationType notificationType)
+	public static bool IsNotificationEnabled (NotificationType notificationType)
 	{
 		Debug.Log ("IsNotificationEnabled - start");
 
@@ -405,7 +403,7 @@ public class PropellerSDK : MonoBehaviour
 	/// <summary>
 	/// Begins an asynchronous operation to indicate login info is complete.
 	/// </summary>
-	public static void SdkSocialLoginCompleted(Dictionary<string, string> loginInfo)
+	public static void SdkSocialLoginCompleted (Dictionary<string, string> loginInfo)
 	{
 		Debug.Log ("SdkSocialLoginCompleted - start");
 
@@ -532,7 +530,6 @@ public class PropellerSDK : MonoBehaviour
 		Debug.Log ("RestoreAllLocalNotifications - end");
 	}
 
-
 	/// <summary>
 	/// FUEL DYNAMICS - SetUserConditions
 	/// 
@@ -546,19 +543,15 @@ public class PropellerSDK : MonoBehaviour
 	public static bool SetUserConditions (Dictionary<string, object> conditions)
 	{
 		Debug.Log ("SetUserConditions - start");
-		
+
 		bool succeeded = false;
-		
-		if (!Application.isEditor)
-		{
+
+		if (!Application.isEditor) {
 			JSONClass conditionsJSON = toJSONClass (conditions);
 
-			if (conditionsJSON == null)
-			{
+			if (conditionsJSON == null) {
 				Debug.Log ("SetUserConditions - conditions parse error");
-			}
-			else
-			{
+			} else {
 #if UNITY_IPHONE
 				succeeded = PropellerImports.iOSSetUserConditions( conditionsJSON.ToString () );
 #elif UNITY_ANDROID
@@ -569,9 +562,9 @@ public class PropellerSDK : MonoBehaviour
 #endif
 			}
 		}
-		
+
 		Debug.Log ("SetUserConditions - end");
-		
+
 		return succeeded;
 	}
 
@@ -586,7 +579,7 @@ public class PropellerSDK : MonoBehaviour
 #if UNITY_IPHONE
 			PropellerImports.iOSSyncUserValues();
 #elif UNITY_ANDROID
-			m_jniPropellerUnity.CallStatic("SyncUserValues");
+			m_jniPropellerUnity.CallStatic<bool>("SyncUserValues");
 #endif
 		}
 
@@ -622,8 +615,8 @@ public class PropellerSDK : MonoBehaviour
 				m_jniPropellerUnity.CallStatic<bool>("SetNotificationIcon", AndroidNotificationIcon);
 				m_jniPropellerUnity.CallStatic("InitializeGCM", AndroidGCMSenderID);
 #endif
-				if (!string.IsNullOrEmpty(HostGameObjectName)) {
-					m_hostGameObject = GameObject.Find(HostGameObjectName);
+				if (!string.IsNullOrEmpty (HostGameObjectName)) {
+					m_hostGameObject = GameObject.Find (HostGameObjectName);
 				}
 			}
 			
@@ -682,12 +675,12 @@ public class PropellerSDK : MonoBehaviour
 		Debug.Log ("PropellerOnSdkCompletedWithExit");
 
 		if (!string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnSdkCompletedWithExit - " + message);
+			Debug.Log ("PropellerOnSdkCompletedWithExit - " + message);
 		}
 		
 		if (m_listener == null) {
-            Debug.Log ("PropellerOnSdkCompletedWithExit - undefined listener");
-            return;
+			Debug.Log ("PropellerOnSdkCompletedWithExit - undefined listener");
+			return;
 		}
 
 		m_listener.SdkCompletedWithExit ();
@@ -722,8 +715,8 @@ public class PropellerSDK : MonoBehaviour
 		matchInfo.Add ("paramsJSON", paramsJSON);
 		
 		if (m_listener == null) {
-            Debug.Log ("PropellerOnSdkCompletedWithExit - undefined listener");
-            return;
+			Debug.Log ("PropellerOnSdkCompletedWithExit - undefined listener");
+			return;
 		}
 
 		m_listener.SdkCompletedWithMatch (matchInfo);
@@ -734,12 +727,12 @@ public class PropellerSDK : MonoBehaviour
 		Debug.Log ("PropellerOnSdkFailed");
 
 		if (!string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnSdkFailed - " + message);
+			Debug.Log ("PropellerOnSdkFailed - " + message);
 		}
 		
 		if (m_listener == null) {
-            Debug.Log ("PropellerOnSdkFailed - undefined listener");
-            return;
+			Debug.Log ("PropellerOnSdkFailed - undefined listener");
+			return;
 		}
 
 		m_listener.SdkFailed (message);
@@ -748,87 +741,101 @@ public class PropellerSDK : MonoBehaviour
 	private void PropellerOnChallengeCountChanged (string message)
 	{
 		Debug.Log ("PropellerOnChallengeCountChanged");
-		
+
+		// message must contain the challenge count or else its an error
 		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnChallengeCountChanged - null or empty message");
+			Debug.Log ("PropellerOnChallengeCountChanged - null or empty message");
 			return;
-        }
+		}
 
 		Debug.Log ("PropellerOnChallengeCountChanged - " + message);
 		
 		if (m_hostGameObject == null) {
-            Debug.Log ("PropellerOnChallengeCountChanged - undefined host game object");
-            return;
+			Debug.Log ("PropellerOnChallengeCountChanged - undefined host game object");
+			return;
 		}
 
-		m_hostGameObject.SendMessage("OnPropellerSDKChallengeCountUpdated", message);
+		m_hostGameObject.SendMessage ("OnPropellerSDKChallengeCountUpdated", message);
 	}
 	
 	private void PropellerOnTournamentInfo (string message)
 	{
 		Debug.Log ("PropellerOnTournamentInfo");
-		
-		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnTournamentInfo - null or empty message");
+
+		// message must be defined or else its an error
+		if (message == null) {
+			Debug.Log ("PropellerOnTournamentInfo - null message");
 			return;
 		}
+
+		// can have no tournament info in the case where
+		// no current or future tournament has been
+		// scheduled
 
 		Debug.Log ("PropellerOnTournamentInfo - " + message);
-		
-		const char kDelimeter = '&';
-		string[] resultsArray = message.Split (kDelimeter);
-		
-		if (resultsArray.Length != 6) {
-			Debug.LogError ("PropellerOnTournamentInfo - Invalid response from PropellerUnitySDK");
-			return;
+
+		string[] resultsArray = null;
+
+		if (message.Length > 0) {
+			const char kDelimeter = '&';
+
+			resultsArray = message.Split (kDelimeter);
+
+			if (resultsArray.Length != 6) {
+				Debug.LogError ("PropellerOnTournamentInfo - Invalid response from PropellerUnitySDK");
+				return;
+			}
 		}
-		
+
 		Dictionary<string, string> tournamentInfo = new Dictionary<string, string> ();
 
-        if (!string.IsNullOrEmpty (resultsArray[0])) {
-    		tournamentInfo.Add ("name", WWW.UnEscapeURL (resultsArray[0]));
-        }
+		if (resultsArray != null) {
+			if (!string.IsNullOrEmpty (resultsArray [0])) {
+				tournamentInfo.Add ("name", WWW.UnEscapeURL (resultsArray [0]));
+			}
 
-        if (!string.IsNullOrEmpty (resultsArray[1])) {
-	    	tournamentInfo.Add ("campaignName", WWW.UnEscapeURL (resultsArray[1]));
-        }
+			if (!string.IsNullOrEmpty (resultsArray [1])) {
+				tournamentInfo.Add ("campaignName", WWW.UnEscapeURL (resultsArray [1]));
+			}
 
-        if (!string.IsNullOrEmpty (resultsArray[2])) {
-    		tournamentInfo.Add ("sponsorName", WWW.UnEscapeURL (resultsArray[2]));
-        }
+			if (!string.IsNullOrEmpty (resultsArray [2])) {
+				tournamentInfo.Add ("sponsorName", WWW.UnEscapeURL (resultsArray [2]));
+			}
 
-        if (!string.IsNullOrEmpty (resultsArray[3])) {
-		    tournamentInfo.Add ("startDate", WWW.UnEscapeURL (resultsArray[3]));
-        }
+			if (!string.IsNullOrEmpty (resultsArray [3])) {
+				tournamentInfo.Add ("startDate", WWW.UnEscapeURL (resultsArray [3]));
+			}
 
-        if (!string.IsNullOrEmpty (resultsArray[4])) {
-	    	tournamentInfo.Add ("endDate", WWW.UnEscapeURL (resultsArray[4]));
-        }
+			if (!string.IsNullOrEmpty (resultsArray [4])) {
+				tournamentInfo.Add ("endDate", WWW.UnEscapeURL (resultsArray [4]));
+			}
 
-        if (!string.IsNullOrEmpty (resultsArray[5])) {
-    		tournamentInfo.Add ("logo", WWW.UnEscapeURL (resultsArray[5]));
-        }
-		
-		if (m_hostGameObject == null) {
-            Debug.Log ("PropellerOnTournamentInfo - undefined host game object");
-            return;
+			if (!string.IsNullOrEmpty (resultsArray [5])) {
+				tournamentInfo.Add ("logo", WWW.UnEscapeURL (resultsArray [5]));
+			}
 		}
 
-		m_hostGameObject.SendMessage("OnPropellerSDKTournamentInfo", tournamentInfo);
+		if (m_hostGameObject == null) {
+			Debug.Log ("PropellerOnTournamentInfo - undefined host game object");
+			return;
+		}
+
+		m_hostGameObject.SendMessage ("OnPropellerSDKTournamentInfo", tournamentInfo);
 	}
 
-    private void PropellerOnVirtualGoodList (string message)
-    {
+	private void PropellerOnVirtualGoodList (string message)
+	{
 		Debug.Log ("PropellerOnVirtualGoodList");
 
+		// message must at least contain the transaction ID or else its an error
 		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnVirtualGoodList - null or empty message");
+			Debug.Log ("PropellerOnVirtualGoodList - null or empty message");
 			return;
-        }
+		}
 
 		Debug.Log ("PropellerOnVirtualGoodList - " + message);
 
-        const char kDelimeter = '&';
+		const char kDelimeter = '&';
 		string[] resultsArray = message.Split (kDelimeter);
 
 		if (resultsArray.Length == 0) {
@@ -836,59 +843,59 @@ public class PropellerSDK : MonoBehaviour
 			return;
 		}
 
-        Dictionary<string, object> virtualGoodInfo = new Dictionary<string, object> ();
-        virtualGoodInfo.Add ("transactionID", resultsArray[0]);
+		Dictionary<string, object> virtualGoodInfo = new Dictionary<string, object> ();
+		virtualGoodInfo.Add ("transactionID", resultsArray [0]);
 
-        List<string> virtualGoods = new List<string> ();
+		List<string> virtualGoods = new List<string> ();
 
-        for (int i = 1; i < resultsArray.Length; i++)
-        {
-            virtualGoods.Add(resultsArray[i]);
-        }
-
-        virtualGoodInfo.Add ("virtualGoods", virtualGoods);
-
-		if (m_hostGameObject == null) {
-            Debug.Log ("PropellerOnVirtualGoodList - undefined host game object");
-            return;
+		for (int i = 1; i < resultsArray.Length; i++) {
+			virtualGoods.Add (resultsArray [i]);
 		}
 
-		m_hostGameObject.SendMessage("OnPropellerSDKVirtualGoodList", virtualGoodInfo);
-    }
+		virtualGoodInfo.Add ("virtualGoods", virtualGoods);
 
-    private void PropellerOnVirtualGoodRollback (string message)
-    {
+		if (m_hostGameObject == null) {
+			Debug.Log ("PropellerOnVirtualGoodList - undefined host game object");
+			return;
+		}
+
+		m_hostGameObject.SendMessage ("OnPropellerSDKVirtualGoodList", virtualGoodInfo);
+	}
+
+	private void PropellerOnVirtualGoodRollback (string message)
+	{
 		Debug.Log ("PropellerOnVirtualGoodRollback");
 
+		// message must contain the transaction ID or else its an error
 		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnVirtualGoodRollback - null or empty message");
+			Debug.Log ("PropellerOnVirtualGoodRollback - null or empty message");
 			return;
-        }
+		}
 
 		Debug.Log ("PropellerOnVirtualGoodRollback - " + message);
 
 		if (m_hostGameObject == null) {
-            Debug.Log ("PropellerOnVirtualGoodRollback - undefined host game object");
-            return;
+			Debug.Log ("PropellerOnVirtualGoodRollback - undefined host game object");
+			return;
 		}
 
-		m_hostGameObject.SendMessage("OnPropellerSDKVirtualGoodRollback", message);
-    }
+		m_hostGameObject.SendMessage ("OnPropellerSDKVirtualGoodRollback", message);
+	}
 
 	private void PropellerOnSdkSocialLogin (string message)
 	{
 		Debug.Log ("PropellerOnSdkSocialLogin");
 
 		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnSdkSocialLogin - null or empty message");
+			Debug.Log ("PropellerOnSdkSocialLogin - null or empty message");
 			return;
 		}
 
 		Debug.Log ("PropellerOnSdkSocialLogin - " + message);
 		
 		if (m_listener == null) {
-            Debug.Log ("PropellerOnSdkSocialLogin - undefined listener");
-            return;
+			Debug.Log ("PropellerOnSdkSocialLogin - undefined listener");
+			return;
 		}
 
 		bool allowCache = System.Convert.ToBoolean (message);
@@ -900,15 +907,15 @@ public class PropellerSDK : MonoBehaviour
 		Debug.Log ("PropellerOnSdkSocialInvite");
 
 		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnSdkSocialInvite - null or empty message");
+			Debug.Log ("PropellerOnSdkSocialInvite - null or empty message");
 			return;
 		}
 
 		Debug.Log ("PropellerOnSdkSocialInvite - " + message);
 
 		if (m_listener == null) {
-            Debug.Log ("PropellerOnSdkSocialInvite - undefined listener");
-            return;
+			Debug.Log ("PropellerOnSdkSocialInvite - undefined listener");
+			return;
 		}
 
 		Dictionary<string, string> inviteDetail = new Dictionary<string, string> ();
@@ -932,15 +939,15 @@ public class PropellerSDK : MonoBehaviour
 		Debug.Log ("PropellerOnSdkSocialShare");
 
 		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnSdkSocialShare - null or empty message");
+			Debug.Log ("PropellerOnSdkSocialShare - null or empty message");
 			return;
 		}
 
-        Debug.Log ("PropellerOnSdkSocialShare - " + message);
+		Debug.Log ("PropellerOnSdkSocialShare - " + message);
 
 		if (m_listener == null) {
-            Debug.Log ("PropellerOnSdkSocialShare - undefined listener");
-            return;
+			Debug.Log ("PropellerOnSdkSocialShare - undefined listener");
+			return;
 		}
 
 		Dictionary<string, string> shareDetail = new Dictionary<string, string> ();
@@ -964,25 +971,25 @@ public class PropellerSDK : MonoBehaviour
 		Debug.Log ("PropellerOnSdkOnNotificationEnabled");
 
 		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnSdkOnNotificationEnabled - null or empty message");
+			Debug.Log ("PropellerOnSdkOnNotificationEnabled - null or empty message");
 			return;
 		}
 
 		Debug.Log ("PropellerOnSdkOnNotificationEnabled - " + message);
 		
 		if (m_notificationListener == null) {
-            // undefined notification listener
-            return;
+			// undefined notification listener
+			return;
 		}
 
 		int notificationTypeValue = -1;
 		
-		if (!int.TryParse(message, out notificationTypeValue)) {
+		if (!int.TryParse (message, out notificationTypeValue)) {
 			Debug.Log ("PropellerOnSdkOnNotificationEnabled - unparsable notification type value");
 			return;
 		}
 		
-		System.Array notificationTypes = System.Enum.GetValues(typeof(NotificationType));
+		System.Array notificationTypes = System.Enum.GetValues (typeof(NotificationType));
 		NotificationType notificationType = NotificationType.none;
 		bool foundNotificationType = false;
 		
@@ -1000,7 +1007,7 @@ public class PropellerSDK : MonoBehaviour
 			return;
 		}
 		
-		m_notificationListener.SdkOnNotificationEnabled(notificationType);
+		m_notificationListener.SdkOnNotificationEnabled (notificationType);
 	}
 
 	private void PropellerOnSdkOnNotificationDisabled (string message)
@@ -1008,25 +1015,25 @@ public class PropellerSDK : MonoBehaviour
 		Debug.Log ("PropellerOnSdkOnNotificationDisabled");
 
 		if (string.IsNullOrEmpty (message)) {
-            Debug.Log ("PropellerOnSdkOnNotificationDisabled - null or empty message");
+			Debug.Log ("PropellerOnSdkOnNotificationDisabled - null or empty message");
 			return;
 		}
 
 		Debug.Log ("PropellerOnSdkOnNotificationDisabled - " + message);
 		
 		if (m_notificationListener == null) {
-            // undefined notification listener
-            return;
+			// undefined notification listener
+			return;
 		}
 
 		int notificationTypeValue = -1;
 		
-		if (!int.TryParse(message, out notificationTypeValue)) {
+		if (!int.TryParse (message, out notificationTypeValue)) {
 			Debug.Log ("PropellerOnSdkOnNotificationDisabled - unparsable notification type value");
 			return;
 		}
 		
-		System.Array notificationTypes = System.Enum.GetValues(typeof(NotificationType));
+		System.Array notificationTypes = System.Enum.GetValues (typeof(NotificationType));
 		NotificationType notificationType = NotificationType.none;
 		bool foundNotificationType = false;
 		
@@ -1044,7 +1051,7 @@ public class PropellerSDK : MonoBehaviour
 			return;
 		}
 		
-		m_notificationListener.SdkOnNotificationDisabled(notificationType);
+		m_notificationListener.SdkOnNotificationDisabled (notificationType);
 	}
 
 	private void PropellerOnUserValues (string message)
@@ -1074,40 +1081,32 @@ public class PropellerSDK : MonoBehaviour
             return;
 		}
 
-		m_hostGameObject.SendMessage("OnUserValues", userValuesInfo);
+		m_hostGameObject.SendMessage("OnPropellerSDKUserValues", userValuesInfo);
     }
 
 	#endregion
 	
 	#region private utility methods
-	private static JSONClass toJSONClass(Dictionary<string, object> dictionary)
+	private static JSONClass toJSONClass (Dictionary<string, object> dictionary)
 	{
-		if (dictionary == null)
-		{
+		if (dictionary == null) {
 			return null;
 		}
 
 		JSONClass jsonClass = new JSONClass ();
 
-		foreach (KeyValuePair<string, object> item in dictionary)
-		{
+		foreach (KeyValuePair<string, object> item in dictionary) {
 			JSONNode jsonNode;
 
-			if (item.Value is List<object>)
-			{
-				jsonNode = toJSONArray ((List<object>) item.Value);
-			}
-			else if (item.Value is Dictionary<string, object>)
-			{
-				jsonNode = toJSONClass ((Dictionary<string, object>) item.Value);
-			}
-			else
-			{
+			if (item.Value is List<object>) {
+				jsonNode = toJSONArray ((List<object>)item.Value);
+			} else if (item.Value is Dictionary<string, object>) {
+				jsonNode = toJSONClass ((Dictionary<string, object>)item.Value);
+			} else {
 				jsonNode = toJSONValue (item.Value);
 			}
 
-			if (jsonNode == null)
-			{
+			if (jsonNode == null) {
 				continue;
 			}
 
@@ -1117,39 +1116,30 @@ public class PropellerSDK : MonoBehaviour
 		return jsonClass;
 	}
 
-	private static JSONArray toJSONArray(List<object> list)
+	private static JSONArray toJSONArray (List<object> list)
 	{
-		if (list == null)
-		{
+		if (list == null) {
 			return null;
 		}
 
-		JSONArray jsonArray = new JSONArray();
+		JSONArray jsonArray = new JSONArray ();
 
-		foreach (object item in list)
-		{
-			if (item == null)
-			{
+		foreach (object item in list) {
+			if (item == null) {
 				continue;
 			}
 
 			JSONNode jsonNode;
 
-			if (item is List<object>)
-			{
-				jsonNode = toJSONArray ((List<object>) item);
-			}
-			else if (item is Dictionary<string, object>)
-			{
-				jsonNode = toJSONClass ((Dictionary<string, object>) item);
-			}
-			else
-			{
+			if (item is List<object>) {
+				jsonNode = toJSONArray ((List<object>)item);
+			} else if (item is Dictionary<string, object>) {
+				jsonNode = toJSONClass ((Dictionary<string, object>)item);
+			} else {
 				jsonNode = toJSONValue (item);
 			}
 
-			if (jsonNode == null)
-			{
+			if (jsonNode == null) {
 				continue;
 			}
 
@@ -1159,41 +1149,27 @@ public class PropellerSDK : MonoBehaviour
 		return jsonArray;
 	}
 
-	private static JSONClass toJSONValue(object data)
+	private static JSONClass toJSONValue (object data)
 	{
-		if (data == null)
-		{
+		if (data == null) {
 			return null;
 		}
 
 		DataType type;
 
-		if (data is int)
-		{
+		if (data is int) {
 			type = DataType.intType;
-		}
-		else if (data is long)
-		{
+		} else if (data is long) {
 			type = DataType.longType;
-		}
-		else if (data is float)
-		{
+		} else if (data is float) {
 			type = DataType.floatType;
-		}
-		else if (data is double)
-		{
+		} else if (data is double) {
 			type = DataType.doubleType;
-		}
-		else if (data is bool)
-		{
+		} else if (data is bool) {
 			type = DataType.boolType;
-		}
-		else if (data is string)
-		{
+		} else if (data is string) {
 			type = DataType.stringType;
-		}
-		else
-		{
+		} else {
 			return null;
 		}
 

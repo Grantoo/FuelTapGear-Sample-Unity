@@ -8,4 +8,3 @@ public abstract class PropellerSDKNotificationListener
 	public abstract void SdkOnNotificationDisabled (PropellerSDK.NotificationType type);
 
 }
-
