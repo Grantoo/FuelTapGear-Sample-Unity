@@ -59,6 +59,7 @@ public class FuelHandler : MonoBehaviour
 	public float GearFriction { get; set; }
 	public int GearShapeType { get; set; }
 	public int GameTime { get; set; }
+	public string Split1Name { get; set; }
 
 	public GameMatchData getMatchData()
 	{
@@ -143,6 +144,8 @@ public class FuelHandler : MonoBehaviour
 		GearFriction = 0.98f;
 		GearShapeType = 5;
 		GameTime = 7;
+
+		Split1Name = "none";
 
 		//get stored dynamic values
 		if (PlayerPrefs.HasKey ("gearfriction")) {
@@ -1014,6 +1017,7 @@ public class FuelHandler : MonoBehaviour
 		String _friction = "friction";
 		String _geartype = "geartype";
 		String _gametime = "gametime";
+		String _split1name = "split1name";
 
 		Dictionary<string, string> analyticResult = new Dictionary<string, string> ();
 
@@ -1033,6 +1037,11 @@ public class FuelHandler : MonoBehaviour
 			{
 				string gametimeStr = (string) entry.Value;
 				GameTime = int.Parse(gametimeStr);
+			}
+			else if(_split1name.Equals( entry.Key ))
+			{
+				string split1nameStr = (string) entry.Value;
+				Split1Name = split1nameStr;
 			}
 
 			analyticResult.Add (entry.Key, (string)entry.Value);

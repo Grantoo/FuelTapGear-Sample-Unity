@@ -1081,6 +1081,7 @@ public class PropellerSDK : MonoBehaviour
             return;
 		}
 
+		Debug.Log ("PropellerOnUserValues:::::####:::::SendMessage");
 		m_hostGameObject.SendMessage("OnPropellerSDKUserValues", userValuesInfo);
     }
 

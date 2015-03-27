@@ -199,6 +199,7 @@ public class InitMainMenu : MonoBehaviour
 		int _gearShapeType = _fuelHandlerScript.GearShapeType;
 		float _gearFriction = _fuelHandlerScript.GearFriction;
 		int _gameTime = _fuelHandlerScript.GameTime;
+		string _split1name = _fuelHandlerScript.Split1Name;
 
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
@@ -213,6 +214,11 @@ public class InitMainMenu : MonoBehaviour
 		textMesh = GameObject.Find ("DebugText3");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "gametime = " + _gameTime.ToString();
+		tmesh.renderer.enabled = true;
+
+		textMesh = GameObject.Find ("DebugText4");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.text = "split1name = " + _split1name.ToString();
 		tmesh.renderer.enabled = true;
 	}
 
