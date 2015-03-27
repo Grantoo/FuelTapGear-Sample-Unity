@@ -59,6 +59,13 @@ public class MainLoop : MonoBehaviour
 		tmesh.text = str;
 	}
 
+	public void updateFinalScoreText (string str) 
+	{
+		GameObject scoreObj = GameObject.Find ("finalScore");
+		TextMesh tmesh = (TextMesh)scoreObj.GetComponent (typeof(TextMesh)); 
+		tmesh.text = str;
+	}
+
 	public void updateGameTimerText (string str) 
 	{
 		GameObject gameTimerObj = GameObject.Find ("GameTimer");
@@ -161,6 +168,14 @@ public class MainLoop : MonoBehaviour
 
 		GameObject _backObj = GameObject.Find("backButton");
 		_backObj.renderer.enabled = false;
+
+
+		//Timeup Popup
+		GameObject _timeup = GameObject.Find("TimeUpPopup");
+		_timeup.renderer.enabled = false;
+		_timeup = GameObject.Find("finalScore");
+		_timeup.renderer.enabled = false;
+
 	}
 
 	IEnumerator DownloadImage(string url, Texture2D tex) 
@@ -276,6 +291,15 @@ public class MainLoop : MonoBehaviour
 					_gearActionScript.ClearActiveBonuses();
 
 					GameOverSFX.Play();
+
+					//Timeup Popup
+					GameObject _timeup = GameObject.Find("TimeUpPopup");
+					_timeup.renderer.enabled = true;
+
+					updateFinalScoreText(scoreValue.ToString());
+					_timeup = GameObject.Find("finalScore");
+					_timeup.renderer.enabled = true;
+
 
 					//another complete game session
 					if (PlayerPrefs.HasKey ("numSessions")) 

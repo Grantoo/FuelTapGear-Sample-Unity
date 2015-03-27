@@ -1061,7 +1061,7 @@ public class PropellerSDK : MonoBehaviour
 			return;
         }
 
-		Debug.Log ("FuelDynamicsUserValues = " + message);
+		Debug.Log ("PropellerOnUserValues::::::::::::::FuelDynamicsUserValues = " + message);
 
         const char kDelimeter = '&';
 		string[] resultsArray = message.Split (kDelimeter);
