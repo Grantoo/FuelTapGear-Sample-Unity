@@ -12,6 +12,7 @@ public class MainLoop : MonoBehaviour
 		FirstTap, 
 		Running,
 		Done,
+		Exit,
 	};
 
 	public AudioSource GameOverSFX;
@@ -21,7 +22,9 @@ public class MainLoop : MonoBehaviour
 	private float gameTimerValue = 10.0f;
 	private eGameState mGameState = eGameState.Init;
 
-	
+	private float gameoverTimer = 0.0f;
+	public float gameoverTimeout = 2.0f;
+
 	/*
 	 -----------------------------------------------------
 			Access to FuelHandler this pointer
@@ -175,6 +178,8 @@ public class MainLoop : MonoBehaviour
 		_timeup.renderer.enabled = false;
 		_timeup = GameObject.Find("finalScore");
 		_timeup.renderer.enabled = false;
+
+		gameoverTimer = 0.0f;
 
 	}
 
@@ -330,9 +335,23 @@ public class MainLoop : MonoBehaviour
 
 			case eGameState.Done:
 			{
+				//timeout to return to main menu
+
+				gameoverTimer += Time.deltaTime;
+				if(gameoverTimer >= gameoverTimeout)
+				{
+					Application.LoadLevel("MainMenu");
+
+					mGameState = eGameState.Exit;
+				}
 			}
 			break;
 
+			case eGameState.Exit:
+			{
+
+			}
+			break;
 		}
 
 	}

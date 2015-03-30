@@ -1071,6 +1071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameOverSFX: {fileID: 1479090003}
   scoreValue: 0
+  gameoverTimeout: 3.5
 --- !u!1 &675124319
 GameObject:
   m_ObjectHideFlags: 0

@@ -20,6 +20,7 @@ public class InitMainMenu : MonoBehaviour
 		//FuelDynamicsHandler _fuelDynamicsHandlerScript = _fuelDynamicsHandler.GetComponent<FuelDynamicsHandler>();
 		//_fuelHandlerScript.setUserConditions();
 
+		RefreshDebugText();
 		RefreshGoldCount(0);
 		RefreshOilCount(0);
 		RefreshHiScore();
@@ -187,6 +188,11 @@ public class InitMainMenu : MonoBehaviour
 		textMesh = GameObject.Find ("DebugText3");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "null";
+		tmesh.renderer.enabled = true;
+
+		textMesh = GameObject.Find ("DebugText4");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.text = "split1name";
 		tmesh.renderer.enabled = true;
 	}
 

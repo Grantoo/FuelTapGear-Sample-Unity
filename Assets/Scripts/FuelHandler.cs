@@ -144,7 +144,6 @@ public class FuelHandler : MonoBehaviour
 		GearFriction = 0.98f;
 		GearShapeType = 5;
 		GameTime = 7;
-
 		Split1Name = "none";
 
 		//get stored dynamic values
@@ -156,6 +155,9 @@ public class FuelHandler : MonoBehaviour
 		}
 		if (PlayerPrefs.HasKey ("gametime")) {
 			GameTime = PlayerPrefs.GetInt("gametime");
+		}
+		if (PlayerPrefs.HasKey ("splitgroup")) {
+			Split1Name = PlayerPrefs.GetString("splitgroup");
 		}
 
 
@@ -1057,6 +1059,9 @@ public class FuelHandler : MonoBehaviour
 		}
 		if (PlayerPrefs.HasKey ("gametime")) {
 			PlayerPrefs.SetInt("gametime", GameTime);
+		}
+		if (PlayerPrefs.HasKey ("splitgroup")) {
+			PlayerPrefs.SetString("splitgroup", Split1Name);
 		}
 
 		NotificationCenter.DefaultCenter.PostNotification(getMainMenuClass(), "RefreshDebugText");
