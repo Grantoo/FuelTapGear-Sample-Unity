@@ -4,7 +4,7 @@ using System;
 
 public class InitMainMenu : MonoBehaviour 
 {
-	
+
 	void Start () 
 	{
 		Debug.Log ("InitMainMenu!");
@@ -15,23 +15,18 @@ public class InitMainMenu : MonoBehaviour
 
 		ResetDebugText();
 
-		//get Fuel Dynamics Handler
-		//GameObject _fuelDynamicsHandler = GameObject.Find("FuelDynamicsHandlerObject");
-		//FuelDynamicsHandler _fuelDynamicsHandlerScript = _fuelDynamicsHandler.GetComponent<FuelDynamicsHandler>();
-		//_fuelHandlerScript.setUserConditions();
-
 		RefreshDebugText();
 		RefreshGoldCount(0);
 		RefreshOilCount(0);
 		RefreshHiScore();
 
-		FuelHandler _fuelHandlerScript = getFuelHandlerClass();
-		_fuelHandlerScript.syncUserValues();
-		_fuelHandlerScript.SyncChallengeCounts();
-		_fuelHandlerScript.SyncTournamentInfo();
-		_fuelHandlerScript.SyncVirtualGoods();
-		_fuelHandlerScript.updateLoginText();
-		_fuelHandlerScript.tryLaunchFuelSDK();
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
+		_propellerProductScript.syncUserValues();
+		_propellerProductScript.SyncChallengeCounts();
+		_propellerProductScript.SyncTournamentInfo();
+		_propellerProductScript.SyncVirtualGoods();
+		_propellerProductScript.updateLoginText();
+		_propellerProductScript.tryLaunchFuelSDK();
 	}
 
 	
@@ -148,8 +143,10 @@ public class InitMainMenu : MonoBehaviour
 	public void RefreshHiScore()
 	{
 		if (PlayerPrefs.HasKey ("hiScore")) {
-			FuelHandler _fuelHandlerScript = getFuelHandlerClass();
-			int score = _fuelHandlerScript.getMatchData().MatchScore;
+
+			PropellerProduct _propellerProductScript = getPropellerProductClass();
+			GameMatchData _gameMatchData = _propellerProductScript.getMatchData();
+			int score = _gameMatchData.MatchScore;
 			var _score = PlayerPrefs.GetInt ("hiScore");
 
 			if (score > _score) {
@@ -199,13 +196,12 @@ public class InitMainMenu : MonoBehaviour
 
 	public void RefreshDebugText()
 	{
-		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
-		
-		int _gearShapeType = _fuelHandlerScript.GearShapeType;
-		float _gearFriction = _fuelHandlerScript.GearFriction;
-		int _gameTime = _fuelHandlerScript.GameTime;
-		string _split1name = _fuelHandlerScript.Split1Name;
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
+		int _gameTime = (int)_propellerProductScript.getGameTime ();
+		int _gearShapeType = _propellerProductScript.getGearShapeType ();
+		float _gearFriction = _propellerProductScript.getGearFriction ();
+		string _split1name = _propellerProductScript.getSplit1Name();
+
 
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
@@ -251,13 +247,13 @@ public class InitMainMenu : MonoBehaviour
 	}
 
 
-	private FuelHandler getFuelHandlerClass()
+	private PropellerProduct getPropellerProductClass()
 	{
-		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-		if (_fuelHandler != null) {
-			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler> ();
-			if(_fuelHandlerScript != null) {
-				return _fuelHandlerScript;
+		GameObject _propellerProductObj = GameObject.Find("PropellerProduct");
+		if (_propellerProductObj != null) {
+			PropellerProduct _propellerProductScript = _propellerProductObj.GetComponent<PropellerProduct> ();
+			if(_propellerProductScript != null) {
+				return _propellerProductScript;
 			}
 			throw new Exception();
 		}
@@ -287,6 +283,16 @@ public class InitMainMenu : MonoBehaviour
 		//hide trophy
 		gameObj = GameObject.Find ("Trophy");
 		gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
+
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
+
+		bool _isDynamics = _propellerProductScript.isDynamicsOnly ();
+		if (_isDynamics == true) 
+		{
+			gameObj = GameObject.Find("buttonMultiPlayer");
+			gameObj.transform.position = new Vector3 (-24.0f, 1.0f, 0.0f);
+			gameObj.renderer.enabled = false;
+		}
 	}
 
 }

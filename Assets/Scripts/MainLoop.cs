@@ -30,13 +30,13 @@ public class MainLoop : MonoBehaviour
 			Access to FuelHandler this pointer
 	 -----------------------------------------------------
 	*/
-	private FuelHandler getFuelHandlerClass()
+	private PropellerProduct getPropellerProductClass()
 	{
-		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-		if (_fuelHandler != null) {
-			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler> ();
-			if(_fuelHandlerScript != null) {
-				return _fuelHandlerScript;
+		GameObject _propellerProductObj = GameObject.Find("PropellerProduct");
+		if (_propellerProductObj != null) {
+			PropellerProduct _propellerProductScript = _propellerProductObj.GetComponent<PropellerProduct> ();
+			if(_propellerProductScript != null) {
+				return _propellerProductScript;
 			}
 			throw new Exception();
 		}
@@ -99,12 +99,11 @@ public class MainLoop : MonoBehaviour
 
 	void resetDynamicData () 
 	{
-		FuelHandler _fuelHandlerScript = getFuelHandlerClass();
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
 
-		gameTimerValue = (float)_fuelHandlerScript.GameTime;
-
-		int _gearShapeType = _fuelHandlerScript.GearShapeType;
-		float _gearFriction = _fuelHandlerScript.GearFriction;
+		gameTimerValue = (float)_propellerProductScript.getGameTime ();
+		int _gearShapeType = _propellerProductScript.getGearShapeType ();
+		float _gearFriction = _propellerProductScript.getGearFriction ();
 
 		GameObject _gearAction = GameObject.Find("GearProxy1");
 		gearAction _gearActionScript = _gearAction.GetComponent<gearAction>();
@@ -146,9 +145,14 @@ public class MainLoop : MonoBehaviour
 
 
 		//set match data
-		FuelHandler _fuelHandlerScript = getFuelHandlerClass();
+		//FuelHandler _fuelHandlerScript = getFuelHandlerClass();
 
-		GameMatchData _data = _fuelHandlerScript.getMatchData();
+		//GameMatchData _data = _fuelHandlerScript.getMatchData();
+
+
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
+		GameMatchData _data = _propellerProductScript.getMatchData();
+
 
 		if (_data.ValidMatchData == true) 
 		{
@@ -273,9 +277,8 @@ public class MainLoop : MonoBehaviour
 
 					int maxspeed = (int)_gearActionScript.maxspinvelocity;
 
-					FuelHandler _fuelHandlerScript = getFuelHandlerClass();
-
-					_fuelHandlerScript.SetMatchScore(scoreValue, maxspeed);
+					PropellerProduct _propellerProductScript = getPropellerProductClass();
+					_propellerProductScript.SetMatchScore(scoreValue, maxspeed);
 
 					GameObject _backObj = GameObject.Find("backButton");
 					_backObj.renderer.enabled = true;

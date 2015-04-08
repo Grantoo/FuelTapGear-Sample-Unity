@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class playButton : MonoBehaviour 
 {
@@ -22,12 +23,25 @@ public class playButton : MonoBehaviour
 		{
 			clickSound.Play();
 			
-			GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-			FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
+			PropellerProduct _propellerProduct = getPropellerProductClass();
 
 			gameObject.GetComponent<SpriteRenderer>().sprite = imgDown;
 
-			_fuelHandlerScript.launchSinglePlayerGame();
+			_propellerProduct.launchSinglePlayerGame();
 		}
 	}
+
+	private PropellerProduct getPropellerProductClass()
+	{
+		GameObject _propellerProductObj = GameObject.Find("PropellerProduct");
+		if (_propellerProductObj != null) {
+			PropellerProduct _propellerProductScript = _propellerProductObj.GetComponent<PropellerProduct> ();
+			if(_propellerProductScript != null) {
+				return _propellerProductScript;
+			}
+			throw new Exception();
+		}
+		throw new Exception();
+	}
+
 }

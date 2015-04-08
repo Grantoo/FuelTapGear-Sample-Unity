@@ -5,6 +5,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using PropellerSDKSimpleJSON;
 	
+
+
 public class PropellerSDK : MonoBehaviour
 {
 	public enum ContentOrientation
@@ -553,7 +555,7 @@ public class PropellerSDK : MonoBehaviour
 				Debug.Log ("SetUserConditions - conditions parse error");
 			} else {
 #if UNITY_IPHONE
-				succeeded = PropellerImports.iOSSetUserConditions( conditionsJSON.ToString () );
+				succeeded = PropellerCommon.iOSSetUserConditions( conditionsJSON.ToString () );
 #elif UNITY_ANDROID
 				using (AndroidJavaObject conditionsJSONString = new AndroidJavaObject("java.lang.String", conditionsJSON.ToString ()))
 				{
@@ -577,7 +579,7 @@ public class PropellerSDK : MonoBehaviour
 
 		if (!Application.isEditor) {
 #if UNITY_IPHONE
-			PropellerImports.iOSSyncUserValues();
+			PropellerCommon.iOSSyncUserValues();
 #elif UNITY_ANDROID
 			m_jniPropellerUnity.CallStatic<bool>("SyncUserValues");
 #endif
@@ -617,6 +619,8 @@ public class PropellerSDK : MonoBehaviour
 #endif
 				if (!string.IsNullOrEmpty (HostGameObjectName)) {
 					m_hostGameObject = GameObject.Find (HostGameObjectName);
+
+					PropellerCommon.SetHostGameObject(m_hostGameObject);
 				}
 			}
 			

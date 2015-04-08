@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class TitleScreenAdvance : MonoBehaviour 
 {
@@ -37,16 +38,27 @@ public class TitleScreenAdvance : MonoBehaviour
 		}
 	}
 
-	
+	private PropellerProduct getPropellerProductClass()
+	{
+		GameObject _propellerProductObj = GameObject.Find("PropellerProduct");
+		if (_propellerProductObj != null) {
+			PropellerProduct _propellerProductScript = _propellerProductObj.GetComponent<PropellerProduct> ();
+			if(_propellerProductScript != null) {
+				return _propellerProductScript;
+			}
+			throw new Exception();
+		}
+		throw new Exception();
+	}
+
 	public void RefreshDebugText()
 	{
-		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
-		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
-		
-		int _gearShapeType = _fuelHandlerScript.GearShapeType;
-		float _gearFriction = _fuelHandlerScript.GearFriction;
-		int _gameTime = _fuelHandlerScript.GameTime;
-		
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
+		int _gameTime = (int)_propellerProductScript.getGameTime ();
+		int _gearShapeType = _propellerProductScript.getGearShapeType ();
+		float _gearFriction = _propellerProductScript.getGearFriction ();
+		//string _split1name = _propellerProductScript.getSplit1Name();
+
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "friction = " + _gearFriction.ToString();
