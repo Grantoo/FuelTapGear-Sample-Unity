@@ -21,6 +21,7 @@ public class InitMainMenu : MonoBehaviour
 		RefreshHiScore();
 
 		PropellerProduct _propellerProductScript = getPropellerProductClass();
+		Debug.Log ("......syncUserValues");
 		_propellerProductScript.syncUserValues();
 		_propellerProductScript.SyncChallengeCounts();
 		_propellerProductScript.SyncTournamentInfo();
@@ -36,6 +37,7 @@ public class InitMainMenu : MonoBehaviour
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshDebugText");
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshChallengeCount");
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshTournamentInfo");
+		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshVirtualGoods");
 		NotificationCenter.DefaultCenter.AddObserver(this, "AddTransOverlay");
 		NotificationCenter.DefaultCenter.AddObserver(this, "SubTransOverlay");
 	}
@@ -46,6 +48,7 @@ public class InitMainMenu : MonoBehaviour
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshDebugText");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshChallengeCount");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshTournamentInfo");
+		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshVirtualGoods");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "AddTransOverlay");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "SetTransOverlay");
 	}
@@ -99,10 +102,21 @@ public class InitMainMenu : MonoBehaviour
 		int addGold = (int)goodsTable["addGold"]; 
 		int addOil= (int)goodsTable["addOil"]; 
 
-		RefreshGoldCount(addGold);
-		RefreshOilCount(addOil);
+		if (addGold > 0) {
+			RefreshGoldCount(addGold);
 
-		VirtualGoodsFanFare ();
+			GameObject gameObj = GameObject.Find ("VirtualGoodGoldParticles");
+			ParticleSystem psystem = (ParticleSystem)gameObj.GetComponent (typeof(ParticleSystem)); 
+			psystem.Play();
+		}
+
+		if (addOil > 0) {
+			RefreshOilCount(addOil);
+
+			GameObject gameObj = GameObject.Find ("VirtualGoodOilParticles");
+			ParticleSystem psystem = (ParticleSystem)gameObj.GetComponent (typeof(ParticleSystem)); 
+			psystem.Play();
+		}
 	}
 
 	
@@ -161,13 +175,6 @@ public class InitMainMenu : MonoBehaviour
 	}
 
 
-	private void VirtualGoodsFanFare()
-	{
-		GameObject gameObj = GameObject.Find ("VirtualGoodsParticles");
-		ParticleSystem psystem = (ParticleSystem)gameObj.GetComponent (typeof(ParticleSystem)); 
-
-		psystem.Play();
-	}
 
 	
 	public void ResetDebugText()
@@ -255,8 +262,10 @@ public class InitMainMenu : MonoBehaviour
 			if(_propellerProductScript != null) {
 				return _propellerProductScript;
 			}
+			Debug.Log ("getPropellerProductClass Exception : _propellerProductScript = null");
 			throw new Exception();
 		}
+		Debug.Log ("getPropellerProductClass Exception : _propellerProductObj = null");
 		throw new Exception();
 	}
 	
@@ -268,8 +277,12 @@ public class InitMainMenu : MonoBehaviour
 		gameObj.renderer.enabled = false;
 
 		//init particles to off
-		GameObject particleObj = GameObject.Find ("VirtualGoodsParticles");
+		GameObject particleObj = GameObject.Find ("VirtualGoodGoldParticles");
 		ParticleSystem psystem = (ParticleSystem)particleObj.GetComponent (typeof(ParticleSystem)); 
+		psystem.Stop();
+
+		particleObj = GameObject.Find ("VirtualGoodOilParticles");
+		psystem = (ParticleSystem)particleObj.GetComponent (typeof(ParticleSystem)); 
 		psystem.Stop();
 
 		//hide challenge count pieces

@@ -389,9 +389,9 @@ extern "C"
         return [gSDK setUserConditions:conditions];
     }
 
-    void iOSSyncUserValues()
+    BOOL iOSSyncUserValues()
     {
-        [[PropellerSDK instance] syncUserValues];
+        return [[PropellerSDK instance] syncUserValues];
     }
 
     NSObject* normalizeJSONDictionary(NSDictionary *dictionary)

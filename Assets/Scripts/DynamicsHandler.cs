@@ -31,7 +31,7 @@ public class DynamicsHandler : MonoBehaviour
 	*/
 	void Awake ()
 	{
-		Debug.Log ("Awake");
+		Debug.Log ("DynamicsHandler Awake");
 		
 		if (Instance != null && Instance != this) 
 		{
@@ -55,7 +55,7 @@ public class DynamicsHandler : MonoBehaviour
 	*/
 	void Start () 
 	{
-		Debug.Log ("Start");
+		Debug.Log ("DynamicsHandler Start");
 
 		GearFriction = 0.98f;
 		GearShapeType = 5;
@@ -231,7 +231,7 @@ public class DynamicsHandler : MonoBehaviour
 			_longitude = Input.location.lastData.longitude;
 		}
 		
-		Dictionary<string, object> conditions = new Dictionary<string, object> ();
+		Dictionary<string, string> conditions = new Dictionary<string, string> ();
 		
 		//required
 		conditions.Add ("userAge", userAge.ToString());
@@ -252,7 +252,7 @@ public class DynamicsHandler : MonoBehaviour
 		//game conditions
 		conditions.Add ("gameVersion", "tapgear v1.1");
 		
-		PropellerSDK.SetUserConditions (conditions);
+		FuelDynamics.SetUserConditions (conditions);
 		
 		Debug.Log 
 			(
@@ -276,7 +276,7 @@ public class DynamicsHandler : MonoBehaviour
 	
 	public void syncUserValues()
 	{
-		PropellerSDK.SyncUserValues();
+		FuelDynamics.SyncUserValues();
 	}
 	
 	public void OnPropellerSDKUserValues (Dictionary<string, object> userValuesInfo)
@@ -287,8 +287,37 @@ public class DynamicsHandler : MonoBehaviour
 		String _gametime = "gametime";
 		String _split1name = "split1name";
 		
-		Dictionary<string, string> analyticResult = new Dictionary<string, string> ();
+		//Dictionary<string, string> analyticResult = new Dictionary<string, string> ();
+
+
+		object value;
+		if (userValuesInfo.TryGetValue (_friction, out value)) {
+			GearFriction = float.Parse (value.ToString ());
+		} else {
+			Debug.Log("friction not found in userValueInfo");
+		}
 		
+		if (userValuesInfo.TryGetValue (_geartype, out value)) {
+			GearShapeType = int.Parse(value.ToString());
+		} else {
+			Debug.Log("geartype not found in userValueInfo");
+		}
+		
+		if (userValuesInfo.TryGetValue (_gametime, out value)) {
+			GameTime = int.Parse(value.ToString());
+		} else {
+			Debug.Log("gametime not found in userValueInfo");
+		}
+		
+		if (userValuesInfo.TryGetValue (_split1name, out value)) {
+			Split1Name = value.ToString();
+		} else {
+			Debug.Log("split1name not found in userValueInfo");
+		}
+		
+		Debug.Log ("TryGetValue:: friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
+
+		/*
 		foreach(KeyValuePair<string, object> entry in userValuesInfo)
 		{
 			if(_friction.Equals( entry.Key ))
@@ -315,7 +344,8 @@ public class DynamicsHandler : MonoBehaviour
 			analyticResult.Add (entry.Key, (string)entry.Value);
 		}
 		Debug.Log ("friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
-		
+		*/
+
 		//store values
 		if (PlayerPrefs.HasKey ("gearfriction")) {
 			PlayerPrefs.SetFloat("gearfriction", GearFriction);

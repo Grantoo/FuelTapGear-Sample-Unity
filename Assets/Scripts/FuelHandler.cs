@@ -499,19 +499,21 @@ public class FuelHandler : MonoBehaviour
 
 		Debug.Log ("OnPropellerSDKVirtualGoodList: transactionId = " + transactionId);
 
+		Hashtable goodsTable = new Hashtable();  
+		goodsTable["addGold"] = 0;                          
+		goodsTable["addOil"] = 0;                          
 
-		Hashtable goodsTable = new Hashtable();                 
 		bool virtualGoodsTaken = false;
 		foreach (string vg in virtualGoods)
 		{
-			Debug.Log (">> vg = " + vg);
+			Debug.Log (":virtual good = " + vg);
 
-			if(vg == "goldPack")
+			if(vg == "golddrop")
 			{
-				goodsTable["addGold"] = 4;                          
+				goodsTable["addGold"] = 2;                          
 				virtualGoodsTaken = true;
 			}
-			else if(vg == "diamondGrade1")
+			else if(vg == "oildrop")
 			{
 				goodsTable["addOil"] = 2;                          
 				virtualGoodsTaken = true;
@@ -965,7 +967,7 @@ public class FuelHandler : MonoBehaviour
 			_longitude = Input.location.lastData.longitude;
 		}
 
-		Dictionary<string, object> conditions = new Dictionary<string, object> ();
+		Dictionary<string, string> conditions = new Dictionary<string, string> ();
 		
 		//required
 		conditions.Add ("userAge", userAge.ToString());
@@ -1015,12 +1017,44 @@ public class FuelHandler : MonoBehaviour
 	
 	public void OnPropellerSDKUserValues (Dictionary<string, object> userValuesInfo)
 	{
+		Debug.Log("OnPropellerSDKUserValues");
+
 		//Game Values - defined in the CSV
 		String _friction = "friction";
 		String _geartype = "geartype";
 		String _gametime = "gametime";
 		String _split1name = "split1name";
 
+
+
+		object value;
+		if (userValuesInfo.TryGetValue (_friction, out value)) {
+			GearFriction = float.Parse (value.ToString ());
+		} else {
+			Debug.Log("friction not found in userValueInfo");
+		}
+		
+		if (userValuesInfo.TryGetValue (_geartype, out value)) {
+			GearShapeType = int.Parse(value.ToString());
+		} else {
+			Debug.Log("friction not found in userValueInfo");
+		}
+
+		if (userValuesInfo.TryGetValue (_gametime, out value)) {
+			GameTime = int.Parse(value.ToString());
+		} else {
+			Debug.Log("friction not found in userValueInfo");
+		}
+
+		if (userValuesInfo.TryGetValue (_split1name, out value)) {
+			Split1Name = value.ToString();
+		} else {
+			Debug.Log("friction not found in userValueInfo");
+		}
+
+		Debug.Log ("TryGetValue:: friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
+
+		/*
 		Dictionary<string, string> analyticResult = new Dictionary<string, string> ();
 
 		foreach(KeyValuePair<string, object> entry in userValuesInfo)
@@ -1049,6 +1083,7 @@ public class FuelHandler : MonoBehaviour
 			analyticResult.Add (entry.Key, (string)entry.Value);
 		}
 		Debug.Log ("friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
+		*/
 
 		//store values
 		if (PlayerPrefs.HasKey ("gearfriction")) {

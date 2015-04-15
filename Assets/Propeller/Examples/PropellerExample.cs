@@ -50,6 +50,8 @@ public class PropellerExample : MonoBehaviour
 	private ComboBox languageCodeComboBox;
 	private int lastNotificationToggleSelected;
 	private ComboBox notificationToggleComboBox;
+	private int lastUserConditionsSelected;
+	private ComboBox userConditionsComboBox;
 	private Texture2D whiteTexture;
 	
 	private void OnGUI ()
@@ -137,6 +139,24 @@ public class PropellerExample : MonoBehaviour
 			
 			GUILayout.FlexibleSpace ();
 			
+			int userConditionsSelected = userConditionsComboBox.Show ();
+
+			if (userConditionsSelected != lastUserConditionsSelected) {
+				OnUserConditionsTogglingGUI (userConditionsSelected);
+				lastUserConditionsSelected = userConditionsSelected;
+			}
+
+			GUILayout.FlexibleSpace ();
+
+			if (GUILayout.Button ("SyncUserValues")) {
+				UpdateDialog ("Calling PropellerSDK.SyncUserValues()...");
+				ShowDialog ();
+
+				PropellerSDK.SyncUserValues ();
+			}
+
+			GUILayout.FlexibleSpace ();
+
 			GUILayout.EndVertical ();
 			GUILayout.FlexibleSpace ();
 			GUILayout.EndHorizontal ();
@@ -206,6 +226,31 @@ public class PropellerExample : MonoBehaviour
 		}
 	}
 	
+	private void OnUserConditionsTogglingGUI (int selectedIndex)
+	{
+		int userAge = 100;
+		int numSessions = 75;
+		int numLaunches = 50;
+		bool isTablet = selectedIndex != 0;
+
+		Dictionary<string, string> userConditions = new Dictionary<string, string> ();
+		userConditions ["userAge"] = userAge.ToString ();
+		userConditions ["numSessions"] = numSessions.ToString ();
+		userConditions ["numLaunches"] = numLaunches.ToString ();
+		userConditions ["isTablet"] = isTablet.ToString ();
+
+		UpdateDialog ("Calling PropellerSDK.SetUserConditions()...");
+
+		foreach (KeyValuePair<string, string> userCondition in userConditions) {
+			UpdateDialog ("User condition: " + userCondition.Key + " -> " + userCondition.Value);
+		}
+
+		UpdateDialog ("Done!");
+		ShowDialog ();
+
+		PropellerSDK.SetUserConditions (userConditions);
+	}
+
 	private void OnDialogGUI (int windowID)
 	{
 		GUI.FocusWindow (windowID);
@@ -304,6 +349,18 @@ public class PropellerExample : MonoBehaviour
 		
 		// Rollback the virtual good transaction for the given transaction ID
 	}
+
+	public void OnPropellerSDKUserValues (Dictionary<string, string> userValues)
+	{
+		UpdateDialog ("OnPropellerSDKUserValues() callback called...");
+
+		foreach (KeyValuePair<string, string> userValue in userValues) {
+			UpdateDialog ("User value: " + userValue.Key + " -> " + userValue.Value);
+		}
+
+		UpdateDialog ("Done!");
+		ShowDialog ();
+	}
 	
 	private void Awake ()
 	{
@@ -371,6 +428,16 @@ public class PropellerExample : MonoBehaviour
 		notificationToggleComboBox = new ComboBox (
 			notificationToggleList [lastNotificationToggleSelected],
 			notificationToggleList,
+			comboBoxListStyle);
+
+		GUIContent[] userConditionsList = new GUIContent[2];
+		userConditionsList [0] = new GUIContent ("User Conditions: isTablet = false");
+		userConditionsList [1] = new GUIContent ("User Conditions: isTablet = true");
+
+		lastUserConditionsSelected = 0;
+		userConditionsComboBox = new ComboBox (
+			userConditionsList [lastUserConditionsSelected],
+			userConditionsList,
 			comboBoxListStyle);
 	}
 	

@@ -47,7 +47,6 @@ MonoBehaviour:
   iOSGameHandleLogin: 0
   iOSGameHandleInvite: 0
   iOSGameHandleShare: 0
-  AndroidNotificationIcon: notify_icon
   AndroidGCMSenderID: 
   AndroidGameHandleLogin: 0
   AndroidGameHandleInvite: 0

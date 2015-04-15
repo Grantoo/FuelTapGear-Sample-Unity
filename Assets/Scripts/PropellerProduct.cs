@@ -16,7 +16,7 @@ public class PropellerProduct : MonoBehaviour
 	*/
 	void Awake ()
 	{
-		Debug.Log ("Awake");
+		Debug.Log ("PropellerProduct Awake");
 		
 		if (Instance != null && Instance != this) 
 		{

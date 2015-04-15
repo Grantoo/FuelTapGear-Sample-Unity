@@ -136,10 +136,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 14
+  spinvelocity: 0
   direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!1 &29060023
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +209,7 @@ Transform:
   m_LocalScale: {x: .075000003, y: .075000003, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
 --- !u!1 &54394815
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,10 +380,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 8
+  spinvelocity: 0
   direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!1 &139464901
 GameObject:
   m_ObjectHideFlags: 0
@@ -441,9 +441,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0196703dca3124befaaa46cfd4c044a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameKey: 542b3bec636f62427de7ac00
-  GameSecret: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
-  UseTestServers: 0
+  GameKey: 5477a6c17061701423190000
+  GameSecret: bc8939af-ac67-de48-7791-a4dc76ac3cfe
+  UseTestServers: 1
   Orientation: 1
   HostGameObjectName: FuelHandlerObject
   iOSGameHandleLogin: 1
@@ -582,10 +582,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 8
+  spinvelocity: 0
   direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!212 &421659614
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -678,7 +678,7 @@ Transform:
   m_LocalScale: {x: .075000003, y: .075000003, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
 --- !u!1001 &608099797
 Prefab:
   m_ObjectHideFlags: 0
@@ -778,7 +778,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
 --- !u!114 &725453746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -854,10 +854,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 8
-  direction: 1
+  spinvelocity: 0
+  direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!1 &817702306
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,10 +921,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 10
-  direction: 1
+  spinvelocity: 0
+  direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!1 &843402034
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,10 +988,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 6
+  spinvelocity: 0
   direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!1 &845407383
 GameObject:
   m_ObjectHideFlags: 0
@@ -1061,7 +1061,7 @@ Transform:
   m_LocalScale: {x: .075000003, y: .075000003, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
 --- !u!1 &885672965
 GameObject:
   m_ObjectHideFlags: 0
@@ -1209,10 +1209,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 12
-  direction: 1
+  spinvelocity: 0
+  direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!1 &991962382
 GameObject:
   m_ObjectHideFlags: 0
@@ -1282,7 +1282,7 @@ Transform:
   m_LocalScale: {x: .075000003, y: .075000003, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
 --- !u!1 &1023443249
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,10 +1412,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 18
-  direction: 1
+  spinvelocity: 0
+  direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!1 &1446534095
 GameObject:
   m_ObjectHideFlags: 0
@@ -1512,7 +1512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 636fc3ffcae864f628e19b65e6b3b87c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OthorMult: 1.23000002
+  OthorMult: 1.20000005
 --- !u!1 &1588793376
 GameObject:
   m_ObjectHideFlags: 0
@@ -1549,7 +1549,7 @@ Transform:
   - {fileID: 1196619027}
   - {fileID: 27711255}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 14
 --- !u!1 &1618785235
 GameObject:
   m_ObjectHideFlags: 0
@@ -1619,7 +1619,7 @@ Transform:
   m_LocalScale: {x: .075000003, y: .075000003, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 12
 --- !u!1001 &1667720155
 Prefab:
   m_ObjectHideFlags: 0
@@ -1768,10 +1768,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 11
+  spinvelocity: 0
   direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!1 &1753430843
 GameObject:
   m_ObjectHideFlags: 0
@@ -1841,7 +1841,7 @@ Transform:
   m_LocalScale: {x: .075000003, y: .075000003, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
 --- !u!1 &1840239610
 GameObject:
   m_ObjectHideFlags: 0
@@ -2225,11 +2225,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: GameKey
-      value: 542b3bec636f62427de7ac00
+      value: 5477a6c17061701423190000
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: GameSecret
-      value: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
+      value: bc8939af-ac67-de48-7791-a4dc76ac3cfe
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: iOSGameHandleLogin
@@ -2257,7 +2257,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: UseTestServers
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: Orientation
@@ -2304,10 +2304,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27c824de474bf4a048feb2b442bd2540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spinvelocity: 6
-  direction: 1
+  spinvelocity: 0
+  direction: 0
   relativegamevelocity: 1
-  passivefriction: .995000005
+  passivefriction: 1
 --- !u!212 &2046303785
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2561,4 +2561,4 @@ Transform:
   m_LocalScale: {x: .075000003, y: .075000003, z: .100000001}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 13
