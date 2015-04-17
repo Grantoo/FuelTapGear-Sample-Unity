@@ -420,8 +420,11 @@ public class FuelHandler : MonoBehaviour
 		Debug.Log ("OnPropellerSDKChallengeCountUpdated : countValue = " + countValue);
 
 		Hashtable ccTable = new Hashtable();                 
-		ccTable["cc"] = countValue;                          
-		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshChallengeCount", ccTable );
+		ccTable.Add("cc", countValue);
+
+		getMainMenuClass().RefreshChallengeCount(ccTable);
+
+		//NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshChallengeCount", ccTable );
 	}
 
 
@@ -449,30 +452,39 @@ public class FuelHandler : MonoBehaviour
 		} 
 		else 
 		{
+			Debug.Log ("name");
 			string tournyname = tournamentInfo["name"];
+			Debug.Log ("campaignName");
 			string campaignName = tournamentInfo["campaignName"];
-			string sponsorName = tournamentInfo["sponsorName"];
+			Debug.Log ("startDate");
 			string startDate = tournamentInfo["startDate"];
+			Debug.Log ("endDate");
 			string endDate = tournamentInfo["endDate"];
+			Debug.Log ("logo");
 			string logo = tournamentInfo["logo"];
+
 
 			Debug.Log 
 			(
 			    "*** TournamentInfo ***" + "\n" +
 			    "tournyname = " + tournyname + "\n" +
 			    "campaignName = " + campaignName + "\n" +
-			    "sponsorName = " + sponsorName + "\n" +
 			    "startDate = " + startDate + "\n" +
 			    "endDate = " + endDate + "\n" +
 			    "logo = " + logo + "\n"
 			);
 
-			Hashtable tournyTable = new Hashtable();                 
-			tournyTable["running"] = false;                          
-			tournyTable["tournyname"] = tournyname;                          
-			tournyTable["startDate"] = startDate;                          
-			tournyTable["endDate"] = endDate;                          
-			NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshTournamentInfo", tournyTable );
+			Hashtable tournyTable = new Hashtable();  
+
+			tournyTable.Add("running", true);
+			tournyTable.Add("tournyname", tournyname);
+			tournyTable.Add("startDate", startDate);
+			tournyTable.Add("endDate", endDate);
+
+			getMainMenuClass().RefreshTournamentInfo(tournyTable);
+
+			//notification not passing hashtable properly (runtime error)
+			//NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshTournamentInfo", tournyTable );
 		}
 	}
 
@@ -489,6 +501,7 @@ public class FuelHandler : MonoBehaviour
 			return;
 		}
 
+		//VirtualGoodUnitTest ();
 		PropellerSDK.SyncVirtualGoods ();
 	}
 
@@ -502,6 +515,7 @@ public class FuelHandler : MonoBehaviour
 		Hashtable goodsTable = new Hashtable();  
 		goodsTable["addGold"] = 0;                          
 		goodsTable["addOil"] = 0;                          
+		goodsTable["showTrophy"] = 0;                          
 
 		bool virtualGoodsTaken = false;
 		foreach (string vg in virtualGoods)
@@ -518,10 +532,16 @@ public class FuelHandler : MonoBehaviour
 				goodsTable["addOil"] = 2;                          
 				virtualGoodsTaken = true;
 			}
+			else if(vg == "trophydrop")
+			{
+				goodsTable["showTrophy"] = 1;                          
+				virtualGoodsTaken = true;
+			}
 		}
 
 		if(virtualGoodsTaken == true) {
-			NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshVirtualGoods", goodsTable);
+			getMainMenuClass().RefreshVirtualGoods(goodsTable);
+			//NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshVirtualGoods", goodsTable);
 		}
 
 		// Acknowledge the receipt of the virtual goods list
@@ -1054,36 +1074,6 @@ public class FuelHandler : MonoBehaviour
 
 		Debug.Log ("TryGetValue:: friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
 
-		/*
-		Dictionary<string, string> analyticResult = new Dictionary<string, string> ();
-
-		foreach(KeyValuePair<string, object> entry in userValuesInfo)
-		{
-			if(_friction.Equals( entry.Key ))
-			{
-				string friction = (string) entry.Value;
-				GearFriction = float.Parse(friction);
-			}
-			else if(_geartype.Equals( entry.Key ))
-			{
-				string geartypeStr = (string) entry.Value;
-				GearShapeType = int.Parse(geartypeStr);
-			}
-			else if(_gametime.Equals( entry.Key ))
-			{
-				string gametimeStr = (string) entry.Value;
-				GameTime = int.Parse(gametimeStr);
-			}
-			else if(_split1name.Equals( entry.Key ))
-			{
-				string split1nameStr = (string) entry.Value;
-				Split1Name = split1nameStr;
-			}
-
-			analyticResult.Add (entry.Key, (string)entry.Value);
-		}
-		Debug.Log ("friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
-		*/
 
 		//store values
 		if (PlayerPrefs.HasKey ("gearfriction")) {
@@ -1105,6 +1095,21 @@ public class FuelHandler : MonoBehaviour
 		flurryService.LogEvent("OnFuelDynamicsUserValues", analyticResult);
 #endif
 
+	}
+
+
+
+
+
+	//Unit Tests
+	private void VirtualGoodUnitTest()
+	{
+		Hashtable goodsTable = new Hashtable();  
+		goodsTable["addGold"] = 2;                          
+		goodsTable["addOil"] = 2;                          
+		goodsTable["showTrophy"] = 1;                          
+		
+		getMainMenuClass().RefreshVirtualGoods(goodsTable);
 	}
 		
 }

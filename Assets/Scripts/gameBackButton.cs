@@ -26,6 +26,7 @@ public class gameBackButton : MonoBehaviour
 
 			if(_mainloopScript.isGameOver() == true)
 			{
+				InitMainMenu.sComingFromGame = true;
 				Application.LoadLevel("MainMenu");
 			}
 		}

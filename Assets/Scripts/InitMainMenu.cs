@@ -4,10 +4,13 @@ using System;
 
 public class InitMainMenu : MonoBehaviour 
 {
+	public static bool sComingFromTitle = false;
+	public static bool sComingFromGame = false;
+
 
 	void Start () 
 	{
-		Debug.Log ("InitMainMenu!");
+		Debug.Log ("InitMainMenu Start");
 
 		AddNotificationObservers();
 
@@ -21,20 +24,30 @@ public class InitMainMenu : MonoBehaviour
 		RefreshHiScore();
 
 		PropellerProduct _propellerProductScript = getPropellerProductClass();
-		Debug.Log ("......syncUserValues");
+		_propellerProductScript.tryLaunchFuelSDK();
+
+		if (sComingFromTitle == true) {
+			UpdatePropellerSDK();
+			sComingFromTitle = false;
+		}
+	}
+
+	public void UpdatePropellerSDK()
+	{
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
 		_propellerProductScript.syncUserValues();
 		_propellerProductScript.SyncChallengeCounts();
 		_propellerProductScript.SyncTournamentInfo();
 		_propellerProductScript.SyncVirtualGoods();
 		_propellerProductScript.updateLoginText();
-		_propellerProductScript.tryLaunchFuelSDK();
 	}
 
-	
+
 	public void AddNotificationObservers()
 	{
 		NotificationCenter.DefaultCenter.AddObserver(this, "LaunchGamePlay");
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshDebugText");
+		NotificationCenter.DefaultCenter.AddObserver(this, "UpdatePropellerSDK");
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshChallengeCount");
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshTournamentInfo");
 		NotificationCenter.DefaultCenter.AddObserver(this, "RefreshVirtualGoods");
@@ -46,6 +59,7 @@ public class InitMainMenu : MonoBehaviour
 	{
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "LaunchGamePlay");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshDebugText");
+		NotificationCenter.DefaultCenter.RemoveObserver(this, "UpdatePropellerSDK");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshChallengeCount");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshTournamentInfo");
 		NotificationCenter.DefaultCenter.RemoveObserver(this, "RefreshVirtualGoods");
@@ -65,35 +79,55 @@ public class InitMainMenu : MonoBehaviour
 	public void RefreshChallengeCount(Hashtable ccTable)
 	{
 		// retrieve a value for the given key
-		int ccount = (int)ccTable["cc"];    
+		int ccount = (int)ccTable["cc"]; 
+
+		bool enabled = false;
+		if (ccount > 0)
+			enabled = true;
 
 		//show challenge count pieces and set count values
 		GameObject gameObj = GameObject.Find("ccbacking");
-		gameObj.renderer.enabled = true;
+		gameObj.renderer.enabled = enabled;
 
 		GameObject ccountObj = GameObject.Find ("ChallengeCount");
 		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = ccount.ToString();
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 	}
 
 
 	public void RefreshTournamentInfo(Hashtable tournyTable)
 	{
-		bool enabled = (bool)tournyTable["enabled"]; 
-
-		/* need to add screen elements for the following: */
-		//string tournyname = (string)tournyTable["tournyname"];    
-		//string startDate = (string)tournyTable["startDate"];    
-		//string endDate = (string)tournyTable["endDate"];    
+		Debug.Log ("enabled");
+		bool enabled = (bool)tournyTable["running"]; 
+		Debug.Log ("tournyname");
+		string tournyname = (string)tournyTable["tournyname"];    
+		Debug.Log ("startDate");
+		string startDate = (string)tournyTable["startDate"];    
+		Debug.Log ("endDate");
+		string endDate = (string)tournyTable["endDate"];    
 
 		GameObject gameObj = GameObject.Find ("Trophy");
-		
-		if(enabled == false){
-			gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
-		} else {
-			gameObj.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
-		}
+		gameObj.renderer.enabled = enabled;
+
+		gameObj = GameObject.Find ("TournyNameText");
+		TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.text = tournyname.ToString();
+		tmesh.renderer.enabled = enabled;
+
+		long t = Convert.ToInt64 (startDate);
+		DateTime date = FromUnixTime (t);
+		gameObj = GameObject.Find ("StartDateText");
+		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.text = date.ToString();
+		tmesh.renderer.enabled = enabled;
+
+		t = Convert.ToInt64 (endDate);
+		date = FromUnixTime (t);
+		gameObj = GameObject.Find ("EndDateText");
+		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.text = date.ToString();
+		tmesh.renderer.enabled = enabled;
 	}
 
 
@@ -101,6 +135,7 @@ public class InitMainMenu : MonoBehaviour
 	{
 		int addGold = (int)goodsTable["addGold"]; 
 		int addOil= (int)goodsTable["addOil"]; 
+		int showTrophy= (int)goodsTable["showTrophy"]; 
 
 		if (addGold > 0) {
 			RefreshGoldCount(addGold);
@@ -117,9 +152,23 @@ public class InitMainMenu : MonoBehaviour
 			ParticleSystem psystem = (ParticleSystem)gameObj.GetComponent (typeof(ParticleSystem)); 
 			psystem.Play();
 		}
+
+		if (showTrophy > 0) {
+			ShowTrophy();
+			
+			GameObject gameObj = GameObject.Find ("VirtualGoodTrophyParticles");
+			ParticleSystem psystem = (ParticleSystem)gameObj.GetComponent (typeof(ParticleSystem)); 
+			psystem.Play();
+		}
+
 	}
 
-	
+	private void ShowTrophy()
+	{
+		GameObject gameObj = GameObject.Find ("ShowTrophy");
+		gameObj.renderer.enabled = true;
+	}
+
 	public void RefreshGoldCount(int addAmount)
 	{
 		if (PlayerPrefs.HasKey ("userGold")) {
@@ -295,7 +344,24 @@ public class InitMainMenu : MonoBehaviour
 		
 		//hide trophy
 		gameObj = GameObject.Find ("Trophy");
-		gameObj.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 0f);
+		gameObj.renderer.enabled = false;
+
+		//parcipitation trophy
+		gameObj = GameObject.Find ("ShowTrophy");
+		gameObj.renderer.enabled = false;
+
+		gameObj = GameObject.Find ("TournyNameText");
+		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = false;
+		
+		gameObj = GameObject.Find ("StartDateText");
+		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = false;
+		
+		gameObj = GameObject.Find ("EndDateText");
+		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = false;
+
 
 		PropellerProduct _propellerProductScript = getPropellerProductClass();
 
@@ -306,6 +372,12 @@ public class InitMainMenu : MonoBehaviour
 			gameObj.transform.position = new Vector3 (-24.0f, 1.0f, 0.0f);
 			gameObj.renderer.enabled = false;
 		}
+	}
+
+	private DateTime FromUnixTime(long unixTime)
+	{
+		var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+		return epoch.AddSeconds(unixTime);
 	}
 
 }

@@ -343,6 +343,7 @@ public class MainLoop : MonoBehaviour
 				gameoverTimer += Time.deltaTime;
 				if(gameoverTimer >= gameoverTimeout)
 				{
+					InitMainMenu.sComingFromGame = true;
 					Application.LoadLevel("MainMenu");
 
 					mGameState = eGameState.Exit;

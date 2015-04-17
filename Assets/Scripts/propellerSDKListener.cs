@@ -74,14 +74,19 @@ public class fuelSDKListener : PropellerSDKListener
 	
 	public override void SdkCompletedWithExit ()
 	{
-		// sdk completed gracefully with no further action
 		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "SubTransOverlay");
+
+		if (InitMainMenu.sComingFromGame == true) {
+
+			NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "UpdatePropellerSDK");
+			InitMainMenu.sComingFromGame = false;
+		}
+
 		Debug.Log ("SdkCompletedWithExit");
 	}
 	
 	public override void SdkCompletedWithMatch (Dictionary<string, string> matchResult)
 	{
-		// sdk completed with a match
 		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
 
@@ -91,6 +96,7 @@ public class fuelSDKListener : PropellerSDKListener
 	public override void SdkFailed (string reason)
 	{
 		// sdk has failed with an unrecoverable error
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "SubTransOverlay");
 		Debug.Log ("SdkFailed" + reason);
 	}
 
