@@ -904,27 +904,6 @@ public class FuelHandler : MonoBehaviour
 								Fuel Dynamics
 	 ---------------------------------------------------------------------
     */
-	private bool isDeviceTablet ()
-	{
-		bool isTablet = false;
-
-#if UNITY_IPHONE
-		if (Application.platform == RuntimePlatform.IPhonePlayer) {
-			
-			if(iPhone.generation == iPhoneGeneration.iPadUnknown ||
-			   iPhone.generation == iPhoneGeneration.iPad1Gen ||
-			   iPhone.generation == iPhoneGeneration.iPad2Gen ||
-			   iPhone.generation == iPhoneGeneration.iPad3Gen ||
-			   iPhone.generation == iPhoneGeneration.iPad4Gen ||
-			   iPhone.generation == iPhoneGeneration.iPadMini1Gen)
-			{
-				isTablet = true;
-			}
-		}
-#endif
-
-		return isTablet;
-	}
 	private int getNumLaunches ()
 	{
 		int numLaunches = 0;
@@ -1111,7 +1090,45 @@ public class FuelHandler : MonoBehaviour
 		
 		getMainMenuClass().RefreshVirtualGoods(goodsTable);
 	}
+
+
+
+	private bool isDeviceTablet ()
+	{
+		bool isTablet = false;
 		
+		#if UNITY_IPHONE
+
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+				
+				if(iPhone.generation == iPhoneGeneration.iPadUnknown ||
+				   iPhone.generation == iPhoneGeneration.iPad1Gen ||
+				   iPhone.generation == iPhoneGeneration.iPad2Gen ||
+				   iPhone.generation == iPhoneGeneration.iPad3Gen ||
+				   iPhone.generation == iPhoneGeneration.iPad4Gen ||
+				   iPhone.generation == iPhoneGeneration.iPadMini1Gen)
+				{
+					isTablet = true;
+				}
+			}
+
+		#else
+
+			float screenWidth = Screen.width / Screen.dpi;
+			float screenHeight = Screen.height / Screen.dpi;
+			float size = Mathf.Sqrt(Mathf.Pow(screenWidth, 2) + Mathf.Pow(screenHeight, 2));
+			size =  (float)Mathf.Round(size * 10f) / 10f;
+			Debug.Log("IsTablet inches = " + size);
+			if(size >= 7.0)
+				isTablet = true;
+			else
+				isTablet = false;
+
+		#endif
+		
+		return isTablet;
+	}
+
 }
 
 
