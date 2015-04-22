@@ -228,25 +228,36 @@ public class InitMainMenu : MonoBehaviour
 	
 	public void ResetDebugText()
 	{
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
+		int showdebug = _propellerProductScript.getShowDebug();
+		bool enabled = false;
+		if (showdebug == 1)
+			enabled = true;
+
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "Dynamics";
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 		
 		textMesh = GameObject.Find ("DebugText2");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "returning";
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 		
 		textMesh = GameObject.Find ("DebugText3");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "null";
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 
 		textMesh = GameObject.Find ("DebugText4");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "split1name";
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
+
+		textMesh = GameObject.Find ("VersionText");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = enabled;
+
 	}
 
 
@@ -258,26 +269,34 @@ public class InitMainMenu : MonoBehaviour
 		float _gearFriction = _propellerProductScript.getGearFriction ();
 		string _split1name = _propellerProductScript.getSplit1Name();
 
+		int showdebug = _propellerProductScript.getShowDebug();
+		bool enabled = false;
+		if (showdebug == 1)
+			enabled = true;
 
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "friction = " + _gearFriction.ToString();
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 
 		textMesh = GameObject.Find ("DebugText2");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "geartype = " + _gearShapeType.ToString();
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 
 		textMesh = GameObject.Find ("DebugText3");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "gametime = " + _gameTime.ToString();
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 
 		textMesh = GameObject.Find ("DebugText4");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "split1name = " + _split1name.ToString();
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
+
+		textMesh = GameObject.Find ("VersionText");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = enabled;
 	}
 
 

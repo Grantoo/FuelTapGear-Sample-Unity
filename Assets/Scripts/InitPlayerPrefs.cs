@@ -69,6 +69,12 @@ public class InitPlayerPrefs : MonoBehaviour
 			PlayerPrefs.SetInt("gametime", 7);
 		}
 
+		if (PlayerPrefs.HasKey ("showdebug") == false) 
+		{
+			Debug.Log ("_setting showdebug");
+			PlayerPrefs.SetInt("showdebug", 0);
+		}
+
 		if (PlayerPrefs.HasKey ("splitgroup") == false) 
 		{
 			Debug.Log ("_setting splitgroup");

@@ -59,6 +59,7 @@ public class FuelHandler : MonoBehaviour
 	public float GearFriction { get; set; }
 	public int GearShapeType { get; set; }
 	public int GameTime { get; set; }
+	public int ShowDebug { get; set; }
 	public string Split1Name { get; set; }
 
 	public GameMatchData getMatchData()
@@ -144,6 +145,7 @@ public class FuelHandler : MonoBehaviour
 		GearFriction = 0.98f;
 		GearShapeType = 5;
 		GameTime = 7;
+		ShowDebug = 0;
 		Split1Name = "none";
 
 		//get stored dynamic values
@@ -155,6 +157,9 @@ public class FuelHandler : MonoBehaviour
 		}
 		if (PlayerPrefs.HasKey ("gametime")) {
 			GameTime = PlayerPrefs.GetInt("gametime");
+		}
+		if (PlayerPrefs.HasKey ("showdebug")) {
+			ShowDebug = PlayerPrefs.GetInt("showdebug");
 		}
 		if (PlayerPrefs.HasKey ("splitgroup")) {
 			Split1Name = PlayerPrefs.GetString("splitgroup");
@@ -973,7 +978,8 @@ public class FuelHandler : MonoBehaviour
 		conditions.Add ("numSessions", numSessions.ToString());
 		conditions.Add ("numLaunches", numLaunches.ToString());
 		conditions.Add ("isTablet", isTablet);
-		
+		conditions.Add ("gameVersion", "1.0.2");
+
 		//standardized
 		conditions.Add ("orientation", "portrait");
 		conditions.Add ("daysSinceFirstPayment", "-1");
@@ -984,9 +990,8 @@ public class FuelHandler : MonoBehaviour
 		conditions.Add ("gpsLong", _latitude.ToString());
 		conditions.Add ("gpsLat", _longitude.ToString());
 		
-		//game conditions
-		conditions.Add ("gameVersion", "tapgear v1.1");
-		
+		//non standardized
+
 		PropellerSDK.SetUserConditions (conditions);
 
 		Debug.Log 
@@ -1004,7 +1009,7 @@ public class FuelHandler : MonoBehaviour
 				"age = " + "16" + "\n" +
 				"gpsLong = " + _latitude.ToString() + "\n" +
 				"gpsLat = " + _longitude.ToString() + "\n" +
-				"gameVersion = " + "tapgear v1.1"
+				"gameVersion = " + "1.0.2"
 		);
 
 	}
@@ -1022,6 +1027,7 @@ public class FuelHandler : MonoBehaviour
 		String _friction = "friction";
 		String _geartype = "geartype";
 		String _gametime = "gametime";
+		String _showdebug = "showdebug";
 		String _split1name = "split1name";
 
 
@@ -1045,13 +1051,19 @@ public class FuelHandler : MonoBehaviour
 			Debug.Log("friction not found in userValueInfo");
 		}
 
+		if (userValuesInfo.TryGetValue (_showdebug, out value)) {
+			ShowDebug = int.Parse(value.ToString());
+		} else {
+			Debug.Log("showdebug not found in userValueInfo");
+		}
+
 		if (userValuesInfo.TryGetValue (_split1name, out value)) {
 			Split1Name = value.ToString();
 		} else {
 			Debug.Log("friction not found in userValueInfo");
 		}
 
-		Debug.Log ("TryGetValue:: friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime);
+		Debug.Log ("TryGetValue:: friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime + ", showdebug = " + ShowDebug);
 
 
 		//store values
@@ -1063,6 +1075,9 @@ public class FuelHandler : MonoBehaviour
 		}
 		if (PlayerPrefs.HasKey ("gametime")) {
 			PlayerPrefs.SetInt("gametime", GameTime);
+		}
+		if (PlayerPrefs.HasKey ("showdebug")) {
+			PlayerPrefs.SetInt("showdebug", ShowDebug);
 		}
 		if (PlayerPrefs.HasKey ("splitgroup")) {
 			PlayerPrefs.SetString("splitgroup", Split1Name);

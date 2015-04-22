@@ -12,6 +12,7 @@ public class TitleScreenAdvance : MonoBehaviour
 
 	void Start () 
 	{
+		RefreshDebugText();
 
 
 	}
@@ -60,22 +61,43 @@ public class TitleScreenAdvance : MonoBehaviour
 		int _gameTime = (int)_propellerProductScript.getGameTime ();
 		int _gearShapeType = _propellerProductScript.getGearShapeType ();
 		float _gearFriction = _propellerProductScript.getGearFriction ();
-		//string _split1name = _propellerProductScript.getSplit1Name();
+		int showdebug = _propellerProductScript.getShowDebug();
+		bool enabled = false;
+		if (showdebug == 1)
+			enabled = true;
+
 
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "friction = " + _gearFriction.ToString();
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 		
 		textMesh = GameObject.Find ("DebugText2");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "geartype = " + _gearShapeType.ToString();
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
 		
 		textMesh = GameObject.Find ("DebugText3");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "gametime = " + _gameTime.ToString();
-		tmesh.renderer.enabled = true;
+		tmesh.renderer.enabled = enabled;
+
+		textMesh = GameObject.Find ("DebugText4");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.text = "gametime = " + _gameTime.ToString();
+		tmesh.renderer.enabled = enabled;
+
+		textMesh = GameObject.Find ("Environment");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = enabled;
+
+		textMesh = GameObject.Find ("Complete");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = enabled;
+
+		textMesh = GameObject.Find ("UserPrefs");
+		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
+		tmesh.renderer.enabled = enabled;
 	}
 
 }

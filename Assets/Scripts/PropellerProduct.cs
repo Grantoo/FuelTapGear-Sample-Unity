@@ -139,6 +139,16 @@ public class PropellerProduct : MonoBehaviour
 		}
 	}
 
+	public int getShowDebug () 
+	{
+		if (mDynamicsOnly == false) 
+		{
+			FuelHandler _fuelHandlerScript = getFuelHandlerClass();
+			return(_fuelHandlerScript.ShowDebug);
+		}
+
+		return 0;
+	}
 
 	public int getGearShapeType () 
 	{
