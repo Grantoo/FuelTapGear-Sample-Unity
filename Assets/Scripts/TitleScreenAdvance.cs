@@ -12,7 +12,7 @@ public class TitleScreenAdvance : MonoBehaviour
 
 	void Start () 
 	{
-		RefreshDebugText();
+		//RefreshDebugText();
 
 
 	}
@@ -28,7 +28,7 @@ public class TitleScreenAdvance : MonoBehaviour
 
 		if (firstPass == true && advanceTimerValue > 0.5f) 
 		{
-			RefreshDebugText();
+			//RefreshDebugText();
 
 			firstPass = false;
 		}
@@ -62,6 +62,7 @@ public class TitleScreenAdvance : MonoBehaviour
 		int _gearShapeType = _propellerProductScript.getGearShapeType ();
 		float _gearFriction = _propellerProductScript.getGearFriction ();
 		int showdebug = _propellerProductScript.getShowDebug();
+		string _split1name = _propellerProductScript.getSplit1Name();
 		bool enabled = false;
 		if (showdebug == 1)
 			enabled = true;
@@ -84,7 +85,7 @@ public class TitleScreenAdvance : MonoBehaviour
 
 		textMesh = GameObject.Find ("DebugText4");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
-		tmesh.text = "gametime = " + _gameTime.ToString();
+		tmesh.text = "group = " + _split1name.ToString();
 		tmesh.renderer.enabled = enabled;
 
 		textMesh = GameObject.Find ("Environment");

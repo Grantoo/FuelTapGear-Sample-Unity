@@ -110,6 +110,10 @@ public class PropellerProduct : MonoBehaviour
 	}
 
 
+	
+
+
+
 	public GameMatchData getMatchData () 
 	{
 		if (mDynamicsOnly == true) 
@@ -147,6 +151,17 @@ public class PropellerProduct : MonoBehaviour
 			return(_fuelHandlerScript.ShowDebug);
 		}
 
+		return 0;
+	}
+
+	public int getFBIcon () 
+	{
+		if (mDynamicsOnly == false) 
+		{
+			FuelHandler _fuelHandlerScript = getFuelHandlerClass();
+			return(_fuelHandlerScript.FBIcon);
+		}
+		
 		return 0;
 	}
 

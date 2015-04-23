@@ -23,8 +23,11 @@ public class InitMainMenu : MonoBehaviour
 		RefreshOilCount(0);
 		RefreshHiScore();
 
+		UpdateFBIcon ();
+
 		PropellerProduct _propellerProductScript = getPropellerProductClass();
 		_propellerProductScript.tryLaunchFuelSDK();
+		_propellerProductScript.updateLoginText ();
 
 		if (sComingFromTitle == true) {
 			UpdatePropellerSDK();
@@ -398,5 +401,22 @@ public class InitMainMenu : MonoBehaviour
 		var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 		return epoch.AddSeconds(unixTime);
 	}
+
+
+	void UpdateFBIcon () 
+	{
+		PropellerProduct _propellerProductScript = getPropellerProductClass();
+		int fbicon = _propellerProductScript.getFBIcon();
+		if (fbicon == 0) 
+		{
+			GameObject gameObj = GameObject.Find ("FBButton");
+			gameObj.transform.position = new Vector3 (13.08f, -5.14f, 5.0f);
+			gameObj.renderer.enabled = true;
+			gameObj = GameObject.Find ("LoginStatusText");
+			gameObj.transform.position = new Vector3 (13.08f, -3.41f, 4.0f);
+			gameObj.renderer.enabled = true;
+		}
+	}
+
 
 }

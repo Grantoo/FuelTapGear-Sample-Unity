@@ -75,6 +75,12 @@ public class InitPlayerPrefs : MonoBehaviour
 			PlayerPrefs.SetInt("showdebug", 0);
 		}
 
+		if (PlayerPrefs.HasKey ("fbicon") == false) 
+		{
+			Debug.Log ("_setting fbicon");
+			PlayerPrefs.SetInt("fbicon", 0);
+		}
+
 		if (PlayerPrefs.HasKey ("splitgroup") == false) 
 		{
 			Debug.Log ("_setting splitgroup");

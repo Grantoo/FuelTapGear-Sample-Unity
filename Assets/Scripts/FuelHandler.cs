@@ -1,4 +1,5 @@
 //#define USE_ANALYTICS
+//#define RUN_UNIT_TESTS
 
 using UnityEngine;
 using System;
@@ -60,6 +61,7 @@ public class FuelHandler : MonoBehaviour
 	public int GearShapeType { get; set; }
 	public int GameTime { get; set; }
 	public int ShowDebug { get; set; }
+	public int FBIcon { get; set; }
 	public string Split1Name { get; set; }
 
 	public GameMatchData getMatchData()
@@ -146,6 +148,7 @@ public class FuelHandler : MonoBehaviour
 		GearShapeType = 5;
 		GameTime = 7;
 		ShowDebug = 0;
+		FBIcon = 0;
 		Split1Name = "none";
 
 		//get stored dynamic values
@@ -160,6 +163,9 @@ public class FuelHandler : MonoBehaviour
 		}
 		if (PlayerPrefs.HasKey ("showdebug")) {
 			ShowDebug = PlayerPrefs.GetInt("showdebug");
+		}
+		if (PlayerPrefs.HasKey ("fbicon")) {
+			FBIcon = PlayerPrefs.GetInt("fbicon");
 		}
 		if (PlayerPrefs.HasKey ("splitgroup")) {
 			Split1Name = PlayerPrefs.GetString("splitgroup");
@@ -366,21 +372,19 @@ public class FuelHandler : MonoBehaviour
 	public void updateLoginText () 
 	{
 		GameObject gameObj = GameObject.Find ("LoginStatusText");
+		if (gameObj != null) 
+		{
 
-		if (FB.IsLoggedIn) 
-		{
-			if (gameObj) 
-			{
-				TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-				tmesh.text = "LogOut";
-			}
-		} 
-		else 
-		{
-			if (gameObj) 
-			{
-				TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-				tmesh.text = "Log In";
+			if (FB.IsLoggedIn) {
+					if (gameObj) {
+							TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+							tmesh.text = "LogOut";
+					}
+			} else {
+					if (gameObj) {
+							TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
+							tmesh.text = "Log In";
+					}
 			}
 		}
 	}
@@ -506,7 +510,9 @@ public class FuelHandler : MonoBehaviour
 			return;
 		}
 
-		//VirtualGoodUnitTest ();
+#if RUN_UNIT_TESTS
+		VirtualGoodUnitTest ();
+#endif
 		PropellerSDK.SyncVirtualGoods ();
 	}
 
@@ -597,7 +603,7 @@ public class FuelHandler : MonoBehaviour
 		else
 		{
 			//Logout?
-			//FB.Logout();
+			FB.Logout();
 		}
 	}
 	public void LogoutButtonPressed()
@@ -629,6 +635,8 @@ public class FuelHandler : MonoBehaviour
 		{
 			Debug.Log("....WARNING NOT LOGGING IN");                                                          
 		}
+
+		updateLoginText ();
 	}                                                                                          
 	
 	void OnLoggedIn()                                                                          
@@ -1028,6 +1036,7 @@ public class FuelHandler : MonoBehaviour
 		String _geartype = "geartype";
 		String _gametime = "gametime";
 		String _showdebug = "showdebug";
+		String _fbicon = "fbicon";
 		String _split1name = "split1name";
 
 
@@ -1057,13 +1066,19 @@ public class FuelHandler : MonoBehaviour
 			Debug.Log("showdebug not found in userValueInfo");
 		}
 
+		if (userValuesInfo.TryGetValue (_fbicon, out value)) {
+			FBIcon = int.Parse(value.ToString());
+		} else {
+			Debug.Log("fbicon not found in userValueInfo");
+		}
+
 		if (userValuesInfo.TryGetValue (_split1name, out value)) {
 			Split1Name = value.ToString();
 		} else {
-			Debug.Log("friction not found in userValueInfo");
+			Debug.Log("split1name not found in userValueInfo");
 		}
 
-		Debug.Log ("TryGetValue:: friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime + ", showdebug = " + ShowDebug);
+		Debug.Log ("TryGetValue:: friction = " + GearFriction + ", geartype = " + GearShapeType + ", gametime = " + GameTime + ", showdebug = " + ShowDebug + ", fbicon = " + FBIcon + ", split1name = " + Split1Name);
 
 
 		//store values
@@ -1079,6 +1094,9 @@ public class FuelHandler : MonoBehaviour
 		if (PlayerPrefs.HasKey ("showdebug")) {
 			PlayerPrefs.SetInt("showdebug", ShowDebug);
 		}
+		if (PlayerPrefs.HasKey ("fbicon")) {
+			PlayerPrefs.SetInt("fbicon", FBIcon);
+		}
 		if (PlayerPrefs.HasKey ("splitgroup")) {
 			PlayerPrefs.SetString("splitgroup", Split1Name);
 		}
@@ -1090,24 +1108,7 @@ public class FuelHandler : MonoBehaviour
 #endif
 
 	}
-
-
-
-
-
-	//Unit Tests
-	private void VirtualGoodUnitTest()
-	{
-		Hashtable goodsTable = new Hashtable();  
-		goodsTable["addGold"] = 2;                          
-		goodsTable["addOil"] = 2;                          
-		goodsTable["showTrophy"] = 1;                          
-		
-		getMainMenuClass().RefreshVirtualGoods(goodsTable);
-	}
-
-
-
+	
 	private bool isDeviceTablet ()
 	{
 		bool isTablet = false;
@@ -1144,7 +1145,25 @@ public class FuelHandler : MonoBehaviour
 		return isTablet;
 	}
 
+
+	
+	
+	//Unit Tests
+	private void VirtualGoodUnitTest()
+	{
+		Hashtable goodsTable = new Hashtable();  
+		goodsTable["addGold"] = 2;                          
+		goodsTable["addOil"] = 2;                          
+		goodsTable["showTrophy"] = 1;                          
+		
+		getMainMenuClass().RefreshVirtualGoods(goodsTable);
+	}
+	
+	
+
 }
+
+
 
 
 
