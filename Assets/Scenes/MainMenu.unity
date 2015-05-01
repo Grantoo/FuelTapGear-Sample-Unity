@@ -6079,7 +6079,7 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1612925785}
-  m_Text: Version 1.11
+  m_Text: Version 1.12p
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
