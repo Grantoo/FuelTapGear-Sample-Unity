@@ -41,12 +41,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameKey: 
   GameSecret: 
-  UseTestServers: 0
   Orientation: 0
   HostGameObjectName: 
   iOSGameHandleLogin: 0
   iOSGameHandleInvite: 0
   iOSGameHandleShare: 0
+  AndroidNotificationIcon: notify_icon
   AndroidGCMSenderID: 
   AndroidGameHandleLogin: 0
   AndroidGameHandleInvite: 0

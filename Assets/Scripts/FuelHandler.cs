@@ -233,10 +233,12 @@ public class FuelHandler : MonoBehaviour
 						Launch Routines
 	 -----------------------------------------------------
 	*/
-	private void LaunchDashBoardWithResults()
+	private void LaunchDashBoard()
 	{
-		Debug.Log ("LaunchDashBoardWithResults");
-		sendMatchResult (m_matchData.MatchScore);
+		Debug.Log ("LaunchDashBoard");
+
+		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "AddTransOverlay");
+		PropellerSDK.Launch (m_listener);	
 	}
 
 	
@@ -245,7 +247,7 @@ public class FuelHandler : MonoBehaviour
 		Debug.Log ("tryLaunchFuelSDK");
 		if (m_matchData.MatchComplete == true && m_matchData.MatchType == MATCH_TYPE_MULTI) 
 		{
-			LaunchDashBoardWithResults();
+			LaunchDashBoard();
 		}
 	}
 
@@ -315,11 +317,10 @@ public class FuelHandler : MonoBehaviour
 		matchResult.Add ("visualScore", visualScoreStr);
 
 		PropellerSDK.SubmitMatchResult (matchResult);
-		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "AddTransOverlay");
-		PropellerSDK.Launch (m_listener);	
 	}
 
-	
+
+	//not currently being used
 	private void sendCustomMatchResult (long score, float visualScore)
 	{
 		Debug.Log ("sendCustomMatchResult");
@@ -402,6 +403,11 @@ public class FuelHandler : MonoBehaviour
 		{
 			m_matchData.MatchComplete = true;
 		}
+
+		//timer has run out. this is the earliest the score can be set
+		//early score reporting
+		sendMatchResult (m_matchData.MatchScore);
+
 	}
 	
 
@@ -1027,7 +1033,7 @@ public class FuelHandler : MonoBehaviour
 		PropellerSDK.SyncUserValues();
 	}
 	
-	public void OnPropellerSDKUserValues (Dictionary<string, object> userValuesInfo)
+	public void OnPropellerSDKUserValues (Dictionary<string, string> userValuesInfo)
 	{
 		Debug.Log("OnPropellerSDKUserValues");
 
@@ -1041,7 +1047,7 @@ public class FuelHandler : MonoBehaviour
 
 
 
-		object value;
+		string value;
 		if (userValuesInfo.TryGetValue (_friction, out value)) {
 			GearFriction = float.Parse (value.ToString ());
 		} else {

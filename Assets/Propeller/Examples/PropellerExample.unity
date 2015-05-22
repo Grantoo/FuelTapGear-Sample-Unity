@@ -73,6 +73,7 @@ NavMeshSettings:
     minRegionArea: 2
     widthInaccuracy: 16.666666
     heightInaccuracy: 10
+    tileSizeHint: 0
   m_NavMesh: {fileID: 0}
 --- !u!1 &365622464
 GameObject:
@@ -198,13 +199,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0196703dca3124befaaa46cfd4c044a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameKey: 542b3bec636f62427de7ac00
-  GameSecret: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
-  Orientation: 1
-  HostGameObjectName: PropellerExample
-  iOSGameHandleLogin: 1
-  iOSGameHandleInvite: 1
-  iOSGameHandleShare: 1
+  GameKey: 
+  GameSecret: 
+  Orientation: 0
+  HostGameObjectName: 
+  iOSGameHandleLogin: 0
+  iOSGameHandleInvite: 0
+  iOSGameHandleShare: 0
   AndroidNotificationIcon: notify_icon
   AndroidGCMSenderID: 
   AndroidGameHandleLogin: 0
@@ -243,34 +244,6 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: GameKey
-      value: 542b3bec636f62427de7ac00
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: GameSecret
-      value: 7944a1a9-fc41-8789-4c67-dc98bb4c1743
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: Orientation
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: HostGameObjectName
-      value: PropellerExample
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: iOSGameHandleLogin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: iOSGameHandleInvite
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11400000, guid: 897969e7df3db46878772554d4e1eb0f, type: 2}
-      propertyPath: iOSGameHandleShare
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

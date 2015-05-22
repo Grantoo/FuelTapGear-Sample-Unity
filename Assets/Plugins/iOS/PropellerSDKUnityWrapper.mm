@@ -216,17 +216,6 @@ extern "C"
         gsPropellerUnityListener = [PropellerUnityListener alloc];
     }
 
-    void iOSInitializeDynamics(const char* key, const char* secret, bool useTestServers)
-    {
-        if ( useTestServers )
-        {
-            [PropellerSDK useSandbox];
-        }
-
-        [PropellerSDK initializeDynamics:[NSString stringWithUTF8String:key] gameSecret:[NSString stringWithUTF8String:secret]];
-    }
-
-
     void iOSSetLanguageCode(const char* languageCode)
     {
         [[PropellerSDK instance] setLanguageCode:[NSString stringWithUTF8String:languageCode]];

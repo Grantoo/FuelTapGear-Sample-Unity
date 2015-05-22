@@ -89,7 +89,6 @@ typedef enum
 // kind of parameters.
 + (void)setRootViewController:(UIViewController*)rootViewController;
 + (void)useSandbox;
-+ (void)initializeDynamics:(NSString*)gameID gameSecret:(NSString*)gameSecret;
 + (void)initialize:(NSString*)gameID gameSecret:(NSString*)gameSecret;
 + (void)initialize:(NSString*)gameID gameSecret:(NSString*)gameSecret gameHasLogin:(BOOL)gameHasLogin gameHasInvite:(BOOL)gameHasInvite gameHasShare:(BOOL)gameHasShare;
 
