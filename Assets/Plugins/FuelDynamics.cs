@@ -11,7 +11,7 @@ public class FuelDynamics : MonoBehaviour
 	#region Unity Editor Fields
 	public string GameKey;
 	public string GameSecret;
-	public bool UseTestServers = false;
+	private bool UseTestServers = false;
 	public string HostGameObjectName;
 	#endregion
 	

@@ -55,7 +55,7 @@ public class PropellerCommon : MonoBehaviour
 			return;
 		}
 		
-		Dictionary<string, string> userValuesInfo = new Dictionary<string, string> ();
+		Dictionary<string, object> userValuesInfo = new Dictionary<string, object> ();
 		for(int i = 0; i < resultsArray.Length; i+=2) {
 			userValuesInfo.Add (resultsArray[i], resultsArray[i+1]);	
 		}

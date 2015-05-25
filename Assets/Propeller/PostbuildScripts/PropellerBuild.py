@@ -55,6 +55,8 @@ adSupportFrameworkPath = None
 accountsFrameworkPath = None
 socialFrameworkPath = None
 securityFrameworkPath = None
+cfNetworkFrameworkPath = None
+audioToolboxFrameworkPath = None
 libsqlite3Path = None
 libicucorePath = None
 
@@ -67,6 +69,10 @@ for directory, dirnames, filenames in os.walk( xcodePath + '/Platforms/iPhoneOS.
 		socialFrameworkPath = directory
 	elif os.path.basename( directory ) == 'Security.framework':
 		securityFrameworkPath = directory
+	elif os.path.basename( directory ) == 'CFNetwork.framework':
+		cfNetworkFrameworkPath = directory
+	elif os.path.basename( directory ) == 'AudioToolbox.framework':
+		audioToolboxFrameworkPath = directory
 	else:
 		if 'libsqlite3.dylib' in filenames:
 			libsqlite3Path = directory + '/libsqlite3.dylib'
@@ -79,6 +85,8 @@ checkPath( systemConfigurationFrameworkPath, 'SystemConfiguration.framework' )
 checkPath( adSupportFrameworkPath, 'AdSupport.framework' )
 checkPath( socialFrameworkPath, 'Social.framework' )
 checkPath( securityFrameworkPath, 'Security.framework' )
+checkPath( cfNetworkFrameworkPath, 'CFNetwork.framework' )
+checkPath( audioToolboxFrameworkPath, 'AudioToolbox.framework' )
 checkPath( libsqlite3Path, 'libsqlite3.dylib' )
 checkPath( libicucorePath, 'libicucore.dylib' )
 
@@ -92,6 +100,8 @@ project.add_file_if_doesnt_exist( systemConfigurationFrameworkPath, tree='SDKROO
 project.add_file_if_doesnt_exist( adSupportFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
 project.add_file_if_doesnt_exist( socialFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
 project.add_file_if_doesnt_exist( securityFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
+project.add_file_if_doesnt_exist( cfNetworkFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
+project.add_file_if_doesnt_exist( audioToolboxFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
 project.add_file_if_doesnt_exist( libsqlite3Path, tree='SDKROOT', parent=frameworkGroup, weak=True )
 project.add_file_if_doesnt_exist( libicucorePath, tree='SDKROOT', parent=frameworkGroup, weak=True )
 
@@ -474,7 +484,7 @@ def addExtraFunctions():
 	print '\t\t\tmessage = [paramList componentsJoinedByString:@"&"];'
 	print '\t\t}'
 	print ''
-	print '\t\tUnitySendMessage("PropellerSDK", "PropellerOnUserValues", [message UTF8String]);'
+	print '\t\tUnitySendMessage("PropellerCommon", "PropellerOnUserValues", [message UTF8String]);'
 	print '\t}'
 	print '}'
 	print ''
