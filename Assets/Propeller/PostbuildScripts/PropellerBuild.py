@@ -12,7 +12,7 @@ def exitWithError( message ):
 	sys.exit('Failed automatic integration')
 
 if len(sys.argv) < 6:
-    exitWithError('Argument list does not contain enough arguments')
+	exitWithError('Argument list does not contain enough arguments')
 
 pluginPath = sys.argv[1]
 xcodePath = sys.argv[2]
@@ -38,7 +38,8 @@ xcodeVersion = sys.argv[6]
 # 13 - UNITY_4_2,
 # 14 - UNITY_4_3,
 # 15 - UNITY_4_5,
-# 16 - UNITY_4_6
+# 16 - UNITY_4_6,
+# 17 - UNITY_5_0
 
 # only supporting Unity 3.5 and up
 if unityApiLevel < 9:
@@ -96,14 +97,14 @@ print 'Adding frameworks required by Propeller'
 
 frameworkGroup = project.get_or_create_group('Frameworks')
 
-project.add_file_if_doesnt_exist( systemConfigurationFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
-project.add_file_if_doesnt_exist( adSupportFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
-project.add_file_if_doesnt_exist( socialFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
-project.add_file_if_doesnt_exist( securityFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
-project.add_file_if_doesnt_exist( cfNetworkFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
-project.add_file_if_doesnt_exist( audioToolboxFrameworkPath, tree='SDKROOT', parent=frameworkGroup, weak=True )
-project.add_file_if_doesnt_exist( libsqlite3Path, tree='SDKROOT', parent=frameworkGroup, weak=True )
-project.add_file_if_doesnt_exist( libicucorePath, tree='SDKROOT', parent=frameworkGroup, weak=True )
+project.add_file_if_doesnt_exist( systemConfigurationFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
+project.add_file_if_doesnt_exist( adSupportFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
+project.add_file_if_doesnt_exist( socialFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
+project.add_file_if_doesnt_exist( securityFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
+project.add_file_if_doesnt_exist( cfNetworkFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
+project.add_file_if_doesnt_exist( audioToolboxFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
+project.add_file_if_doesnt_exist( libsqlite3Path, tree='SDKROOT', parent=frameworkGroup )
+project.add_file_if_doesnt_exist( libicucorePath, tree='SDKROOT', parent=frameworkGroup )
 
 print 'Adding resources required by Propeller'
 
@@ -126,13 +127,13 @@ def addFacebookDependencies(dataPath, frameworkGroup, resourceGroup):
 
 	print 'Found iOS Facebook SDK'
 
-	project.add_file_if_doesnt_exist( iOSFacebookSDKFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
+	project.add_file_if_doesnt_exist( iOSFacebookSDKFrameworkPath, parent=frameworkGroup )
 
 	iOSFacebookSDKResourcesBundlePath = iOSFacebookSDKFrameworkPath + '/Resources/FacebookSDKResources.bundle'
 
 	if os.path.exists(iOSFacebookSDKResourcesBundlePath):
 		print 'iOS Facebook SDK resources bundle found'
-		project.add_file_if_doesnt_exist( iOSFacebookSDKResourcesBundlePath, tree='SDKROOT', parent=resourceGroup )
+		project.add_file_if_doesnt_exist( iOSFacebookSDKResourcesBundlePath, parent=resourceGroup )
 
 	project.add_framework_search_paths([iOSFacebookSDKFrameworkPath + '/' + os.pardir])
 
@@ -141,18 +142,20 @@ def addFacebookDependencies(dataPath, frameworkGroup, resourceGroup):
 print 'Adding Facebook dependencies required by Propeller'
 
 if not addFacebookDependencies(dataPath, frameworkGroup, resourceGroup):
-    exitWithError('No Facebook SDK found')
+	exitWithError('No Facebook SDK found')
 
 print 'Inserting Propeller libraries'
 
 classesGroup = project.get_or_create_group( 'Classes' )
 librariesGroup = project.get_or_create_group( 'Libraries' )
-shutil.copy( pluginPath + '/PropellerSDK.h' , projectPath + '/Classes/PropellerSDK.h' )
-shutil.copy( pluginPath + '/libPropellerSDK.a', projectPath + '/Libraries/libPropellerSDK.a' )
-shutil.copy( pluginPath + '/PropellerSDKUnityWrapper.mm', projectPath + '/Libraries/PropellerSDKUnityWrapper.mm' )
-project.add_file_if_doesnt_exist( projectPath + '/Classes/PropellerSDK.h', parent=classesGroup )
-project.add_file_if_doesnt_exist( projectPath + '/Libraries/libPropellerSDK.a', parent=librariesGroup )
-project.add_file_if_doesnt_exist( projectPath + '/Libraries/PropellerSDKUnityWrapper.mm', parent=librariesGroup )
+
+if unityApiLevel < 17:
+	shutil.copy( pluginPath + '/PropellerSDK.h' , projectPath + '/Classes/PropellerSDK.h' )
+	shutil.copy( pluginPath + '/libPropellerSDK.a', projectPath + '/Libraries/libPropellerSDK.a' )
+	shutil.copy( pluginPath + '/PropellerSDKUnityWrapper.mm', projectPath + '/Libraries/PropellerSDKUnityWrapper.mm' )
+	project.add_file_if_doesnt_exist( projectPath + '/Classes/PropellerSDK.h', parent=classesGroup )
+	project.add_file_if_doesnt_exist( projectPath + '/Libraries/libPropellerSDK.a', parent=librariesGroup )
+	project.add_file_if_doesnt_exist( projectPath + '/Libraries/PropellerSDKUnityWrapper.mm', parent=librariesGroup )
 
 project.saveFormat3_2()
 
@@ -160,9 +163,9 @@ project.saveFormat3_2()
 controllerFilename = ''
 
 if unityApiLevel < 13:
-    controllerFilename = 'AppController.mm'
+	controllerFilename = 'AppController.mm'
 else:
-    controllerFilename = 'UnityAppController.mm'
+	controllerFilename = 'UnityAppController.mm'
 
 controllerFile = projectPath + '/Classes/' + controllerFilename
 
@@ -170,51 +173,95 @@ print 'Injecting Propeller script into ' + controllerFilename
 
 # inject code into AppController.mm or UnityAppController.m
 
+injectionPrefix = '// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
+injectionSuffix = '// *** END PROPELLER BUILD SCRIPT INSERTION ***'
+
+def addInjectionPrefix(indents=0):
+	print '\t' * indents + injectionPrefix
+	print ''
+
+def addInjectionSuffix(indents=0):
+	print ''
+	print '\t' * indents + injectionSuffix
+	print ''
+
+def addFunctionInjectionPrefix(signature, contentOnly=False, contentIndents=1):
+	if not contentOnly:
+		addInjectionPrefix()
+		print signature
+		print '{'
+	else:
+		addInjectionPrefix(contentIndents)
+
+def addFunctionInjectionSuffix(contentOnly=False, contentIndents=1):
+	if not contentOnly:
+		print '}'
+		addInjectionSuffix()
+	else:
+		addInjectionSuffix(contentIndents)
+
 def addHeader():
-	print '// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
+	addInjectionPrefix()
 	print '#include "PropellerSDK.h"'
-	print ''
-	print '// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
+	addInjectionSuffix()
 
-def addReceiveLocalNotification():
-	print '\t// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
+def addInit(contentOnly=False):
+	addFunctionInjectionPrefix('- (id)init', contentOnly, 2)
+	if not contentOnly:
+		print '\tif( (self = [super init]) )'
+		print '\t{'
+	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKChallengeCountChanged" object:nil];'
+	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKTournamentInfo" object:nil];'
+	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKVirtualGoodList" object:nil];'
+	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKVirtualGoodRollback" object:nil];'
+	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKUserValues" object:nil];'
+	if not contentOnly:
+		print '\t}'
+		print '\treturn self;'
+	addFunctionInjectionSuffix(contentOnly, 2)
+
+def addDealloc(contentOnly=False):
+	addFunctionInjectionPrefix('- (void) dealloc', contentOnly)
+	print '\t[[NSNotificationCenter defaultCenter] removeObserver:self];'
+	if not contentOnly:
+		print '#if !__has_feature(objc_arc)'
+		print '\t[super dealloc];'
+		print '#endif'
+	addFunctionInjectionSuffix(contentOnly)
+
+def addReceiveLocalNotification(contentOnly=False):
+	addFunctionInjectionPrefix('- (void)application:(UIApplication*)application didReceiveLocalNotification:(UILocalNotification*)notification', contentOnly)
 	print '\t[PropellerSDK handleLocalNotification:notification newLaunch:NO];'
-	print ''
-	print '\t// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
+	addFunctionInjectionSuffix(contentOnly)
 
-def addReceiveRemoteNotification():
-	print '\t// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
-	print '\t[PropellerSDK handleRemoteNotification:userInfo newLaunch:NO];'
-	print ''
-	print '\t// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
-
-def addRegisterRemoteNotifications():
-	print '\t// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
+def addRegisterRemoteNotifications(contentOnly=False):
+	addFunctionInjectionPrefix('- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken', contentOnly)
 	print '\tNSString *devToken = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];'
 	print '\tdevToken = [devToken stringByReplacingOccurrencesOfString:@" " withString:@""];'
 	print '\t[PropellerSDK setNotificationToken:devToken];'
-	print ''
-	print '\t// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
+	addFunctionInjectionSuffix(contentOnly)
 
-def addFailToRegisterNotifications():
-	print '\t// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
+def addFailToRegisterRemoteNotifications(contentOnly=False):
+	addFunctionInjectionPrefix('- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error', contentOnly)
 	print '\t[PropellerSDK setNotificationToken:nil];'
+	addFunctionInjectionSuffix(contentOnly)
+
+def addReceiveRemoteNotification(contentOnly=False):
+	addFunctionInjectionPrefix('- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo', contentOnly)
+	print '\t[PropellerSDK handleRemoteNotification:userInfo newLaunch:NO];'
+	addFunctionInjectionSuffix(contentOnly)
+
+def addRegisterUserNotificationSettings(contentOnly=False):
+	print '#ifdef __IPHONE_8_0'
 	print ''
-	print '\t// *** END PROPELLER BUILD SCRIPT INSERTION ***'
+	addFunctionInjectionPrefix('- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings', contentOnly)
+	print '\t[application registerForRemoteNotifications];'
+	addFunctionInjectionSuffix(contentOnly)
+	print '#endif'
 	print ''
 
-def addLaunchOptionLines():
-	print '\t// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
+def addFinishLaunching(contentOnly=False):
+	addFunctionInjectionPrefix('- (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions', contentOnly)
 	print '\tNSDictionary *remoteNotificationDict = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];'
 	print ''
 	print '\tif (remoteNotificationDict)'
@@ -257,56 +304,23 @@ def addLaunchOptionLines():
 	print '                                                        UIRemoteNotificationTypeSound);'
 	print '\t[[UIApplication sharedApplication] registerForRemoteNotificationTypes:remoteNotificationTypes];'
 	print '#endif'
-	print ''
-	print '\t// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
+	addFunctionInjectionSuffix(contentOnly)
 
-def addEnterBackground():
-	print '\t// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
+def addEnterBackground(contentOnly=False):
+	addFunctionInjectionPrefix('- (void)applicationDidEnterBackground:(UIApplication*)application', contentOnly)
 	print '\t[[UIApplication sharedApplication] setApplicationIconBadgeNumber:1];'
 	print '\t[[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];'
 	print '\t[[UIApplication sharedApplication] cancelAllLocalNotifications];'
 	print '\t[PropellerSDK restoreAllLocalNotifications];'
-	print ''
-	print '\t// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
+	addFunctionInjectionSuffix(contentOnly)
 
-def addEnterForeground():
-	print '\t// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
+def addEnterForeground(contentOnly=False):
+	addFunctionInjectionPrefix('- (void)applicationWillEnterForeground:(UIApplication*)application', contentOnly)
 	print '\t[PropellerSDK handleApplicationWillEnterForeground:application];'
-	print ''
-	print '\t// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
+	addFunctionInjectionSuffix(contentOnly)
 	
-def addDealloc():
-	print ''
-	print '\t// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
-	print '\t[[NSNotificationCenter defaultCenter] removeObserver:self];'
-	print ''
-	print '\t// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
-
 def addExtraFunctions():
-	print ''
-	print '// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-	print ''
-	print '-(id)init'
-	print '{'
-	print '\tif (self = [super init])'
-	print '\t{'
-	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKChallengeCountChanged" object:nil];'
-	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKTournamentInfo" object:nil];'
-	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKVirtualGoodList" object:nil];'
-	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKVirtualGoodRollback" object:nil];'
-	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKUserValues" object:nil];'
-	print '\t}'
-	print ''
-	print '\treturn self;'
-	print '}'
-	print ''
+	addInjectionPrefix()
 	print '-(NSString *)urlEncode:(NSString *)rawString'
 	print '{'
 	print '\treturn CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL, (CFStringRef)rawString, NULL, (CFStringRef)@"!*\'();:@&=+$,/?%#[]", kCFStringEncodingUTF8));'
@@ -487,21 +501,30 @@ def addExtraFunctions():
 	print '\t\tUnitySendMessage("PropellerCommon", "PropellerOnUserValues", [message UTF8String]);'
 	print '\t}'
 	print '}'
-	print ''
-	print '// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-	print ''
+	addInjectionSuffix()
 
-injectHeader = False
+injectHeader = True
+injectInit = False
 injectReceiveLocalNotification = False
+injectRegisterRemoteNotifications = False
+injectFailToRegisterRemoteNotifications = False
 injectReceiveRemoteNotification = False
-injectRegisterNotifications = False
-injectFailToRegisterNotifications = False
-injectLaunch = False
+injectRegisterUserNotificationSettings = False
+injectFinishLaunching = False
 injectEnterBackground = False
 injectEnterForeground = False
-injectExtraFunctions = False
 
-hasRegisterUserNotificationSettings = False
+injectedHeader = False
+injectedInit = False
+injectedDealloc = False
+injectedReceiveLocalNotification = False
+injectedRegisterRemoteNotifications = False
+injectedFailToRegisterRemoteNotifications = False
+injectedReceiveRemoteNotification = False
+injectedRegisterUserNotificationSettings = False
+injectedFinishLaunching = False
+injectedEnterBackground = False
+injectedEnterForeground = False
 
 lastNonBlankLine = ''
 
@@ -510,66 +533,79 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 		print line,
 		continue
 
-	if '#include <mach/mach_time.h>' in line:
-		injectHeader = True
-	elif 'didReceiveLocalNotification:' in line:
-		injectReceiveLocalNotification = True
-	elif 'didRegisterForRemoteNotificationsWithDeviceToken:' in line:
-		injectRegisterNotifications = True
-	elif 'didFailToRegisterForRemoteNotificationsWithError:' in line:
-		injectFailToRegisterNotifications = True
-	elif 'didReceiveRemoteNotification:' in line:
-		injectReceiveRemoteNotification = True
-	elif 'didFinishLaunchingWithOptions:' in line:
-		injectLaunch = True
-	elif 'applicationDidEnterBackground:' in line:
-		injectEnterBackground = True
-	elif 'applicationWillEnterForeground:' in line:
-		injectEnterForeground = True
+	if '[super init]' in line:
+		injectInit = True
 	elif '[super dealloc]' in line:
-		if '// *** END PROPELLER BUILD SCRIPT INSERTION ***' not in lastNonBlankLine:
-			addDealloc()
-		injectDealloc = False
-		injectExtraFunctions = True
-	elif 'didRegisterUserNotificationSettings:' in line:
-		hasRegisterUserNotificationSettings = True
+		if injectionSuffix not in lastNonBlankLine:
+			addDealloc(True)
+			injectedDealloc = True
+	elif 'didReceiveLocalNotification:(' in line:
+		injectReceiveLocalNotification = True
+	elif 'didRegisterForRemoteNotificationsWithDeviceToken:(' in line:
+		injectRegisterRemoteNotifications = True
+	elif 'didFailToRegisterForRemoteNotificationsWithError:(' in line:
+		injectFailToRegisterRemoteNotifications = True
+	elif 'didReceiveRemoteNotification:(' in line:
+		injectReceiveRemoteNotification = True
+	elif 'didRegisterUserNotificationSettings:(' in line:
+		injectRegisterUserNotificationSettings = True
+	elif 'didFinishLaunchingWithOptions:(' in line:
+		injectFinishLaunching = True
+	elif ')applicationDidEnterBackground:(' in line:
+		injectEnterBackground = True
+	elif ')applicationWillEnterForeground:(' in line:
+		injectEnterForeground = True
 	else:
 		if injectHeader:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				addHeader()
 			injectHeader = False
-		elif injectReceiveLocalNotification and '{' not in line:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				addReceiveLocalNotification()
+			if injectionPrefix not in line:
+				addHeader()
+				injectedHeader = True
+		if injectInit and '{' not in line:
+			injectInit = False
+			if injectionPrefix not in line:
+				addInit(True)
+				injectedInit = True
+		if injectReceiveLocalNotification and '{' not in line:
 			injectReceiveLocalNotification = False
-		elif injectReceiveRemoteNotification and '{' not in line:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				addReceiveRemoteNotification()
+			if injectionPrefix not in line:
+				addReceiveLocalNotification(True)
+				injectedReceiveLocalNotification = True
+		if injectRegisterRemoteNotifications and '{' not in line:
+			injectRegisterRemoteNotifications = False
+			if injectionPrefix not in line:
+				addRegisterRemoteNotifications(True)
+				injectedRegisterRemoteNotifications = True
+		if injectFailToRegisterRemoteNotifications and '{' not in line:
+			injectFailToRegisterRemoteNotifications = False
+			if injectionPrefix not in line:
+				addFailToRegisterRemoteNotifications(True)
+				injectedFailToRegisterRemoteNotifications = True
+		if injectReceiveRemoteNotification and '{' not in line:
 			injectReceiveRemoteNotification = False
-		elif injectRegisterNotifications and '{' not in line:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				addRegisterRemoteNotifications()
-			injectRegisterNotifications = False
-		elif injectFailToRegisterNotifications and '{' not in line:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				addFailToRegisterNotifications()
-			injectFailToRegisterNotifications = False
-		elif injectLaunch and 'return ' in line:
-			if '// *** END PROPELLER BUILD SCRIPT INSERTION ***' not in lastNonBlankLine:
-				addLaunchOptionLines()
-			injectLaunch = False
-		elif injectEnterBackground and '{' not in line:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				addEnterBackground()
+			if injectionPrefix not in line:
+				addReceiveRemoteNotification(True)
+				injectedReceiveRemoteNotification = True
+		if injectRegisterUserNotificationSettings and '{' not in line:
+			injectRegisterUserNotificationSettings = False
+			if injectionPrefix not in line:
+				addRegisterUserNotificationSettings(True)
+				injectedRegisterUserNotificationSettings = True
+		if injectFinishLaunching and '{' not in line:
+			injectFinishLaunching = False;
+			if injectionPrefix not in line:
+				addFinishLaunching(True)
+				injectedFinishLaunching = True
+		if injectEnterBackground and '{' not in line:
 			injectEnterBackground = False
-		elif injectEnterForeground and '{' not in line:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				addEnterForeground()
+			if injectionPrefix not in line:
+				addEnterBackground(True)
+				injectedEnterBackground = True
+		if injectEnterForeground and '{' not in line:
 			injectEnterForeground = False
-		elif injectExtraFunctions and '}' not in line:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				addExtraFunctions()
-			injectExtraFunctions = False
+			if injectionPrefix not in line:
+				addEnterForeground(True)
+				injectedEnterForeground = True
 
 	lastNonBlankLine = line
 
@@ -577,16 +613,11 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 
 fileinput.close()
 
-def addRegisterUserNotificationSettings():
-	print '#ifdef __IPHONE_8_0'
-	print '- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings'
-	print '{'
-	print '\t[application registerForRemoteNotifications];'
-	print '}'
-	print '#endif'
-	print ''
+controllerFilenameIndex = controllerFilename.find('.')
+controllerFilenameString = controllerFilename[0:controllerFilenameIndex]
+controllerFileImplementation = '@implementation ' + controllerFilenameString
 
-injectMissingFunctions = False
+injectExtraFunctions = False
 
 lastNonBlankLine = ''
 
@@ -595,31 +626,62 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 		print line,
 		continue
 
-	if 'receiveLocalNotification:' in line:
-		injectMissingFunctions = True
-	elif injectMissingFunctions and '// *** END PROPELLER BUILD SCRIPT INSERTION ***' in line:
-		if not hasRegisterUserNotificationSettings:
-			addRegisterUserNotificationSettings()
-		injectMissingFunctions = False
+	if controllerFileImplementation in line:
+		injectExtraFunctions = True
+	else:
+		if injectExtraFunctions and '@end' in line:
+			injectExtraFunctions = False
+			if injectionSuffix not in lastNonBlankLine:
+				if not injectedInit:
+					addInit()
+				if not injectedDealloc:
+					addDealloc()
+				if not injectedReceiveLocalNotification:
+					addReceiveLocalNotification()
+				if not injectedRegisterRemoteNotifications:
+					addRegisterRemoteNotifications()
+				if not injectedFailToRegisterRemoteNotifications:
+					addFailToRegisterRemoteNotifications()
+				if not injectedReceiveRemoteNotification:
+					addReceiveRemoteNotification()
+				if not injectedRegisterUserNotificationSettings:
+					addRegisterUserNotificationSettings()
+				if not injectedFinishLaunching:
+					addFinishLaunching()
+				if not injectedEnterBackground:
+					addEnterBackground()
+				if not injectedEnterForeground:
+					addEnterForeground()
+				addExtraFunctions()
 
 	lastNonBlankLine = line
 
 	print line,
 
 fileinput.close()
+
+def getFilePath(fileName):
+	files = project.get_files_by_name(fileName)
+
+	if len(files) != 1:
+		exitWithError('Unable to locate the PBX file reference for ' + fileName)
+
+	filePath = files[0].get('path')
+
+	if filePath == None:
+		exitWithError('PBX file reference for ' + fileName + ' is missing a file path')
+
+	return projectPath + '/' + filePath
 
 def addGLViewControllerExport():
 	functionExport = True
 
 	for line in fileinput.input( projectPath + '/Classes/AppController.h', inplace=1 ):
 		if functionExport:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				print '// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-				print ''
+			if injectionPrefix not in line:
+				addInjectionPrefix()
 				print 'UIViewController* UnityGetGLViewController();'
-				print ''
-				print '// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-				print ''
+				addInjectionSuffix()
 			functionExport = False
 
 		print line,
@@ -630,7 +692,7 @@ def addWrapperHeader(headerFile):
 	headerCorrect = False
 	injectHeader = False
 
-	for line in fileinput.input( projectPath + '/Libraries/PropellerSDKUnityWrapper.mm', inplace=1 ):
+	for line in fileinput.input( getFilePath('PropellerSDKUnityWrapper.mm'), inplace=1 ):
 		if not headerCorrect:
 			if injectHeader:
 				if '#import "' + headerFile + '"' not in line:
@@ -649,13 +711,10 @@ def addImport(sourceFile, headerFile):
 
 	for line in fileinput.input( projectPath + '/' + sourceFile, inplace=1 ):
 		if not headerCorrect:
-			if '// *** INSERTED BY PROPELLER BUILD SCRIPT ***' not in line:
-				print '// *** INSERTED BY PROPELLER BUILD SCRIPT ***'
-				print ''
+			if injectionPrefix not in line:
+				addInjectionPrefix()
 				print '#import ' + headerFile
-				print ''
-				print '// *** END PROPELLER BUILD SCRIPT INSERTION ***'
-				print ''
+				addInjectionSuffix()
 			headerCorrect = True
 
 		print line,

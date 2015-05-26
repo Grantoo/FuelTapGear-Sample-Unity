@@ -25,7 +25,8 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 		UNITY_4_2,
 		UNITY_4_3,
 		UNITY_4_5,
-		UNITY_4_6
+		UNITY_4_6,
+		UNITY_5_0
 	};
 
 	private struct ExecutionResult
@@ -172,21 +173,21 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 		}
 
 #if UNITY_2_6
-		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_2_6;
+		UnityAPILevel unityApiLevel = UNSUPPORTED;
 #elif UNITY_2_6_1
-		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_2_6_1;
+		UnityAPILevel unityApiLevel = UNSUPPORTED;
 #elif UNITY_3_0
-		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_3_0;
+		UnityAPILevel unityApiLevel = UNSUPPORTED;
 #elif UNITY_3_0_0
-		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_3_0_0;
+		UnityAPILevel unityApiLevel = UNSUPPORTED;
 #elif UNITY_3_1
-		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_3_1;
+		UnityAPILevel unityApiLevel = UNSUPPORTED;
 #elif UNITY_3_2
-		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_3_2;
+		UnityAPILevel unityApiLevel = UNSUPPORTED;
 #elif UNITY_3_3
-		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_3_3;
+		UnityAPILevel unityApiLevel = UNSUPPORTED;
 #elif UNITY_3_4
-		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_3_4;
+		UnityAPILevel unityApiLevel = UNSUPPORTED;
 #elif UNITY_3_5
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_3_5;
 #elif UNITY_4_0
@@ -203,6 +204,8 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_4_5;
 #elif UNITY_4_6
         UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_4_6;
+#elif UNITY_5_0
+		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_5_0;
 #else
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNSUPPORTED;
 #endif

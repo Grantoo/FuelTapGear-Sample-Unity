@@ -83,8 +83,12 @@ extern "C"
             NSString *resultString = [paramList componentsJoinedByString:@"&"];
             UnitySendMessage("PropellerSDK", "PropellerOnSdkCompletedWithMatch", [resultString UTF8String]);
 
+#if !__has_feature(objc_arc)
             [paramsString release];
             [paramList release];
+#endif
+            paramsString = nil;
+            paramList = nil;
         }
 
         - (BOOL)sdkSocialLogin:(BOOL)allowCache
@@ -331,7 +335,10 @@ extern "C"
         [[PropellerSDK instance] sdkSocialLoginCompleted:loginInfo];
 
         if (loginInfo != nil) {
+#if !__has_feature(objc_arc)
             [loginInfo release];
+#endif
+            loginInfo = nil;
         }
     }
 

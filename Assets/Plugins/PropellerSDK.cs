@@ -728,7 +728,7 @@ public class PropellerSDK : MonoBehaviour
 		matchInfo.Add ("paramsJSON", paramsJSON);
 		
 		if (m_listener == null) {
-			Debug.Log ("PropellerOnSdkCompletedWithExit - undefined listener");
+			Debug.Log ("PropellerOnSdkCompletedWithMatch - undefined listener");
 			return;
 		}
 
