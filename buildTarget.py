@@ -25,8 +25,15 @@ print 'Target Build Sku : ' + targetBuildSku
 print 'Output File Name : ' + outputFileName
 print 'Unity Project Path : ' + unityProjectPath
 
-os.system("/Applications/Unity/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName)
+if targetBuildSku == 'Android':
+    print 'building Android...'
+    os.system("/Applications/Unity/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName)
+elif targetBuildSku == 'iOS':
+    print 'building iOS...'
+    os.system("/Applications/Unity/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformiOSBuild " + outputFileName)
+else:
+    print targetBuildSku + ' not defined'
 
-print 'cleaning up...'
-print 'Operation Complete!'
+
+print 'Operation Complete'
 

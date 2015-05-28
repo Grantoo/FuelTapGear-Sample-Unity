@@ -1,34 +1,3 @@
-/* 
-AutoBuilder.cs
-Automatically changes the target platform and creates a build.
- 
-Installation
-Place in an Editor folder.
- 
-Usage
-Go to File > AutoBuilder and select a platform. These methods can also be run from the Unity command line using -executeMethod AutoBuilder.MethodName.
- 
-License
-Copyright (C) 2011 by Thinksquirrel Software, LLC
- 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
- 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
- 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
- */
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
@@ -46,13 +15,18 @@ public static class AutoBuilder {
  
 	static string[] GetScenePaths()
 	{
+		//note: GetScenePaths() gets ALL scenes in order even non-checked one - so lets create our own list
+		string[] scenes = { "Assets/Scenes/Title.unity",  "Assets/Scenes/MainMenu.unity", "Assets/Scenes/GamePlay.unity"};
+
+		/* TODO: may be able to EditorBuildSettings.scenes[i]. to get if the scene is checked
 		string[] scenes = new string[EditorBuildSettings.scenes.Length];
  
 		for(int i = 0; i < scenes.Length; i++)
 		{
 			scenes[i] = EditorBuildSettings.scenes[i].path;
 		}
- 
+ 		*/
+
 		return scenes;
 	}
  
@@ -76,25 +50,24 @@ public static class AutoBuilder {
 		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iOS);
 
 		//script hook for jenkins building of iOS
-		//Work in progress - testing from the file menu within unity - need to fix a facebook issue and update facebook unity SDK
-		//string[] arguments = System.Environment.GetCommandLineArgs();
-		//if(arguments != null)
-		//{
-			//string outputName = arguments[7];//must match this index with num command line args and where your arg is on the line
-			//BuildPipeline.BuildPlayer(GetScenePaths(), outputName, BuildTarget.iOS, BuildOptions.None);
-			BuildPipeline.BuildPlayer(GetScenePaths(), "/Users/davehards/Dev/src/FuelTapGear-Sample-Unity/Builds/iOS/TapGear_ver1", BuildTarget.iOS, BuildOptions.None);
-		//}
+
+		string[] arguments = System.Environment.GetCommandLineArgs();
+		if(arguments != null)
+		{
+			string outputPath = arguments[7];//must match this index with num command line args and where your arg is on the line
+			BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.iOS, BuildOptions.None);
+		}
 	}
 
 	[MenuItem("File/AutoBuilder/Android")]
 	static void PerformAndroidBuild ()
 	{
-		//script hook for jenkins building of Android - working
+		//script hook for jenkins building of Android
 		string[] arguments = System.Environment.GetCommandLineArgs();
-		string outputName = arguments[7];//must match this index with num command line args :(
+		string outputPath = arguments[7];//must match this index with num command line args :(
 
 		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
-		BuildPipeline.BuildPlayer(GetScenePaths(), outputName, BuildTarget.Android, BuildOptions.None);
+		BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.Android, BuildOptions.None);
 	}
 
 	[MenuItem("File/AutoBuilder/Web/Standard")]
