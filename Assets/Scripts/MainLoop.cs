@@ -52,7 +52,7 @@ public class MainLoop : MonoBehaviour
 	public void hideStartButtonText () 
 	{
 		GameObject startbuttonObj = GameObject.Find ("startTextMesh");
-		startbuttonObj.renderer.enabled = false;
+		startbuttonObj.GetComponent<Renderer>().enabled = false;
 	}
 
 	public void updateScoreText (string str) 
@@ -174,14 +174,14 @@ public class MainLoop : MonoBehaviour
 		}
 
 		GameObject _backObj = GameObject.Find("backButton");
-		_backObj.renderer.enabled = false;
+		_backObj.GetComponent<Renderer>().enabled = false;
 
 
 		//Timeup Popup
 		GameObject _timeup = GameObject.Find("TimeUpPopup");
-		_timeup.renderer.enabled = false;
+		_timeup.GetComponent<Renderer>().enabled = false;
 		_timeup = GameObject.Find("finalScore");
-		_timeup.renderer.enabled = false;
+		_timeup.GetComponent<Renderer>().enabled = false;
 
 		gameoverTimer = 0.0f;
 
@@ -281,7 +281,7 @@ public class MainLoop : MonoBehaviour
 					_propellerProductScript.SetMatchScore(scoreValue, maxspeed);
 
 					GameObject _backObj = GameObject.Find("backButton");
-					_backObj.renderer.enabled = true;
+					_backObj.GetComponent<Renderer>().enabled = true;
 
 
 					//reset animations
@@ -302,11 +302,11 @@ public class MainLoop : MonoBehaviour
 
 					//Timeup Popup
 					GameObject _timeup = GameObject.Find("TimeUpPopup");
-					_timeup.renderer.enabled = true;
+					_timeup.GetComponent<Renderer>().enabled = true;
 
 					updateFinalScoreText(scoreValue.ToString());
 					_timeup = GameObject.Find("finalScore");
-					_timeup.renderer.enabled = true;
+					_timeup.GetComponent<Renderer>().enabled = true;
 
 
 					//another complete game session

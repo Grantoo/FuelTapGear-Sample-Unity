@@ -155,12 +155,12 @@ public class DynamicsHandler : MonoBehaviour
 		#if UNITY_IPHONE
 		if (Application.platform == RuntimePlatform.IPhonePlayer) {
 			
-			if(iPhone.generation == iPhoneGeneration.iPadUnknown ||
-			   iPhone.generation == iPhoneGeneration.iPad1Gen ||
-			   iPhone.generation == iPhoneGeneration.iPad2Gen ||
-			   iPhone.generation == iPhoneGeneration.iPad3Gen ||
-			   iPhone.generation == iPhoneGeneration.iPad4Gen ||
-			   iPhone.generation == iPhoneGeneration.iPadMini1Gen)
+			if(UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPadUnknown ||
+			   UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPad1Gen ||
+			   UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPad2Gen ||
+			   UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPad3Gen ||
+			   UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPad4Gen ||
+			   UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPadMini1Gen)
 			{
 				isTablet = true;
 			}

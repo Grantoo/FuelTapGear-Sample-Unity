@@ -90,12 +90,12 @@ public class InitMainMenu : MonoBehaviour
 
 		//show challenge count pieces and set count values
 		GameObject gameObj = GameObject.Find("ccbacking");
-		gameObj.renderer.enabled = enabled;
+		gameObj.GetComponent<Renderer>().enabled = enabled;
 
 		GameObject ccountObj = GameObject.Find ("ChallengeCount");
 		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = ccount.ToString();
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 	}
 
 
@@ -111,26 +111,26 @@ public class InitMainMenu : MonoBehaviour
 		string endDate = (string)tournyTable["endDate"];    
 
 		GameObject gameObj = GameObject.Find ("Trophy");
-		gameObj.renderer.enabled = enabled;
+		gameObj.GetComponent<Renderer>().enabled = enabled;
 
 		gameObj = GameObject.Find ("TournyNameText");
 		TextMesh tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = tournyname.ToString();
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 		long t = Convert.ToInt64 (startDate);
 		DateTime date = FromUnixTime (t);
 		gameObj = GameObject.Find ("StartDateText");
 		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = date.ToString();
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 		t = Convert.ToInt64 (endDate);
 		date = FromUnixTime (t);
 		gameObj = GameObject.Find ("EndDateText");
 		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
 		tmesh.text = date.ToString();
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 	}
 
 
@@ -169,7 +169,7 @@ public class InitMainMenu : MonoBehaviour
 	private void ShowTrophy()
 	{
 		GameObject gameObj = GameObject.Find ("ShowTrophy");
-		gameObj.renderer.enabled = true;
+		gameObj.GetComponent<Renderer>().enabled = true;
 	}
 
 	public void RefreshGoldCount(int addAmount)
@@ -240,26 +240,26 @@ public class InitMainMenu : MonoBehaviour
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "Dynamics";
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 		
 		textMesh = GameObject.Find ("DebugText2");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "returning";
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 		
 		textMesh = GameObject.Find ("DebugText3");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "null";
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 		textMesh = GameObject.Find ("DebugText4");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "split1name";
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 		textMesh = GameObject.Find ("VersionText");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 	}
 
@@ -280,26 +280,26 @@ public class InitMainMenu : MonoBehaviour
 		GameObject textMesh = GameObject.Find ("DebugText1");
 		TextMesh tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "friction = " + _gearFriction.ToString();
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 		textMesh = GameObject.Find ("DebugText2");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "geartype = " + _gearShapeType.ToString();
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 		textMesh = GameObject.Find ("DebugText3");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "gametime = " + _gameTime.ToString();
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 		textMesh = GameObject.Find ("DebugText4");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
 		tmesh.text = "split1name = " + _split1name.ToString();
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 
 		textMesh = GameObject.Find ("VersionText");
 		tmesh = (TextMesh)textMesh.GetComponent (typeof(TextMesh)); 
-		tmesh.renderer.enabled = enabled;
+		tmesh.GetComponent<Renderer>().enabled = enabled;
 	}
 
 
@@ -313,7 +313,7 @@ public class InitMainMenu : MonoBehaviour
 	{
 		GameObject gameObj = GameObject.Find("transoverlay");
 		gameObj.transform.position = new Vector3(2.0f, 1.0f, 0.0f);
-		gameObj.renderer.enabled = true;
+		gameObj.GetComponent<Renderer>().enabled = true;
 	}
 
 
@@ -321,7 +321,7 @@ public class InitMainMenu : MonoBehaviour
 	{
 		GameObject gameObj = GameObject.Find("transoverlay");
 		gameObj.transform.position = new Vector3 (-24.0f, 1.0f, 0.0f);
-		gameObj.renderer.enabled = false;
+		gameObj.GetComponent<Renderer>().enabled = false;
 	}
 
 
@@ -345,7 +345,7 @@ public class InitMainMenu : MonoBehaviour
 	{
 		//trans overlay
 		GameObject gameObj = GameObject.Find("transoverlay");
-		gameObj.renderer.enabled = false;
+		gameObj.GetComponent<Renderer>().enabled = false;
 
 		//init particles to off
 		GameObject particleObj = GameObject.Find ("VirtualGoodGoldParticles");
@@ -358,31 +358,31 @@ public class InitMainMenu : MonoBehaviour
 
 		//hide challenge count pieces
 		gameObj = GameObject.Find("ccbacking");
-		gameObj.renderer.enabled = false;
+		gameObj.GetComponent<Renderer>().enabled = false;
 		
 		GameObject ccountObj = GameObject.Find ("ChallengeCount");
 		TextMesh tmesh = (TextMesh)ccountObj.GetComponent (typeof(TextMesh)); 
-		tmesh.renderer.enabled = false;
+		tmesh.GetComponent<Renderer>().enabled = false;
 		
 		//hide trophy
 		gameObj = GameObject.Find ("Trophy");
-		gameObj.renderer.enabled = false;
+		gameObj.GetComponent<Renderer>().enabled = false;
 
 		//parcipitation trophy
 		gameObj = GameObject.Find ("ShowTrophy");
-		gameObj.renderer.enabled = false;
+		gameObj.GetComponent<Renderer>().enabled = false;
 
 		gameObj = GameObject.Find ("TournyNameText");
 		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-		tmesh.renderer.enabled = false;
+		tmesh.GetComponent<Renderer>().enabled = false;
 		
 		gameObj = GameObject.Find ("StartDateText");
 		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-		tmesh.renderer.enabled = false;
+		tmesh.GetComponent<Renderer>().enabled = false;
 		
 		gameObj = GameObject.Find ("EndDateText");
 		tmesh = (TextMesh)gameObj.GetComponent (typeof(TextMesh)); 
-		tmesh.renderer.enabled = false;
+		tmesh.GetComponent<Renderer>().enabled = false;
 
 
 		PropellerProduct _propellerProductScript = getPropellerProductClass();
@@ -392,7 +392,7 @@ public class InitMainMenu : MonoBehaviour
 		{
 			gameObj = GameObject.Find("buttonMultiPlayer");
 			gameObj.transform.position = new Vector3 (-24.0f, 1.0f, 0.0f);
-			gameObj.renderer.enabled = false;
+			gameObj.GetComponent<Renderer>().enabled = false;
 		}
 	}
 
@@ -411,10 +411,10 @@ public class InitMainMenu : MonoBehaviour
 		{
 			GameObject gameObj = GameObject.Find ("FBButton");
 			gameObj.transform.position = new Vector3 (13.08f, -5.14f, 5.0f);
-			gameObj.renderer.enabled = true;
+			gameObj.GetComponent<Renderer>().enabled = true;
 			gameObj = GameObject.Find ("LoginStatusText");
 			gameObj.transform.position = new Vector3 (13.08f, -3.41f, 4.0f);
-			gameObj.renderer.enabled = true;
+			gameObj.GetComponent<Renderer>().enabled = true;
 		}
 	}
 

@@ -34,7 +34,8 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
- 
+
+
 public static class AutoBuilder {
  
 	static string GetProjectName()
@@ -72,15 +73,30 @@ public static class AutoBuilder {
 	[MenuItem("File/AutoBuilder/iOS")]
 	static void PerformiOSBuild ()
 	{
-		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iPhone);
-		BuildPipeline.BuildPlayer(GetScenePaths(), "Builds/iOS",BuildTarget.iPhone,BuildOptions.None);
+		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iOS);
+
+		//script hook for jenkins building of iOS
+		//Work in progress - testing from the file menu within unity - need to fix a facebook issue and update facebook unity SDK
+		//string[] arguments = System.Environment.GetCommandLineArgs();
+		//if(arguments != null)
+		//{
+			//string outputName = arguments[7];//must match this index with num command line args and where your arg is on the line
+			//BuildPipeline.BuildPlayer(GetScenePaths(), outputName, BuildTarget.iOS, BuildOptions.None);
+			BuildPipeline.BuildPlayer(GetScenePaths(), "/Users/davehards/Dev/src/FuelTapGear-Sample-Unity/Builds/iOS/TapGear_ver1", BuildTarget.iOS, BuildOptions.None);
+		//}
 	}
+
 	[MenuItem("File/AutoBuilder/Android")]
 	static void PerformAndroidBuild ()
 	{
+		//script hook for jenkins building of Android - working
+		string[] arguments = System.Environment.GetCommandLineArgs();
+		string outputName = arguments[7];//must match this index with num command line args :(
+
 		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
-		BuildPipeline.BuildPlayer(GetScenePaths(), "Builds/Android",BuildTarget.Android,BuildOptions.None);
+		BuildPipeline.BuildPlayer(GetScenePaths(), outputName, BuildTarget.Android, BuildOptions.None);
 	}
+
 	[MenuItem("File/AutoBuilder/Web/Standard")]
 	static void PerformWebBuild ()
 	{

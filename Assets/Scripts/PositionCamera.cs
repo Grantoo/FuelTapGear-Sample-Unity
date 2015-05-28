@@ -63,18 +63,18 @@ public class PositionCamera : MonoBehaviour
 
 			#if UNITY_IPHONE
 
-			if ((iPhone.generation.ToString ()).IndexOf ("iPad") > -1) 
+			if ((UnityEngine.iOS.Device.generation.ToString ()).IndexOf ("iPad") > -1) 
 			{
 				
 			} else {
-				float orthoSize = camera.orthographicSize;
-				camera.orthographicSize = orthoSize * OthorMult;
+				float orthoSize = GetComponent<Camera>().orthographicSize;
+				GetComponent<Camera>().orthographicSize = orthoSize * OthorMult;
 			}
 		
 
 			#elif UNITY_ANDROID
-				float orthoSize = camera.orthographicSize;
-				camera.orthographicSize = orthoSize * OthorMult;
+				float orthoSize = GetComponent<Camera>().orthographicSize;
+				GetComponent<Camera>().orthographicSize = orthoSize * OthorMult;
 
 			#endif
 
