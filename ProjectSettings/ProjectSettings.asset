@@ -76,13 +76,13 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleIdentifier: com.dngames.tapgear
-  bundleVersion: 1.0.3
+  bundleVersion: 1.0.0
   preloadedAssets: []
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
   xboxOneDisableKinectGpuReservation: 0
   productGUID: 012a00848cdac43ae9afceb18acbefae
-  AndroidBundleVersionCode: 103
+  AndroidBundleVersionCode: 1100
   AndroidMinSdkVersion: 9
   AndroidPreferredInstallLocation: 1
   aotOptions: 
