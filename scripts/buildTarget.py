@@ -31,11 +31,11 @@ print 'Unity Project Path : ' + unityProjectPath
 
 if targetBuildSku == 'Android':
     print 'building Android...'
-    os.system("/Applications/Unity/Unity.app/Contents/MacOS/" + unityFolderName + " -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName)
+    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName)
     print 'Build Complete'
 elif targetBuildSku == 'iOS':
     print 'building iOS...'
-    os.system("/Applications/Unity/Unity.app/Contents/MacOS/" + unityFolderName + " -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformiOSBuild " + outputFileName)
+    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformiOSBuild " + outputFileName)
     print 'Build Complete'
 else:
     print targetBuildSku + ' not defined'
