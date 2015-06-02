@@ -53,7 +53,7 @@ public static class AutoBuilder {
 
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 8))
+		if ((arguments != null) && (arguments.Length == 9))
 		{
 			string outputPath = arguments[7];//must match this index with num command line args and where your arg is on the line
 			string buildNumber = arguments[8];
@@ -70,7 +70,7 @@ public static class AutoBuilder {
 		//script hook for jenkins building of Android
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 9)) {
+		if ((arguments != null) && (arguments.Length == 10)) {
 			string outputPath = arguments[7];//must match this index with num command line args :(
 			string buildNumber = arguments[8];
 			string keystorePass = arguments[9];
