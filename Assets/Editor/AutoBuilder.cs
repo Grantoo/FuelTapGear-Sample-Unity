@@ -52,9 +52,12 @@ public static class AutoBuilder {
 		//script hook for jenkins building of iOS
 
 		string[] arguments = System.Environment.GetCommandLineArgs();
-		if(arguments != null)
+
+		if ((arguments != null) && (arguments.Length == 8))
 		{
 			string outputPath = arguments[7];//must match this index with num command line args and where your arg is on the line
+			string buildNumber = arguments[8];
+			PlayerSettings.bundleVersion = buildNumber;
 			BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.iOS, BuildOptions.None);
 		}
 	}
@@ -62,15 +65,22 @@ public static class AutoBuilder {
 	[MenuItem("File/AutoBuilder/Android")]
 	static void PerformAndroidBuild ()
 	{
+		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
+
 		//script hook for jenkins building of Android
 		string[] arguments = System.Environment.GetCommandLineArgs();
-		string outputPath = arguments[7];//must match this index with num command line args :(
-		string keystorePass = arguments[8];
 
-		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
-		PlayerSettings.keyaliasPass = keystorePass;
-		PlayerSettings.keystorePass = keystorePass;
-		BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.Android, BuildOptions.None);
+		if ((arguments != null) && (arguments.Length == 9)) {
+			string outputPath = arguments[7];//must match this index with num command line args :(
+			string buildNumber = arguments[8];
+			string keystorePass = arguments[9];
+			
+			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
+			PlayerSettings.bundleVersion = buildNumber;
+			PlayerSettings.keyaliasPass = keystorePass;
+			PlayerSettings.keystorePass = keystorePass;
+			BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.Android, BuildOptions.None);
+		}
 	}
 
 	[MenuItem("File/AutoBuilder/Web/Standard")]

@@ -22,6 +22,7 @@ targetBuildSku = sys.argv[1] 	    #build target - iOS, Android
 unityFolderName = sys.argv[2] 	    #name of the unity folder in applications
 outputFileName = sys.argv[3] 	    #name of the output file
 unityProjectPath = sys.argv[4] 	    #this is our project that we are building from
+buildNumber = sys.argv[5]
 
 
 print 'Target Build Sku : ' + targetBuildSku
@@ -30,14 +31,14 @@ print 'Output File Name : ' + outputFileName
 print 'Unity Project Path : ' + unityProjectPath
 
 if targetBuildSku == 'Android':
-    keystorePass = sys.argv[5]
+    keystorePass = sys.argv[6]
 
     print 'building Android...'
-    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName + " " + keystorePass)
+    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName + " " + buildNumber + " " + keystorePass)
     print 'Build Complete'
 elif targetBuildSku == 'iOS':
     print 'building iOS...'
-    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformiOSBuild " + outputFileName)
+    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformiOSBuild " + outputFileName + " " + buildNumber)
     print 'Build Complete'
 else:
     print targetBuildSku + ' not defined'
