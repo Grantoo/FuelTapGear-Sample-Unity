@@ -124,7 +124,7 @@ PlayerSettings:
   AndroidTargetDevice: 0
   AndroidSplashScreenScale: 0
   AndroidKeystoreName: /opt/grantoo/grantoo-signing-key/tapgear-release.keystore
-  AndroidKeyaliasName: 
+  AndroidKeyaliasName: grantoo_key
   AndroidTVCompatibility: 1
   AndroidIsGame: 1
   androidEnableBanner: 1
