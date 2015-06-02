@@ -65,8 +65,11 @@ public static class AutoBuilder {
 		//script hook for jenkins building of Android
 		string[] arguments = System.Environment.GetCommandLineArgs();
 		string outputPath = arguments[7];//must match this index with num command line args :(
+		string keystorePass = arguments[8];
 
 		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
+		PlayerSettings.keyaliasPass = keystorePass;
+		PlayerSettings.keystorePass = keystorePass;
 		BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.Android, BuildOptions.None);
 	}
 

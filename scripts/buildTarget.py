@@ -18,10 +18,10 @@ if len(sys.argv) < 4:
 
 
 #This system only works with Unity 5.x.x - 4.x.x does not permit building from the command line
-targetBuildSku = sys.argv[1] 	#build target - iOS, Android
-unityFolderName = sys.argv[2] 	#name of the unity folder in applications
-outputFileName = sys.argv[3] 	#name of the output file
-unityProjectPath = sys.argv[4] 	#this is our project that we are building from
+targetBuildSku = sys.argv[1] 	    #build target - iOS, Android
+unityFolderName = sys.argv[2] 	    #name of the unity folder in applications
+outputFileName = sys.argv[3] 	    #name of the output file
+unityProjectPath = sys.argv[4] 	    #this is our project that we are building from
 
 
 print 'Target Build Sku : ' + targetBuildSku
@@ -30,8 +30,10 @@ print 'Output File Name : ' + outputFileName
 print 'Unity Project Path : ' + unityProjectPath
 
 if targetBuildSku == 'Android':
+    keystorePass = sys.argv[5]
+
     print 'building Android...'
-    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName)
+    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName + " " + keystorePass)
     print 'Build Complete'
 elif targetBuildSku == 'iOS':
     print 'building iOS...'
