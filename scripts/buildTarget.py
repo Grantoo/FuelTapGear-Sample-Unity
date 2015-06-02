@@ -34,11 +34,11 @@ if targetBuildSku == 'Android':
     keystorePass = sys.argv[6]
 
     print 'building Android...'
-    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformAndroidBuild " + outputFileName + " " + buildNumber + " " + keystorePass)
+    os.system("\"/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity\" -quit -batchmode -projectPath \"" + unityProjectPath + "\" -executeMethod AutoBuilder.PerformAndroidBuild \"" + outputFileName + "\" " + buildNumber + " " + keystorePass)
     print 'Build Complete'
 elif targetBuildSku == 'iOS':
     print 'building iOS...'
-    os.system("/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity -quit -batchmode -projectPath " + unityProjectPath + " -executeMethod AutoBuilder.PerformiOSBuild " + outputFileName + " " + buildNumber)
+    os.system("\"/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity\" -quit -batchmode -projectPath \"" + unityProjectPath + "\" -executeMethod AutoBuilder.PerformiOSBuild \"" + outputFileName + "\" " + buildNumber)
     print 'Build Complete'
 else:
     print targetBuildSku + ' not defined'
