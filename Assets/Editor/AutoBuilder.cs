@@ -107,7 +107,7 @@ public static class AutoBuilder {
 				return;
 			}
 
-			if (bundleVersionNumber <= 0) {
+			if (bundleVersionCode <= 0) {
 				// return error, invalid bundle version code
 				return;
 			}
