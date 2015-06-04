@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dngames.tapgear"
+    package="com.grantoo.tapgear"
     android:installLocation="preferExternal"
     android:versionCode="1"
     android:versionName="1.0" >
@@ -32,10 +32,10 @@
         android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <permission
-        android:name="com.dngames.tapgear.permission.C2D_MESSAGE"
+        android:name="com.grantoo.tapgear.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.dngames.tapgear.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.grantoo.tapgear.permission.C2D_MESSAGE" />
 
     <supports-screens
         android:anyDensity="true"
@@ -46,9 +46,9 @@
         android:xlargeScreens="true" />
 
     <application
-        android:debuggable="true"
         android:icon="@drawable/app_icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:isGame="true" >
         
         <activity
             android:name="com.fuelpowered.lib.propeller.unity.PropellerUnityActivity"
@@ -102,7 +102,7 @@
                 <action
                     android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.dngames.tapgear" />
+                <category android:name="com.grantoo.tapgear" />
                 
             </intent-filter>
             
