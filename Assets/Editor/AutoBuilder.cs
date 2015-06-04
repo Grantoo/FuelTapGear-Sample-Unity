@@ -74,11 +74,52 @@ public static class AutoBuilder {
 			string outputPath = arguments[7];//must match this index with num command line args :(
 			string buildNumber = arguments[8];
 			string keystorePass = arguments[9];
+
+			char[] versionDelimiter = {'.'};
+			string[] versionParts = buildNumber.Split(versionDelimiter);
+
+			if (versionParts == null) {
+				// return error, undefined parts
+				return;
+			}
+
+			if (versionParts.Length == 0) {
+				// return error, no parts parsed
+				return;
+			}
+
+			string versionBuildNumber = versionParts[versionParts.Length - 1];
+
+			if (versionBuildNumber == null) {
+				// return error, last part is undefined
+				return;
+			}
+
+			if (versionBuildNumber.Length == 0) {
+				// return error, last part is an empty string
+				return;
+			}
+
+			int bundleVersionCode = -1;
+
+			if (!int.TryParse(versionBuildNumber, out bundleVersionCode)) {
+				// return error, could not parse int from version build number
+				return;
+			}
+
+			if (bundleVersionNumber <= 0) {
+				// return error, invalid bundle version code
+				return;
+			}
 			
 			EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
+
+			PlayerSettings.Android.bundleVersionCode = bundleVersionCode;
+
 			PlayerSettings.bundleVersion = buildNumber;
 			PlayerSettings.keyaliasPass = keystorePass;
 			PlayerSettings.keystorePass = keystorePass;
+
 			BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.Android, BuildOptions.None);
 		}
 	}
