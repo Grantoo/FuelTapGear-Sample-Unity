@@ -1,5 +1,6 @@
 //#define USE_ANALYTICS
 //#define RUN_UNIT_TESTS
+//#define LOCATION_SERVICES
 
 using UnityEngine;
 using System;
@@ -12,7 +13,6 @@ using SimpleJSON;
 #if USE_ANALYTICS
 using Analytics;
 #endif
-
 
 public struct GameMatchData 
 {
@@ -86,7 +86,9 @@ public class FuelHandler : MonoBehaviour
 		} 
 		else if( Instance == null )
 		{
+			#if LOCATION_SERVICES
 			Input.location.Start();
+			#endif
 
 			#if USE_ANALYTICS
 			flurryService = Flurry.Instance;
@@ -979,11 +981,13 @@ public class FuelHandler : MonoBehaviour
 
 		float _latitude = 0.0f;
 		float _longitude = 0.0f;
+		#if LOCATION_SERVICES
 		if (Input.location.status == LocationServiceStatus.Running) 
 		{
 			_latitude = Input.location.lastData.latitude;
 			_longitude = Input.location.lastData.longitude;
 		}
+		#endif
 
 		Dictionary<string, string> conditions = new Dictionary<string, string> ();
 		
