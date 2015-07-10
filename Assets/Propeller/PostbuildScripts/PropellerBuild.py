@@ -314,11 +314,6 @@ def addEnterBackground(contentOnly=False):
 	print '\t[PropellerSDK restoreAllLocalNotifications];'
 	addFunctionInjectionSuffix(contentOnly)
 
-def addEnterForeground(contentOnly=False):
-	addFunctionInjectionPrefix('- (void)applicationWillEnterForeground:(UIApplication*)application', contentOnly)
-	print '\t[PropellerSDK handleApplicationWillEnterForeground:application];'
-	addFunctionInjectionSuffix(contentOnly)
-	
 def addExtraFunctions():
 	addInjectionPrefix()
 	print '-(NSString *)urlEncode:(NSString *)rawString'
@@ -512,7 +507,6 @@ injectReceiveRemoteNotification = False
 injectRegisterUserNotificationSettings = False
 injectFinishLaunching = False
 injectEnterBackground = False
-injectEnterForeground = False
 
 injectedHeader = False
 injectedInit = False
@@ -524,7 +518,6 @@ injectedReceiveRemoteNotification = False
 injectedRegisterUserNotificationSettings = False
 injectedFinishLaunching = False
 injectedEnterBackground = False
-injectedEnterForeground = False
 
 lastNonBlankLine = ''
 
@@ -553,8 +546,6 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 		injectFinishLaunching = True
 	elif ')applicationDidEnterBackground:(' in line:
 		injectEnterBackground = True
-	elif ')applicationWillEnterForeground:(' in line:
-		injectEnterForeground = True
 	else:
 		if injectHeader:
 			injectHeader = False
@@ -601,11 +592,6 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 			if injectionPrefix not in line:
 				addEnterBackground(True)
 				injectedEnterBackground = True
-		if injectEnterForeground and '{' not in line:
-			injectEnterForeground = False
-			if injectionPrefix not in line:
-				addEnterForeground(True)
-				injectedEnterForeground = True
 
 	lastNonBlankLine = line
 
@@ -650,8 +636,6 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 					addFinishLaunching()
 				if not injectedEnterBackground:
 					addEnterBackground()
-				if not injectedEnterForeground:
-					addEnterForeground()
 				addExtraFunctions()
 
 	lastNonBlankLine = line

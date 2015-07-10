@@ -107,12 +107,6 @@ typedef enum
 - (void)setLanguageCode:(NSString*)languageCode;
 
 // -----------------------------------------------------------------------------
-// Propeller SDK lifecycle methods
-// -----------------------------------------------------------------------------
-
-+ (void)handleApplicationWillEnterForeground:(UIApplication*)application;
-
-// -----------------------------------------------------------------------------
 // Notification methods
 // -----------------------------------------------------------------------------
 
@@ -135,8 +129,8 @@ typedef enum
 + (void)restoreAllLocalNotifications;
 
 + (void)setNotificationDelegate:(id<PropellerSDKNotificationDelegate>)notificationDelegate;
-- (BOOL)enableNotification:(PropellerSDKNotificationType)notificationType;
-- (BOOL)disableNotification:(PropellerSDKNotificationType)notificationType;
++ (BOOL)enableNotification:(PropellerSDKNotificationType)notificationType;
++ (BOOL)disableNotification:(PropellerSDKNotificationType)notificationType;
 + (BOOL)isNotificationEnabled:(PropellerSDKNotificationType)notificationType;
 
 // -----------------------------------------------------------------------------
