@@ -895,6 +895,26 @@ public class PropellerSDK : MonoBehaviour
 		m_hostGameObject.SendMessage ("OnPropellerSDKVirtualGoodRollback", message);
 	}
 
+	private void PropellerOnNotification (string message)
+	{
+		Debug.Log ("PropellerOnNotification");
+
+		// message must contain the application state or else its an error
+		if (string.IsNullOrEmpty (message)) {
+			Debug.Log ("PropellerOnNotificaiton - null or empty message");
+			return;
+		}
+
+		Debug.Log ("PropellerOnNotification - " + message);
+
+		if (m_hostGameObject == null) {
+			Debug.Log ("PropellerOnNotification - undefined host game object");
+			return;
+		}
+
+		m_hostGameObject.SendMessage ("OnPropellerSDKNotification", message);
+	}
+
 	private void PropellerOnSdkSocialLogin (string message)
 	{
 		Debug.Log ("PropellerOnSdkSocialLogin");

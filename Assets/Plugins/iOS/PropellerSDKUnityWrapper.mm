@@ -298,12 +298,12 @@ extern "C"
 
     void iOSEnableNotification(PropellerSDKNotificationType notificationType)
     {
-        [[PropellerSDK instance] enableNotification:notificationType];
+        [PropellerSDK enableNotification:notificationType];
     }
 
     void iOSDisableNotification(PropellerSDKNotificationType notificationType)
     {
-        [[PropellerSDK instance] disableNotification:notificationType];
+        [PropellerSDK disableNotification:notificationType];
     }
 
     BOOL iOSIsNotificationEnabled(PropellerSDKNotificationType notificationType)

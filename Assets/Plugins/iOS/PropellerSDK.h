@@ -21,12 +21,14 @@
 #define PSDK_MATCH_RESULT_TOURNAMENT_KEY @"tournamentID"
 #define PSDK_MATCH_RESULT_MATCH_KEY @"matchID"
 #define PSDK_MATCH_RESULT_PARAMS_KEY @"params"
+
 #define PSDK_MATCH_POST_TOURNAMENT_KEY @"tournamentID"
 #define PSDK_MATCH_POST_MATCH_KEY @"matchID"
 #define PSDK_MATCH_POST_SCORE_KEY @"score"
 #define PSDK_MATCH_POST_VISUALSCORE_KEY @"visualScore"
 #define PSDK_MATCH_POST_MATCHDATA_KEY @"matchData"
 #define PSDK_MATCH_POST_CURRENCIES_KEY @"currencies"
+#define PSDK_MATCH_POST_GAMEDATA_KEY @"gameData"
 #define PSDK_MATCH_POST_CURRENCYID_KEY @"id"
 
 typedef enum
@@ -107,12 +109,6 @@ typedef enum
 - (void)setLanguageCode:(NSString*)languageCode;
 
 // -----------------------------------------------------------------------------
-// Propeller SDK lifecycle methods
-// -----------------------------------------------------------------------------
-
-+ (void)handleApplicationWillEnterForeground:(UIApplication*)application;
-
-// -----------------------------------------------------------------------------
 // Notification methods
 // -----------------------------------------------------------------------------
 
@@ -135,8 +131,8 @@ typedef enum
 + (void)restoreAllLocalNotifications;
 
 + (void)setNotificationDelegate:(id<PropellerSDKNotificationDelegate>)notificationDelegate;
-- (BOOL)enableNotification:(PropellerSDKNotificationType)notificationType;
-- (BOOL)disableNotification:(PropellerSDKNotificationType)notificationType;
++ (BOOL)enableNotification:(PropellerSDKNotificationType)notificationType;
++ (BOOL)disableNotification:(PropellerSDKNotificationType)notificationType;
 + (BOOL)isNotificationEnabled:(PropellerSDKNotificationType)notificationType;
 
 // -----------------------------------------------------------------------------

@@ -215,6 +215,7 @@ def addInit(contentOnly=False):
 	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKVirtualGoodList" object:nil];'
 	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKVirtualGoodRollback" object:nil];'
 	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKUserValues" object:nil];'
+	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKNotification" object:nil];'
 	if not contentOnly:
 		print '\t}'
 		print '\treturn self;'
@@ -231,7 +232,9 @@ def addDealloc(contentOnly=False):
 
 def addReceiveLocalNotification(contentOnly=False):
 	addFunctionInjectionPrefix('- (void)application:(UIApplication*)application didReceiveLocalNotification:(UILocalNotification*)notification', contentOnly)
-	print '\t[PropellerSDK handleLocalNotification:notification newLaunch:NO];'
+	print '\tif ([PropellerSDK handleLocalNotification:notification newLaunch:NO]) {'
+	print '\t\t[self broadcastLocalNotification:NO];'
+	print '\t}'
 	addFunctionInjectionSuffix(contentOnly)
 
 def addRegisterRemoteNotifications(contentOnly=False):
@@ -248,7 +251,9 @@ def addFailToRegisterRemoteNotifications(contentOnly=False):
 
 def addReceiveRemoteNotification(contentOnly=False):
 	addFunctionInjectionPrefix('- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo', contentOnly)
-	print '\t[PropellerSDK handleRemoteNotification:userInfo newLaunch:NO];'
+	print '\tif ([PropellerSDK handleRemoteNotification:userInfo newLaunch:NO]) {'
+	print '\t\t[self broadcastLocalNotification:NO];'
+	print '\t}'
 	addFunctionInjectionSuffix(contentOnly)
 
 def addRegisterUserNotificationSettings(contentOnly=False):
@@ -266,8 +271,10 @@ def addFinishLaunching(contentOnly=False):
 	print ''
 	print '\tif (remoteNotificationDict)'
 	print '\t{'
-	print '\t\tif (![PropellerSDK handleRemoteNotification:remoteNotificationDict newLaunch:YES])'
+	print '\t\tif ([PropellerSDK handleRemoteNotification:remoteNotificationDict newLaunch:YES])'
 	print '\t\t{'
+	print '\t\t\t[self broadcastLocalNotification:YES];'
+	print '\t\t} else {'
 	print '\t\t\t// This is not a Fuel remote notification, I should handle it'
 	print '\t\t}'
 	print '\t}'
@@ -276,8 +283,10 @@ def addFinishLaunching(contentOnly=False):
 	print ''
 	print '\tif (localNotification)'
 	print '\t{'
-	print '\t\tif (![PropellerSDK handleLocalNotification:localNotification newLaunch:YES])'
+	print '\t\tif ([PropellerSDK handleLocalNotification:localNotification newLaunch:YES])'
 	print '\t\t{'
+	print '\t\t\t[self broadcastLocalNotification:YES];'
+	print '\t\t} else {'
 	print '\t\t\t// This is not a Fuel local notification, I should handle it'
 	print '\t\t}'
 	print '\t}'
@@ -314,11 +323,6 @@ def addEnterBackground(contentOnly=False):
 	print '\t[PropellerSDK restoreAllLocalNotifications];'
 	addFunctionInjectionSuffix(contentOnly)
 
-def addEnterForeground(contentOnly=False):
-	addFunctionInjectionPrefix('- (void)applicationWillEnterForeground:(UIApplication*)application', contentOnly)
-	print '\t[PropellerSDK handleApplicationWillEnterForeground:application];'
-	addFunctionInjectionSuffix(contentOnly)
-	
 def addExtraFunctions():
 	addInjectionPrefix()
 	print '-(NSString *)urlEncode:(NSString *)rawString'
@@ -499,7 +503,40 @@ def addExtraFunctions():
 	print '\t\t}'
 	print ''
 	print '\t\tUnitySendMessage("PropellerCommon", "PropellerOnUserValues", [message UTF8String]);'
+	print '\t} else if ([type isEqualToString:@"PropellerSDKNotification"]) {'
+	print '\t\tNSString *message = nil;'
+	print ''
+	print '\t\tif (data != nil) {'
+	print '\t\t\tmessage = [data objectForKey:@"applicationState"];'
+	print '\t\t}'
+	print ''
+	print '\t\tif (message == nil) {'
+	print '\t\t\tmessage = @"";'
+	print '\t\t}'
+	print ''
+	print '\t\tUnitySendMessage("PropellerSDK", "PropellerOnNotification", [message UTF8String]);'
 	print '\t}'
+	print '}'
+	print ''
+	print '- (void) broadcastLocalNotification:(BOOL)newLaunch'
+	print '{'
+	print '\tNSString *applicationState = nil;'
+	print ''
+	print '\tif (newLaunch) {'
+	print '\t\tapplicationState = @"inactive";'
+	print '\t} else {'
+	print '\t\tUIApplication *application = [UIApplication sharedApplication];'
+	print ''
+	print '\t\tif ([application applicationState] == UIApplicationStateActive) {'
+	print '\t\t\tapplicationState = @"active";'
+	print '\t\t} else {'
+	print '\t\t\tapplicationState = @"background";'
+	print '\t\t}'
+	print '\t}'
+	print ''
+	print '\tNSDictionary *userInfo = [NSDictionary dictionaryWithObject:applicationState forKey:@"applicationState"];'
+	print ''
+	print '\t[[NSNotificationCenter defaultCenter] postNotificationName:@"PropellerSDKNotification" object:nil userInfo:userInfo];'
 	print '}'
 	addInjectionSuffix()
 
@@ -512,7 +549,6 @@ injectReceiveRemoteNotification = False
 injectRegisterUserNotificationSettings = False
 injectFinishLaunching = False
 injectEnterBackground = False
-injectEnterForeground = False
 
 injectedHeader = False
 injectedInit = False
@@ -524,7 +560,6 @@ injectedReceiveRemoteNotification = False
 injectedRegisterUserNotificationSettings = False
 injectedFinishLaunching = False
 injectedEnterBackground = False
-injectedEnterForeground = False
 
 lastNonBlankLine = ''
 
@@ -553,8 +588,6 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 		injectFinishLaunching = True
 	elif ')applicationDidEnterBackground:(' in line:
 		injectEnterBackground = True
-	elif ')applicationWillEnterForeground:(' in line:
-		injectEnterForeground = True
 	else:
 		if injectHeader:
 			injectHeader = False
@@ -601,11 +634,6 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 			if injectionPrefix not in line:
 				addEnterBackground(True)
 				injectedEnterBackground = True
-		if injectEnterForeground and '{' not in line:
-			injectEnterForeground = False
-			if injectionPrefix not in line:
-				addEnterForeground(True)
-				injectedEnterForeground = True
 
 	lastNonBlankLine = line
 
@@ -650,8 +678,6 @@ for line in fileinput.input( controllerFile, inplace=1 ):
 					addFinishLaunching()
 				if not injectedEnterBackground:
 					addEnterBackground()
-				if not injectedEnterForeground:
-					addEnterForeground()
 				addExtraFunctions()
 
 	lastNonBlankLine = line

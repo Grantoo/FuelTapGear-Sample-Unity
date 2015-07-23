@@ -2,79 +2,80 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.grantoo.tapgear"
-    android:installLocation="preferExternal"
+	android:installLocation="preferExternal"
     android:versionCode="1"
-    android:versionName="1.0" >
-
+    android:versionName="1.0">
+	
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="21" />
-
+	
     <uses-permission
         android:name="android.permission.INTERNET" />
-    
+
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE" />
-    
+
     <uses-permission
         android:name="android.permission.ACCESS_WIFI_STATE" />
-    
-    <uses-permission
+
+	<uses-permission
         android:name="android.permission.VIBRATE" />
-    
-    <uses-permission
+
+	<uses-permission
         android:name="android.permission.GET_ACCOUNTS" />
-    
-    <uses-permission
+
+	<uses-permission
         android:name="android.permission.WAKE_LOCK" />
-    
-    <uses-permission
+			
+	<uses-permission
         android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission
+	<permission
         android:name="com.grantoo.tapgear.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.grantoo.tapgear.permission.C2D_MESSAGE" />
+		android:protectionLevel="signature" />
+		
+	<uses-permission
+        android:name="com.grantoo.tapgear.permission.C2D_MESSAGE" />
 
     <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="true"
-        android:normalScreens="true"
         android:resizeable="true"
         android:smallScreens="true"
-        android:xlargeScreens="true" />
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:anyDensity="true" />
 
     <application
-        android:icon="@drawable/app_icon"
-        android:label="@string/app_name"
+		android:icon="@drawable/app_icon"
+        android:label="@string/app_name">
         android:isGame="true" >
         
         <activity
-            android:name="com.fuelpowered.lib.propeller.unity.PropellerUnityActivity"
-            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen"
-            android:label="@string/app_name" >
-            
-            <meta-data
+            android:name="com.fuelpowered.lib.propeller.unity.PropellerUnityActivity" 
+			android:label="@string/app_name"
+			android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
+
+  			<meta-data
                 android:name="android.app.lib_name"
                 android:value="unity" />
-            
-            <meta-data
+
+  			<meta-data
                 android:name="unityplayer.ForwardNativeEventsToDalvik"
                 android:value="true" />
 
-            <intent-filter>
-                
-                <action
+        	<intent-filter>
+
+				<action
                     android:name="android.intent.action.MAIN" />
 
-                <category
+				<category
                     android:name="android.intent.category.LAUNCHER" />
-                
-            </intent-filter>
-            
-        </activity>
 
+			</intent-filter>
+
+		</activity>
+		
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -82,30 +83,31 @@
         <activity
             android:name="com.fuelpowered.lib.propeller.PropellerSDKActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
-        
+		
         <activity
             android:name="com.fuelpowered.lib.propeller.PropellerSDKNotificationActivity" />
 
         <receiver
             android:name="com.fuelpowered.lib.propeller.PropellerSDKLocalNotificationReceiver"
             android:process=":remote" />
-        
+
         <receiver
             android:name="com.fuelpowered.lib.propeller.gcm.PropellerSDKGCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
-            
+
             <intent-filter>
-                
+
                 <action
                     android:name="com.google.android.c2dm.intent.RECEIVE" />
-                
+
                 <action
                     android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.grantoo.tapgear" />
-                
+                <category
+                    android:name="com.grantoo.tapgear" />
+
             </intent-filter>
-            
+
         </receiver>
 
         <service
