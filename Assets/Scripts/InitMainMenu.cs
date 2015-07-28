@@ -33,6 +33,14 @@ public class InitMainMenu : MonoBehaviour
 			UpdatePropellerSDK();
 			sComingFromTitle = false;
 		}
+
+		if (AutoLauncher.Instance ().AutoLaunch ()) {
+			AutoLauncher.Instance ().SetAutoLaunch (false);
+
+			GameObject fuelHandlerObject = GameObject.Find("FuelHandlerObject");
+			FuelHandler fuelHandler = fuelHandlerObject.GetComponent<FuelHandler>();
+			fuelHandler.launchPropeller();
+		}
 	}
 
 	public void UpdatePropellerSDK()

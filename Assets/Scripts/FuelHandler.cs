@@ -1167,6 +1167,18 @@ public class FuelHandler : MonoBehaviour
 	
 	
 
+	/*
+	 ---------------------------------------------------------------------
+						Notifications & Deep Linking
+	 ---------------------------------------------------------------------
+    */
+	public void OnPropellerSDKNotification(string applicationState)
+	{
+		Debug.Log("OnPropellerSDKNotification");
+
+		AutoLauncher.Instance ().ValidateAutoLauncher (applicationState);
+	}
+
 }
 
 
