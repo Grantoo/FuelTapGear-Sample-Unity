@@ -39,7 +39,8 @@ xcodeVersion = sys.argv[6]
 # 14 - UNITY_4_3,
 # 15 - UNITY_4_5,
 # 16 - UNITY_4_6,
-# 17 - UNITY_5_0
+# 17 - UNITY_5_0,
+# 18 - UNITY_5_1
 
 # only supporting Unity 3.5 and up
 if unityApiLevel < 9:
