@@ -107,44 +107,6 @@ project.add_file_if_doesnt_exist( audioToolboxFrameworkPath, tree='SDKROOT', par
 project.add_file_if_doesnt_exist( libsqlite3Path, tree='SDKROOT', parent=frameworkGroup )
 project.add_file_if_doesnt_exist( libicucorePath, tree='SDKROOT', parent=frameworkGroup )
 
-print 'Adding resources required by Propeller'
-
-resourceGroup = project.get_or_create_group('Resources')
-
-def addFacebookDependencies(dataPath, frameworkGroup, resourceGroup):
-	if os.path.exists(dataPath + '/Facebook/Scripts/FB.cs'):
-		print 'Found Unity Facebook SDK'
-		return True
-
-	iOSFacebookSDKFrameworkPath = None
-
-	for directory, dirnames, filenames in os.walk( os.path.expanduser('~') + '/Documents/FacebookSDK' ):
-		if os.path.basename( directory ) == 'FacebookSDK.framework':
-			iOSFacebookSDKFrameworkPath = directory
-			break;
-
-	if iOSFacebookSDKFrameworkPath == None:
-		return False
-
-	print 'Found iOS Facebook SDK'
-
-	project.add_file_if_doesnt_exist( iOSFacebookSDKFrameworkPath, parent=frameworkGroup )
-
-	iOSFacebookSDKResourcesBundlePath = iOSFacebookSDKFrameworkPath + '/Resources/FacebookSDKResources.bundle'
-
-	if os.path.exists(iOSFacebookSDKResourcesBundlePath):
-		print 'iOS Facebook SDK resources bundle found'
-		project.add_file_if_doesnt_exist( iOSFacebookSDKResourcesBundlePath, parent=resourceGroup )
-
-	project.add_framework_search_paths([iOSFacebookSDKFrameworkPath + '/' + os.pardir])
-
-	return True
-
-print 'Adding Facebook dependencies required by Propeller'
-
-if not addFacebookDependencies(dataPath, frameworkGroup, resourceGroup):
-	exitWithError('No Facebook SDK found')
-
 print 'Inserting Propeller libraries'
 
 classesGroup = project.get_or_create_group( 'Classes' )
