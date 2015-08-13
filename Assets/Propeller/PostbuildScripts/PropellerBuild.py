@@ -195,9 +195,7 @@ def addDealloc(contentOnly=False):
 
 def addReceiveLocalNotification(contentOnly=False):
 	addFunctionInjectionPrefix('- (void)application:(UIApplication*)application didReceiveLocalNotification:(UILocalNotification*)notification', contentOnly)
-	print '\tif ([PropellerSDK handleLocalNotification:notification newLaunch:NO]) {'
-	print '\t\t[self broadcastLocalNotification:NO];'
-	print '\t}'
+	print '\t[PropellerSDK handleLocalNotification:notification newLaunch:NO];'
 	addFunctionInjectionSuffix(contentOnly)
 
 def addRegisterRemoteNotifications(contentOnly=False):
@@ -214,9 +212,7 @@ def addFailToRegisterRemoteNotifications(contentOnly=False):
 
 def addReceiveRemoteNotification(contentOnly=False):
 	addFunctionInjectionPrefix('- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo', contentOnly)
-	print '\tif ([PropellerSDK handleRemoteNotification:userInfo newLaunch:NO]) {'
-	print '\t\t[self broadcastLocalNotification:NO];'
-	print '\t}'
+	print '\t[PropellerSDK handleRemoteNotification:userInfo newLaunch:NO];'
 	addFunctionInjectionSuffix(contentOnly)
 
 def addRegisterUserNotificationSettings(contentOnly=False):
@@ -234,10 +230,7 @@ def addFinishLaunching(contentOnly=False):
 	print ''
 	print '\tif (remoteNotificationDict)'
 	print '\t{'
-	print '\t\tif ([PropellerSDK handleRemoteNotification:remoteNotificationDict newLaunch:YES])'
-	print '\t\t{'
-	print '\t\t\t[self broadcastLocalNotification:YES];'
-	print '\t\t} else {'
+	print '\t\tif (![PropellerSDK handleRemoteNotification:remoteNotificationDict newLaunch:YES])'
 	print '\t\t\t// This is not a Fuel remote notification, I should handle it'
 	print '\t\t}'
 	print '\t}'
@@ -246,10 +239,7 @@ def addFinishLaunching(contentOnly=False):
 	print ''
 	print '\tif (localNotification)'
 	print '\t{'
-	print '\t\tif ([PropellerSDK handleLocalNotification:localNotification newLaunch:YES])'
-	print '\t\t{'
-	print '\t\t\t[self broadcastLocalNotification:YES];'
-	print '\t\t} else {'
+	print '\t\tif (![PropellerSDK handleLocalNotification:localNotification newLaunch:YES])'
 	print '\t\t\t// This is not a Fuel local notification, I should handle it'
 	print '\t\t}'
 	print '\t}'
@@ -466,7 +456,7 @@ def addExtraFunctions():
 	print '\t\t}'
 	print ''
 	print '\t\tUnitySendMessage("PropellerCommon", "PropellerOnUserValues", [message UTF8String]);'
-	print '\t} else if ([type isEqualToString:@"PropellerSDKNotification"]) {'
+	print '\t} else if ([type isEqualToString:@"PropellerSDKImplicitLaunch"]) {'
 	print '\t\tNSString *message = nil;'
 	print ''
 	print '\t\tif (data != nil) {'
@@ -477,29 +467,8 @@ def addExtraFunctions():
 	print '\t\t\tmessage = @"";'
 	print '\t\t}'
 	print ''
-	print '\t\tUnitySendMessage("PropellerSDK", "PropellerOnNotification", [message UTF8String]);'
+	print '\t\tUnitySendMessage("PropellerSDK", "PropellerOnImplicitLaunch", [message UTF8String]);'
 	print '\t}'
-	print '}'
-	print ''
-	print '- (void) broadcastLocalNotification:(BOOL)newLaunch'
-	print '{'
-	print '\tNSString *applicationState = nil;'
-	print ''
-	print '\tif (newLaunch) {'
-	print '\t\tapplicationState = @"inactive";'
-	print '\t} else {'
-	print '\t\tUIApplication *application = [UIApplication sharedApplication];'
-	print ''
-	print '\t\tif ([application applicationState] == UIApplicationStateActive) {'
-	print '\t\t\tapplicationState = @"active";'
-	print '\t\t} else {'
-	print '\t\t\tapplicationState = @"background";'
-	print '\t\t}'
-	print '\t}'
-	print ''
-	print '\tNSDictionary *userInfo = [NSDictionary dictionaryWithObject:applicationState forKey:@"applicationState"];'
-	print ''
-	print '\t[[NSNotificationCenter defaultCenter] postNotificationName:@"PropellerSDKNotification" object:nil userInfo:userInfo];'
 	print '}'
 	addInjectionSuffix()
 
