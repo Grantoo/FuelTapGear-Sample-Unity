@@ -242,13 +242,19 @@ public class FuelHandler : MonoBehaviour
 	}
 
 	
-	public void tryLaunchFuelSDK()
+	public bool tryLaunchFuelSDK()
 	{
 		Debug.Log ("tryLaunchFuelSDK");
 		if (m_matchData.MatchComplete == true && m_matchData.MatchType == MATCH_TYPE_MULTI) 
 		{
+			m_matchData.MatchComplete = false;
+
 			LaunchDashBoard();
+
+			return true;
 		}
+
+		return false;
 	}
 
 
