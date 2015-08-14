@@ -48,32 +48,31 @@ public class AutoLauncher
 			return;
 		}
 		
-		if (applicationState.Equals("inactive")) {
-			// application was launched fresh from a notification
-			// auto launch on transition to the main menu
-		} else if (applicationState.Equals("active")) {
-			// application in foreground when notification was received
-			// do nothing, require explicit launch from the user
-			// next launch will handle the latest received notification context
+		if (applicationState.Equals("starting")) {
+			// suggestion to launch the Propeller SDK after the application
+			// has finished starting up
+
+			// application startup will flow into the main menu
+
+			// auto launch of the Propeller SDK will occur on the load of
+			// the main menu
+		} else if (applicationState.Equals("running")) {
+			// suggestion to launch the Propeller SDK while the application
+			// is currently running in the foreground
+
+			// do nothing and require an explicit launch by the user
 			return;
-		} else if (applicationState.Equals("background")) {
-			if (Application.loadedLevelName.Equals ("MainMenu")) {
-				// application came from background and on main menu
-				// immediately launch
+		} else if (applicationState.Equals("resuming")) {
+			// suggestion to launch the Propeller SDK after the application
+			// has finished resuming from the background
 
-				GameObject fuelHandlerObject = GameObject.Find("FuelHandlerObject");
-				FuelHandler fuelHandler = fuelHandlerObject.GetComponent<FuelHandler>();
-				fuelHandler.launchPropeller();
+			// (re)load / transition to the main menu
+			Application.LoadLevel("MainMenu");
 
-				return;
-			} else {
-				// application came from background and NOT on main menu
-				// transition to the main menu and auto launch when ready
-
-				Application.LoadLevel("MainMenu");
-			}
+			// auto launch of the Propeller SDK will occur on the load of
+			// the main menu
 		} else {
-			Debug.Log ("ValidateAutoLauncher - invalid application state: " + applicationState);
+			Debug.Log ("ValidateAutoLauncher - unsupported application state: " + applicationState);
 			// invalid application state
 			return;
 		}
