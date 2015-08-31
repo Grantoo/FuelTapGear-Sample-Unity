@@ -21,12 +21,14 @@
 #define PSDK_MATCH_RESULT_TOURNAMENT_KEY @"tournamentID"
 #define PSDK_MATCH_RESULT_MATCH_KEY @"matchID"
 #define PSDK_MATCH_RESULT_PARAMS_KEY @"params"
+
 #define PSDK_MATCH_POST_TOURNAMENT_KEY @"tournamentID"
 #define PSDK_MATCH_POST_MATCH_KEY @"matchID"
 #define PSDK_MATCH_POST_SCORE_KEY @"score"
 #define PSDK_MATCH_POST_VISUALSCORE_KEY @"visualScore"
 #define PSDK_MATCH_POST_MATCHDATA_KEY @"matchData"
 #define PSDK_MATCH_POST_CURRENCIES_KEY @"currencies"
+#define PSDK_MATCH_POST_GAMEDATA_KEY @"gameData"
 #define PSDK_MATCH_POST_CURRENCYID_KEY @"id"
 
 typedef enum

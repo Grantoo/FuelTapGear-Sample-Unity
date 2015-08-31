@@ -100,13 +100,15 @@ public class PropellerProduct : MonoBehaviour
 	}
 
 
-	public void tryLaunchFuelSDK () 
+	public bool tryLaunchFuelSDK () 
 	{
 		if (mDynamicsOnly == false) 
 		{
 			FuelHandler _fuelHandlerScript = getFuelHandlerClass();
-			_fuelHandlerScript.tryLaunchFuelSDK();
+			return _fuelHandlerScript.tryLaunchFuelSDK();
 		}
+
+		return false;
 	}
 
 

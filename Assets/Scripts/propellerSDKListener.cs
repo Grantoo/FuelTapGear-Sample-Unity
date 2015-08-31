@@ -46,7 +46,7 @@ public class fuelSDKListener : PropellerSDKListener
 		// handle social invite
 		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
-		_fuelHandlerScript.onSocialInviteClicked (null); 
+		_fuelHandlerScript.onSocialInviteClicked (inviteDetail); 
 	}
 	
 	public override void SdkSocialShare (Dictionary<string, string> shareDetail)
@@ -69,7 +69,7 @@ public class fuelSDKListener : PropellerSDKListener
 		// handle social invite
 		GameObject _fuelHandler = GameObject.Find("FuelHandlerObject");
 		FuelHandler _fuelHandlerScript = _fuelHandler.GetComponent<FuelHandler>();
-		_fuelHandlerScript.onSocialShareClicked (null); 
+		_fuelHandlerScript.onSocialShareClicked (shareDetail); 
 	}
 	
 	public override void SdkCompletedWithExit ()

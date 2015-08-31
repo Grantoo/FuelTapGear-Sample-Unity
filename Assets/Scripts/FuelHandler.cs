@@ -30,7 +30,12 @@ public struct GameMatchData
 	public string TheirAvatarURL { get; set; }
 }
 
-
+public enum SocialPost
+{
+	NONE,
+	INVITE,
+	SHARE
+}
 
 public class FuelHandler : MonoBehaviour 
 {
@@ -48,6 +53,9 @@ public class FuelHandler : MonoBehaviour
 	
 	private bool useFaceBook; 
 	private bool useFuelCompete; 
+
+	private SocialPost socialPost;
+	private Dictionary<string, string> socialPostData;
 
 	public string fbname;
 	public string fbfirstname;//use this as nickname for now
@@ -107,7 +115,10 @@ public class FuelHandler : MonoBehaviour
 			m_matchData = new GameMatchData ();
 			m_matchData.ValidMatchData = false;
 			m_matchData.MatchComplete = false;
-			
+
+			socialPost = SocialPost.NONE;
+			socialPostData = null;
+
 			useFaceBook = true;
 			useFuelCompete = true; 
 
@@ -244,13 +255,19 @@ public class FuelHandler : MonoBehaviour
 	}
 
 	
-	public void tryLaunchFuelSDK()
+	public bool tryLaunchFuelSDK()
 	{
 		Debug.Log ("tryLaunchFuelSDK");
 		if (m_matchData.MatchComplete == true && m_matchData.MatchType == MATCH_TYPE_MULTI) 
 		{
+			m_matchData.MatchComplete = false;
+
 			LaunchDashBoard();
+
+			return true;
 		}
+
+		return false;
 	}
 
 
@@ -601,18 +618,7 @@ public class FuelHandler : MonoBehaviour
 			return;
 		}
 
-		if (!FB.IsLoggedIn) 
-		{   
-			Debug.Log("FB.Login(email, publish_actions, LoginCallback);");                                                          
-
-			FB.Login("email, publish_actions", LoginCallback); 
-			//FB.Login ("public_profile, user_friends, email, publish_actions", LoginCallback); 
-		}
-		else
-		{
-			//Logout?
-			FB.Logout();
-		}
+		trySocialLogin (false);
 	}
 	public void LogoutButtonPressed()
 	{
@@ -632,21 +638,38 @@ public class FuelHandler : MonoBehaviour
 	}
 
 	void LoginCallback(FBResult result)                                                        
-	{                                                                                          
-		Debug.Log("LoginCallback");                                                          
+	{
+		Debug.Log("LoginCallback");
 
-		if (FB.IsLoggedIn) 
-		{                                                                                      
-			OnLoggedIn ();                                                                      
-		} 
-		else 
-		{
-			Debug.Log("....WARNING NOT LOGGING IN");                                                          
+		if (!FB.IsLoggedIn) {
+			if (result.Error != null) {
+				Debug.Log ("LoginCallback - login request failed: " + result.Error);
+			} else {
+				Debug.Log ("LoginCallback - login request cancelled");
+			}
+			
+			PropellerSDK.SdkSocialLoginCompleted(null);
+			
+			if (socialPost != SocialPost.NONE) {
+				switch (socialPost) {
+				case SocialPost.INVITE:
+					PropellerSDK.SdkSocialInviteCompleted ();
+					break;
+				case SocialPost.SHARE:
+					PropellerSDK.SdkSocialShareCompleted ();
+					break;
+				}
+				
+				socialPost = SocialPost.NONE;
+				socialPostData = null;
+			}
+			
+			return;
 		}
 
-		updateLoginText ();
+		OnLoggedIn ();
 	}                                                                                          
-	
+
 	void OnLoggedIn()                                                                          
 	{        
 		Debug.Log("OnLoggedIn");                                                          
@@ -657,42 +680,66 @@ public class FuelHandler : MonoBehaviour
 	
 	void UserCallBack(FBResult result) 
 	{
-		string get_data;
+		Debug.Log("UserCallBack");
+		
 		if (result.Error != null) {
-			get_data = result.Text;
-		} else {
-			get_data = result.Text;
+			Debug.Log("UserCallBack - user graph request failed: " + result.Error + " - " + result.Text);
+			
+			PropellerSDK.SdkSocialLoginCompleted (null);
+
+			if (socialPost != SocialPost.NONE) {
+				switch (socialPost) {
+				case SocialPost.INVITE:
+					PropellerSDK.SdkSocialInviteCompleted ();
+					break;
+				case SocialPost.SHARE:
+					PropellerSDK.SdkSocialShareCompleted ();
+					break;
+				}
+				
+				socialPost = SocialPost.NONE;
+				socialPostData = null;
+			}
+
+			return;
 		}
 
+		string get_data = result.Text;
+		
 		var dict = Json.Deserialize(get_data) as IDictionary;
 		fbname = dict ["name"].ToString();
 		fbemail = dict ["email"].ToString();
 		fbgender = dict ["gender"].ToString();
 		fbfirstname = dict ["first_name"].ToString();
-
+		
 		PushFBDataToFuel ();
+
+		if (socialPost != SocialPost.NONE) {
+			switch (socialPost) {
+			case SocialPost.INVITE:
+				onSocialInviteClicked (socialPostData);
+				break;
+			case SocialPost.SHARE:
+				onSocialShareClicked (socialPostData);
+				break;
+			}
+		}
 	}
 	
 	public void trySocialLogin(bool allowCache)                                                                       
 	{
-		Debug.Log("trySocialLogin");                                                          
-		if (FB.IsLoggedIn && allowCache == false) 
-		{    
-			//FB.Logout();
-			//FB.Login("email, publish_actions", LoginCallback); 
+		Debug.Log("trySocialLogin");
 
-			//return to sdk
-			//PropellerSDK.SdkSocialLoginCompleted (null);
-		}
-		else if (FB.IsLoggedIn) 
-		{    
-			PushFBDataToFuel();//is this needed?
-		}
-		else 
-		{
-			FB.Login("email, publish_actions", LoginCallback); 
+		if (FB.IsLoggedIn) {
+			if (allowCache == true) {
+				PushFBDataToFuel ();
+				return;
+			}
+
+			FB.Logout ();
 		}
 
+		FB.Login("public_profile,email,publish_actions", LoginCallback);
 	}
 
 	
@@ -752,10 +799,6 @@ public class FuelHandler : MonoBehaviour
 
 			OnLoggedIn ();
 
-		} else {
-
-			Debug.Log ("....Already logged in");
-
 		}                                                                                     
 	} 
 	
@@ -805,47 +848,54 @@ public class FuelHandler : MonoBehaviour
 
 		if (FB.IsLoggedIn) 
 		{
-			FB.AppRequest ("Come On!", 
-			null, 
-			null, 
-			null, 
-			null, 
-			"Some Data", 
-			"Some Title", 
-			appRequestCallback);
+			FB.AppRequest (
+				inviteInfo ["long"], 
+				null, 
+				null, 
+				null, 
+				null, 
+				null, 
+				inviteInfo ["subject"], 
+				appRequestCallback);
 		} 
 		else 
 		{
-			FB.Login("email, publish_actions", LoginCallback); 
+			if (socialPost != SocialPost.NONE) {
+				socialPost = SocialPost.NONE;
+				socialPostData = null;
+				
+				PropellerSDK.SdkSocialInviteCompleted ();
+				return;
+			}
+			
+			socialPost = SocialPost.INVITE;
+			socialPostData = inviteInfo;
+
+			trySocialLogin (false);
 		}
 		                                                                                                            
 		
 	}                                                                                                                              
+
 	private void appRequestCallback (FBResult result)                                                                              
 	{     
-
 		Debug.Log("appRequestCallback");  
-		                                                                                       
-		if (result != null)                                                                                                        
-		{    
+		
+		if (result.Error != null) {
+			Debug.Log ("appRequestCallback - invite request failed: " + result.Error);
+		} else  {
+			var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;
 			
-			var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;                                      
-			object obj = 0;                                                                                                        
-			if (responseObject.TryGetValue ("cancelled", out obj))                                                                 
-			{                                                                                                                      
-				Debug.Log("Request cancelled");                                                                                  
-			}                                                                                                                      
-			else if (responseObject.TryGetValue ("request", out obj))                                                              
-			{                
-				//AddPopupMessage("Request Sent", ChallengeDisplayTime);
-				Debug.Log("Request sent");                                                                                       
-			} 
-
-			PropellerSDK.SdkSocialInviteCompleted();
-
+			object obj = null;
 			
-		}  
-
+			if (responseObject.TryGetValue ("cancelled", out obj)) {
+				Debug.Log("appRequestCallback - invite request cancelled");
+			} else if (responseObject.TryGetValue ("request", out obj)) {
+				Debug.Log("appRequestCallback - invite request sent");
+			}
+		}
+		
+		PropellerSDK.SdkSocialInviteCompleted();
 	}  
 
 
@@ -856,7 +906,7 @@ public class FuelHandler : MonoBehaviour
 	 -----------------------------------------------------
 	*/
 	
-	public void onSocialShareClicked(Dictionary<string, string> inviteInfo)                                                                                              
+	public void onSocialShareClicked(Dictionary<string, string> shareInfo)                                                                                              
 	{ 
 		Debug.Log("onSocialShareClicked");  
 		/*
@@ -876,46 +926,58 @@ public class FuelHandler : MonoBehaviour
 
 		if (FB.IsLoggedIn) 
 		{
-			FB.Feed (FB.UserId, 
-	         "", 
-	         "", 
-	         "", 
-	         "", 
-	         "", 
-	         "", 
-	         "", 
-	         "", 
-	         "", 
-	         null,
-	         appFeedCallback);
+			FB.Feed (
+				FB.UserId, 
+				shareInfo ["link"], 
+				shareInfo ["subject"], 
+				shareInfo ["short"],
+				shareInfo ["long"], 
+				shareInfo ["picture"], 
+				null, 
+				null, 
+				null, 
+				null, 
+				null,
+				appFeedCallback);
 		} 
 		else 
 		{
-			FB.Login("email, publish_actions", LoginCallback); 
+			if (socialPost != SocialPost.NONE) {
+				socialPost = SocialPost.NONE;
+				socialPostData = null;
+
+				PropellerSDK.SdkSocialShareCompleted ();
+				return;
+			}
+
+			socialPost = SocialPost.SHARE;
+			socialPostData = shareInfo;
+
+			trySocialLogin (false);
 		}
 		
 		
 	}                                                                                                                              
+
 	private void appFeedCallback (FBResult result)                                                                              
 	{     
 		Debug.Log("appFeedCallback");  
-		
-		if (result != null)                                                                                                        
-		{    
-			var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;                                      
-			object obj = 0;                                                                                                        
-			if (responseObject.TryGetValue ("cancelled", out obj))                                                                 
-			{                                                                                                                      
-				Debug.Log("Request cancelled");                                                                                  
-			}                                                                                                                      
-			else if (responseObject.TryGetValue ("request", out obj))                                                              
-			{                
-				//AddPopupMessage("Request Sent", ChallengeDisplayTime);
-				Debug.Log("Request sent");                                                                                       
-			} 
-			
-			PropellerSDK.SdkSocialShareCompleted();
-		}  
+
+		if (result.Error != null) {
+			Debug.Log ("appFeedCallback - share request failed: " + result.Error);
+		} else  {
+			var responseObject = Json.Deserialize(result.Text) as Dictionary<string, object>;
+
+			object obj = null;
+
+			if (responseObject.TryGetValue ("cancelled", out obj)) {
+				Debug.Log("appFeedCallback - share request cancelled");
+			} else if (responseObject.TryGetValue ("request", out obj)) {
+				Debug.Log("appFeedCallback - share request sent");
+			}
+		}
+
+		PropellerSDK.SdkSocialShareCompleted();
 	}  
 
 
@@ -1170,6 +1232,18 @@ public class FuelHandler : MonoBehaviour
 	}
 	
 	
+
+	/*
+	 ---------------------------------------------------------------------
+						Notifications & Deep Linking
+	 ---------------------------------------------------------------------
+    */
+	public void OnPropellerSDKNotification(string applicationState)
+	{
+		Debug.Log("OnPropellerSDKNotification");
+
+		AutoLauncher.Instance ().ValidateAutoLauncher (applicationState);
+	}
 
 }
 

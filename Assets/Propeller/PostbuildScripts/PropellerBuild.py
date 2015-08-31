@@ -39,7 +39,8 @@ xcodeVersion = sys.argv[6]
 # 14 - UNITY_4_3,
 # 15 - UNITY_4_5,
 # 16 - UNITY_4_6,
-# 17 - UNITY_5_0
+# 17 - UNITY_5_0,
+# 18 - UNITY_5_1
 
 # only supporting Unity 3.5 and up
 if unityApiLevel < 9:
@@ -105,44 +106,6 @@ project.add_file_if_doesnt_exist( cfNetworkFrameworkPath, tree='SDKROOT', parent
 project.add_file_if_doesnt_exist( audioToolboxFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
 project.add_file_if_doesnt_exist( libsqlite3Path, tree='SDKROOT', parent=frameworkGroup )
 project.add_file_if_doesnt_exist( libicucorePath, tree='SDKROOT', parent=frameworkGroup )
-
-print 'Adding resources required by Propeller'
-
-resourceGroup = project.get_or_create_group('Resources')
-
-def addFacebookDependencies(dataPath, frameworkGroup, resourceGroup):
-	if os.path.exists(dataPath + '/Facebook/Scripts/FB.cs'):
-		print 'Found Unity Facebook SDK'
-		return True
-
-	iOSFacebookSDKFrameworkPath = None
-
-	for directory, dirnames, filenames in os.walk( os.path.expanduser('~') + '/Documents/FacebookSDK' ):
-		if os.path.basename( directory ) == 'FacebookSDK.framework':
-			iOSFacebookSDKFrameworkPath = directory
-			break;
-
-	if iOSFacebookSDKFrameworkPath == None:
-		return False
-
-	print 'Found iOS Facebook SDK'
-
-	project.add_file_if_doesnt_exist( iOSFacebookSDKFrameworkPath, parent=frameworkGroup )
-
-	iOSFacebookSDKResourcesBundlePath = iOSFacebookSDKFrameworkPath + '/Resources/FacebookSDKResources.bundle'
-
-	if os.path.exists(iOSFacebookSDKResourcesBundlePath):
-		print 'iOS Facebook SDK resources bundle found'
-		project.add_file_if_doesnt_exist( iOSFacebookSDKResourcesBundlePath, parent=resourceGroup )
-
-	project.add_framework_search_paths([iOSFacebookSDKFrameworkPath + '/' + os.pardir])
-
-	return True
-
-print 'Adding Facebook dependencies required by Propeller'
-
-if not addFacebookDependencies(dataPath, frameworkGroup, resourceGroup):
-	exitWithError('No Facebook SDK found')
 
 print 'Inserting Propeller libraries'
 
@@ -215,6 +178,7 @@ def addInit(contentOnly=False):
 	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKVirtualGoodList" object:nil];'
 	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKVirtualGoodRollback" object:nil];'
 	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKUserValues" object:nil];'
+	print '\t\t[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveLocalNotification:) name:@"PropellerSDKNotification" object:nil];'
 	if not contentOnly:
 		print '\t}'
 		print '\treturn self;'
@@ -266,8 +230,7 @@ def addFinishLaunching(contentOnly=False):
 	print ''
 	print '\tif (remoteNotificationDict)'
 	print '\t{'
-	print '\t\tif (![PropellerSDK handleRemoteNotification:remoteNotificationDict newLaunch:YES])'
-	print '\t\t{'
+	print '\t\tif (![PropellerSDK handleRemoteNotification:remoteNotificationDict newLaunch:YES]) {'
 	print '\t\t\t// This is not a Fuel remote notification, I should handle it'
 	print '\t\t}'
 	print '\t}'
@@ -276,8 +239,7 @@ def addFinishLaunching(contentOnly=False):
 	print ''
 	print '\tif (localNotification)'
 	print '\t{'
-	print '\t\tif (![PropellerSDK handleLocalNotification:localNotification newLaunch:YES])'
-	print '\t\t{'
+	print '\t\tif (![PropellerSDK handleLocalNotification:localNotification newLaunch:YES]) {'
 	print '\t\t\t// This is not a Fuel local notification, I should handle it'
 	print '\t\t}'
 	print '\t}'
@@ -494,6 +456,18 @@ def addExtraFunctions():
 	print '\t\t}'
 	print ''
 	print '\t\tUnitySendMessage("PropellerCommon", "PropellerOnUserValues", [message UTF8String]);'
+	print '\t} else if ([type isEqualToString:@"PropellerSDKImplicitLaunch"]) {'
+	print '\t\tNSString *message = nil;'
+	print ''
+	print '\t\tif (data != nil) {'
+	print '\t\t\tmessage = [data objectForKey:@"applicationState"];'
+	print '\t\t}'
+	print ''
+	print '\t\tif (message == nil) {'
+	print '\t\t\tmessage = @"";'
+	print '\t\t}'
+	print ''
+	print '\t\tUnitySendMessage("PropellerSDK", "PropellerOnImplicitLaunch", [message UTF8String]);'
 	print '\t}'
 	print '}'
 	addInjectionSuffix()

@@ -26,12 +26,37 @@ public class InitMainMenu : MonoBehaviour
 		UpdateFBIcon ();
 
 		PropellerProduct _propellerProductScript = getPropellerProductClass();
-		_propellerProductScript.tryLaunchFuelSDK();
 		_propellerProductScript.updateLoginText ();
 
 		if (sComingFromTitle == true) {
 			UpdatePropellerSDK();
 			sComingFromTitle = false;
+		}
+
+		if (_propellerProductScript.tryLaunchFuelSDK()) {
+			// obtained multiplayer match data
+			// Fuel is being launched to see results
+
+			if (AutoLauncher.Instance ().AutoLaunch ()) {
+				// should never get to here
+				// we have an auto launch condition
+				// reset the state since we are already launching
+
+				AutoLauncher.Instance ().SetAutoLaunch (false);
+			}
+		} else {
+			// no multiplayer match data
+
+			if (AutoLauncher.Instance ().AutoLaunch ()) {
+				// we have an auto launch condition
+				// process auto launch condition normally
+
+				AutoLauncher.Instance ().SetAutoLaunch (false);
+
+				GameObject fuelHandlerObject = GameObject.Find("FuelHandlerObject");
+				FuelHandler fuelHandler = fuelHandlerObject.GetComponent<FuelHandler>();
+				fuelHandler.launchPropeller();
+			}
 		}
 	}
 
@@ -42,7 +67,6 @@ public class InitMainMenu : MonoBehaviour
 		_propellerProductScript.SyncChallengeCounts();
 		_propellerProductScript.SyncTournamentInfo();
 		_propellerProductScript.SyncVirtualGoods();
-		_propellerProductScript.updateLoginText();
 	}
 
 
