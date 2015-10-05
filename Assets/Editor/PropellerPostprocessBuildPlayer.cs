@@ -27,7 +27,8 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 		UNITY_4_5,
 		UNITY_4_6,
 		UNITY_5_0,
-		UNITY_5_1
+		UNITY_5_1,
+		UNITY_5_2
 	};
 
 	private struct ExecutionResult
@@ -209,6 +210,8 @@ public class PropellerPostprocessBuildPlayer : MonoBehaviour
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_5_0;
 #elif UNITY_5_1
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_5_1;
+#elif UNITY_5_2
+		UnityAPILevel unityApiLevel = UnityAPILevel.UNITY_5_2;
 #else
 		UnityAPILevel unityApiLevel = UnityAPILevel.UNSUPPORTED;
 #endif

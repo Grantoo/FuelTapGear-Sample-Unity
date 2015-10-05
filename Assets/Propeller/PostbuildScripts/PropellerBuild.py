@@ -41,6 +41,8 @@ xcodeVersion = sys.argv[6]
 # 16 - UNITY_4_6,
 # 17 - UNITY_5_0,
 # 18 - UNITY_5_1
+# 19 - UNITY_5_2
+
 
 # only supporting Unity 3.5 and up
 if unityApiLevel < 9:
@@ -76,10 +78,10 @@ for directory, dirnames, filenames in os.walk( xcodePath + '/Platforms/iPhoneOS.
 	elif os.path.basename( directory ) == 'AudioToolbox.framework':
 		audioToolboxFrameworkPath = directory
 	else:
-		if 'libsqlite3.dylib' in filenames:
-			libsqlite3Path = directory + '/libsqlite3.dylib'
-		if 'libicucore.dylib' in filenames:
-			libicucorePath = directory + '/libicucore.dylib'
+		if 'libsqlite3.tbd' in filenames:
+			libsqlite3Path = directory + '/libsqlite3.tbd'
+		if 'libicucore.tbd' in filenames:
+			libicucorePath = directory + '/libicucore.tbd'
 
 print 'Locating frameworks and resources required by Propeller'
 
@@ -89,8 +91,8 @@ checkPath( socialFrameworkPath, 'Social.framework' )
 checkPath( securityFrameworkPath, 'Security.framework' )
 checkPath( cfNetworkFrameworkPath, 'CFNetwork.framework' )
 checkPath( audioToolboxFrameworkPath, 'AudioToolbox.framework' )
-checkPath( libsqlite3Path, 'libsqlite3.dylib' )
-checkPath( libicucorePath, 'libicucore.dylib' )
+checkPath( libsqlite3Path, 'libsqlite3.tbd' )
+checkPath( libicucorePath, 'libicucore.tbd' )
 
 project = XcodeProject.Load( projectPath + '/Unity-iPhone.xcodeproj/project.pbxproj' )
 

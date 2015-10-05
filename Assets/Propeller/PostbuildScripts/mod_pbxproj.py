@@ -176,6 +176,7 @@ class PBXFileReference(PBXType):
         '.strings': ('text.plist.strings', 'PBXResourcesBuildPhase'),
         '.bundle': ('wrapper.plug-in', 'PBXResourcesBuildPhase'),
         '.dylib': ('compiled.mach-o.dylib', 'PBXFrameworksBuildPhase'),
+        '.tbd': ('compiled.mach-o.tbd', 'PBXFrameworksBuildPhase'),
         '.xcdatamodeld': ('wrapper.xcdatamodel', 'PBXSourcesBuildPhase')
     }
 
