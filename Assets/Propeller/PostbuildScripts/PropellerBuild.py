@@ -54,6 +54,12 @@ def checkPath(path, libname):
 
 print 'Adding Propeller dependencies to project'
 
+
+xcodeMajorVersionIndex = xcodeVersion.find('.')
+xcodeMajorVersionString = xcodeVersion[0:xcodeMajorVersionIndex]
+xcodeMajorVersion = int(xcodeMajorVersionString)
+
+
 systemConfigurationFrameworkPath = None
 adSupportFrameworkPath = None
 accountsFrameworkPath = None
@@ -78,10 +84,16 @@ for directory, dirnames, filenames in os.walk( xcodePath + '/Platforms/iPhoneOS.
 	elif os.path.basename( directory ) == 'AudioToolbox.framework':
 		audioToolboxFrameworkPath = directory
 	else:
-		if 'libsqlite3.tbd' in filenames:
-			libsqlite3Path = directory + '/libsqlite3.tbd'
-		if 'libicucore.tbd' in filenames:
-			libicucorePath = directory + '/libicucore.tbd'
+		if xcodeMajorVersion >= 7:
+			if 'libsqlite3.tbd' in filenames:
+				libsqlite3Path = directory + '/libsqlite3.tbd'
+			if 'libicucore.tbd' in filenames:
+				libicucorePath = directory + '/libicucore.tbd'
+		else:
+			if 'libsqlite3.dylib' in filenames:
+				libsqlite3Path = directory + '/libsqlite3.dylib'
+			if 'libicucore.dylib' in filenames:
+				libicucorePath = directory + '/libicucore.dylib'
 
 print 'Locating frameworks and resources required by Propeller'
 
@@ -91,8 +103,12 @@ checkPath( socialFrameworkPath, 'Social.framework' )
 checkPath( securityFrameworkPath, 'Security.framework' )
 checkPath( cfNetworkFrameworkPath, 'CFNetwork.framework' )
 checkPath( audioToolboxFrameworkPath, 'AudioToolbox.framework' )
-checkPath( libsqlite3Path, 'libsqlite3.tbd' )
-checkPath( libicucorePath, 'libicucore.tbd' )
+if xcodeMajorVersion >= 7:
+	checkPath( libsqlite3Path, 'libsqlite3.tbd' )
+	checkPath( libicucorePath, 'libicucore.tbd' )
+else:
+	checkPath( libsqlite3Path, 'libsqlite3.dylib' )
+	checkPath( libicucorePath, 'libicucore.dylib' )
 
 project = XcodeProject.Load( projectPath + '/Unity-iPhone.xcodeproj/project.pbxproj' )
 
@@ -693,10 +709,6 @@ else:
 print 'Injecting additional compatibility shims'
 
 if (unityApiLevel == 13) or (unityApiLevel == 14):
-	xcodeMajorVersionIndex = xcodeVersion.find('.')
-	xcodeMajorVersionString = xcodeVersion[0:xcodeMajorVersionIndex]
-	xcodeMajorVersion = int(xcodeMajorVersionString)
-
 	if xcodeMajorVersion >= 6:
 		addImport('Classes/Unity/CMVideoSampling.mm', '<OpenGLES/ES2/glext.h>')
 
