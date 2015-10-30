@@ -596,7 +596,7 @@ public class PropellerSDK : MonoBehaviour
 	#endregion
 
 	#region Unity Functions
-	private void Awake ()
+	private void Start ()
 	{
 		if (!m_bInitialized) {
 			GameObject.DontDestroyOnLoad (gameObject);

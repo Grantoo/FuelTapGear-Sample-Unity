@@ -43,7 +43,6 @@ xcodeVersion = sys.argv[6]
 # 18 - UNITY_5_1
 # 19 - UNITY_5_2
 
-
 # only supporting Unity 3.5 and up
 if unityApiLevel < 9:
 	exitWithError('Unsupported Unity version')
@@ -67,6 +66,7 @@ socialFrameworkPath = None
 securityFrameworkPath = None
 cfNetworkFrameworkPath = None
 audioToolboxFrameworkPath = None
+webKitFrameworkPath = None
 libsqlite3Path = None
 libicucorePath = None
 
@@ -83,6 +83,8 @@ for directory, dirnames, filenames in os.walk( xcodePath + '/Platforms/iPhoneOS.
 		cfNetworkFrameworkPath = directory
 	elif os.path.basename( directory ) == 'AudioToolbox.framework':
 		audioToolboxFrameworkPath = directory
+	elif os.path.basename( directory ) == 'WebKit.framework':
+		webKitFrameworkPath = directory
 	else:
 		if xcodeMajorVersion >= 7:
 			if 'libsqlite3.tbd' in filenames:
@@ -103,6 +105,8 @@ checkPath( socialFrameworkPath, 'Social.framework' )
 checkPath( securityFrameworkPath, 'Security.framework' )
 checkPath( cfNetworkFrameworkPath, 'CFNetwork.framework' )
 checkPath( audioToolboxFrameworkPath, 'AudioToolbox.framework' )
+checkPath( webKitFrameworkPath, 'WebKit.framework' )
+
 if xcodeMajorVersion >= 7:
 	checkPath( libsqlite3Path, 'libsqlite3.tbd' )
 	checkPath( libicucorePath, 'libicucore.tbd' )
@@ -122,6 +126,7 @@ project.add_file_if_doesnt_exist( socialFrameworkPath, tree='SDKROOT', parent=fr
 project.add_file_if_doesnt_exist( securityFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
 project.add_file_if_doesnt_exist( cfNetworkFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
 project.add_file_if_doesnt_exist( audioToolboxFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
+project.add_file_if_doesnt_exist( webKitFrameworkPath, tree='SDKROOT', parent=frameworkGroup )
 project.add_file_if_doesnt_exist( libsqlite3Path, tree='SDKROOT', parent=frameworkGroup )
 project.add_file_if_doesnt_exist( libicucorePath, tree='SDKROOT', parent=frameworkGroup )
 
