@@ -1277,35 +1277,6 @@ public class FuelHandler : MonoBehaviour
 		}
 	}
 
-	
-	private void SetLanguageLocale()
-	{
-		Dictionary<string, string> langLookup = new Dictionary<string, string> ();
-	
-		langLookup.Add ("English", "en");
-		langLookup.Add ("French", "fr");
-		langLookup.Add ("German", "de");
-		langLookup.Add ("Spanish", "es");
-		langLookup.Add ("Italian", "it");
-		langLookup.Add ("Portuguese", "pt");
-
-		langLookup.Add ("Chinese", "zh");
-		langLookup.Add ("Korean", "kr");
-		langLookup.Add ("Japanese", "ja");
-		langLookup.Add ("Russian", "ru");
-		langLookup.Add ("Arabic", "ar");
-
-		var unityLang = Application.systemLanguage;
-
-		string langCode;
-		if (langLookup.TryGetValue (unityLang.ToString (), out langCode)) {
-			PropellerSDK.SetLanguageCode (langCode);
-		} else {
-			Debug.Log("SetLanguageLocale Error: " + unityLang.ToString() + " not supported.");
-			PropellerSDK.SetLanguageCode ("en");
-		}
-	}
-	
 }
 
 
