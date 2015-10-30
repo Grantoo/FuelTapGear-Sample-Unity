@@ -53,11 +53,15 @@ public static class AutoBuilder {
 
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 9))
+		if ((arguments != null) && (arguments.Length == 10))
 		{
 			string outputPath = arguments[7];//must match this index with num command line args and where your arg is on the line
 			string buildNumber = arguments[8];
+			string targetDebugEnv = arguments[9];
 			PlayerSettings.bundleVersion = buildNumber;
+
+			SetTargetDebugEnv(BuildTargetGroup.iOS, targetDebugEnv);
+
 			BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.iOS, BuildOptions.None);
 		}
 	}
@@ -70,10 +74,11 @@ public static class AutoBuilder {
 		//script hook for jenkins building of Android
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 10)) {
+		if ((arguments != null) && (arguments.Length == 11)) {
 			string outputPath = arguments[7];//must match this index with num command line args :(
 			string buildNumber = arguments[8];
-			string keystorePass = arguments[9];
+			string targetDebugEnv = arguments[9];
+			string keystorePass = arguments[10];
 
 			char[] versionDelimiter = {'.'};
 			string[] versionParts = buildNumber.Split(versionDelimiter);
@@ -120,6 +125,8 @@ public static class AutoBuilder {
 			PlayerSettings.keyaliasPass = keystorePass;
 			PlayerSettings.keystorePass = keystorePass;
 
+			SetTargetDebugEnv(BuildTargetGroup.Android, targetDebugEnv);
+
 			BuildPipeline.BuildPlayer(GetScenePaths(), outputPath, BuildTarget.Android, BuildOptions.None);
 		}
 	}
@@ -130,4 +137,31 @@ public static class AutoBuilder {
 		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.WebPlayer);
 		BuildPipeline.BuildPlayer(GetScenePaths(), "Builds/Web",BuildTarget.WebPlayer,BuildOptions.None);
 	}
+
+	private static void SetTargetDebugEnv(BuildTargetGroup buildTargetGroup, string targetDebugEnv)
+	{
+		string environment = null;
+
+		if (targetDebugEnv == null) {
+			UnityEngine.Debug.Log ("[PropellerSDK] Undefined target debug environment - defaulting to a release build");
+		} else if (targetDebugEnv.Equals ("none")) {
+			UnityEngine.Debug.Log ("[PropellerSDK] Configuring the build environment for release");
+		} else if (targetDebugEnv.Equals ("internal") ||
+		           targetDebugEnv.Equals ("sandbox") ||
+		           targetDebugEnv.Equals ("production")) {
+			UnityEngine.Debug.Log ("[PropellerSDK] Configuring the build environment for debug (" + targetDebugEnv + ")");
+			environment = targetDebugEnv.ToUpper ();
+		} else {
+			UnityEngine.Debug.Log ("[PropellerSDK] Unsupported target debug environment (" + targetDebugEnv + ") - defaulting to a release build");
+		}
+
+		if (environment == null) {
+			return;
+		}
+
+		PlayerSettings.SetScriptingDefineSymbolsForGroup(
+			buildTargetGroup,
+			"PROPELLER_SDK_DEBUG;PROPELLER_SDK_DEBUG_" + environment);
+	}
+
 }
