@@ -11,9 +11,9 @@ GameObject:
   - 114: {fileID: 11442836}
   m_Layer: 0
   m_Name: FuelDynamics
-  m_TagString: Untagged
+  m_TagString: 
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 3452816845
   m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &442836
@@ -53,4 +53,3 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 142836}
   m_IsPrefabParent: 1
-  m_IsExploded: 1
