@@ -14,7 +14,8 @@ public class TitleScreenAdvance : MonoBehaviour
 	{
 		//RefreshDebugText();
 
-
+		//tell main menu we're coming
+		InitMainMenu.sComingFromTitle = true;
 	}
 
 
@@ -35,9 +36,6 @@ public class TitleScreenAdvance : MonoBehaviour
 
 		if (Input.GetMouseButtonDown (0)) 
 		{
-			//tell main menu we're coming
-			InitMainMenu.sComingFromTitle = true;
-
 			Application.LoadLevel("MainMenu");
 		}
 	}
