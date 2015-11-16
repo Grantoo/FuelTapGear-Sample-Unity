@@ -10,7 +10,7 @@ TapGear_Web/
 Docs/
 StoreBuilds/
 Builds/
-
+*.meta
 
  
 # ===================================== #
