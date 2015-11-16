@@ -1,6 +1,0 @@
-#!/bin/bash
-
-xcodeDirectory=`xcode-select -p`
-xcodeVersion=`"$xcodeDirectory/usr/bin/xcodebuild" -version | grep Xcode | awk '{print $2}'`
-
-python "$2/Propeller/PostbuildScripts/PropellerBuild.py" "$2/Plugins/iOS" "$xcodeDirectory" "$1" "$2" $3 "$xcodeVersion"
