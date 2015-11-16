@@ -18,6 +18,8 @@ Builds/
 # =================================== #
 Assets/Editor/PropellerPostprocessBuildPlayer.cs
 Assets/Plugins/Android/PropellerSDKUnityPlugin.jar
+Assets/Plugins/Android/AndroidManifest.example.xml
+Assets/Plugins/Android/AndroidManifest.example.shared.xml
 Assets/Plugins/Android/PropellerSDK_Android.jar
 Assets/Plugins/Android/PropellerSDK_Android_GCM.jar
 Assets/Plugins/Android/android-support-v4.jar
