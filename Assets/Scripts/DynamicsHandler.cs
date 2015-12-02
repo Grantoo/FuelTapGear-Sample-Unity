@@ -251,8 +251,10 @@ public class DynamicsHandler : MonoBehaviour
 		
 		//game conditions
 		conditions.Add ("gameVersion", "tapgear v1.1");
-		
+
+#if PROPELLER_SDK
 		FuelDynamics.SetUserConditions (conditions);
+#endif
 		
 		Debug.Log 
 			(
@@ -276,7 +278,9 @@ public class DynamicsHandler : MonoBehaviour
 	
 	public void syncUserValues()
 	{
+#if PROPELLER_SDK
 		FuelDynamics.SyncUserValues();
+#endif
 	}
 	
 	public void OnPropellerSDKUserValues (Dictionary<string, object> userValuesInfo)

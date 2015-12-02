@@ -1,3 +1,4 @@
+#if PROPELLER_SDK
 using UnityEngine;
 using System;
 using System.Collections;
@@ -120,6 +121,4 @@ public class fuelSDKListener : PropellerSDKListener
 	}
 
 }
-
-
-
+#endif

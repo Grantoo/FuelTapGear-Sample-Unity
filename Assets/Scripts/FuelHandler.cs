@@ -48,7 +48,9 @@ public class FuelHandler : MonoBehaviour
 
 	public static FuelHandler Instance { get; private set; }
 
+#if PROPELLER_SDK
 	private fuelSDKListener m_listener;
+#endif
 	private GameMatchData m_matchData;
 	
 	private bool useFaceBook; 
@@ -106,11 +108,13 @@ public class FuelHandler : MonoBehaviour
 			flurryService.StartSession(_iosApiKey, _androidApiKey);
 			#endif
 
+#if PROPELLER_SDK
 			m_listener = new fuelSDKListener ();
 			if(m_listener == null) 
 			{
 				throw new Exception();
 			}
+#endif
 			
 			m_matchData = new GameMatchData ();
 			m_matchData.ValidMatchData = false;
@@ -145,7 +149,8 @@ public class FuelHandler : MonoBehaviour
 		Debug.Log ("Start");
 
 		SetLanguageLocale ();
-		
+
+#if PROPELLER_SDK
 		// enable push notifications
 		PropellerSDK.EnableNotification ( PropellerSDK.NotificationType.push );
 		
@@ -158,6 +163,7 @@ public class FuelHandler : MonoBehaviour
 		{
 			Debug.Log ("fuelEnabled NotificationEnabled!");
 		}
+#endif
 
 		GearFriction = 0.98f;
 		GearShapeType = 5;
@@ -252,8 +258,10 @@ public class FuelHandler : MonoBehaviour
 	{
 		Debug.Log ("LaunchDashBoard");
 
+#if PROPELLER_SDK
 		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "AddTransOverlay");
-		PropellerSDK.Launch (m_listener);	
+		PropellerSDK.Launch (m_listener);
+#endif
 	}
 
 	
@@ -337,7 +345,9 @@ public class FuelHandler : MonoBehaviour
 		string visualScoreStr = visualScore.ToString() + " : " + m_matchData.MatchMaxSpeed.ToString() + " mps";
 		matchResult.Add ("visualScore", visualScoreStr);
 
+#if PROPELLER_SDK
 		PropellerSDK.SubmitMatchResult (matchResult);
+#endif
 	}
 
 
@@ -366,9 +376,11 @@ public class FuelHandler : MonoBehaviour
 		matchResult.Add ("score", m_matchData.MatchScore);
 		matchResult.Add ("matchData", matchData);
 
+#if PROPELLER_SDK
 		PropellerSDK.SubmitMatchResult (matchResult);
 		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "AddTransOverlay");
-		PropellerSDK.Launch (m_listener);	
+		PropellerSDK.Launch (m_listener);
+#endif
 	}
 
 	public void launchPropeller ()
@@ -379,15 +391,16 @@ public class FuelHandler : MonoBehaviour
 		}
 
 		Debug.Log ("launchPropeller");
+
+#if PROPELLER_SDK		
 		if (m_listener == null) 
 		{
 			throw new Exception();
 		}
 		
-		
 		NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "AddTransOverlay");
-		
 		PropellerSDK.Launch (m_listener);
+#endif
 	}
 
 
@@ -443,7 +456,9 @@ public class FuelHandler : MonoBehaviour
 			return;
 		}
 
+#if PROPELLER_SDK
 		PropellerSDK.SyncChallengeCounts ();
+#endif
 	}
 	
 	public void OnPropellerSDKChallengeCountUpdated (string count)
@@ -476,7 +491,9 @@ public class FuelHandler : MonoBehaviour
 			return;
 		}
 
+#if PROPELLER_SDK
 		PropellerSDK.SyncTournamentInfo ();
+#endif
 	}
 	public void OnPropellerSDKTournamentInfo (Dictionary<string, string> tournamentInfo)
 	{
@@ -540,7 +557,9 @@ public class FuelHandler : MonoBehaviour
 #if RUN_UNIT_TESTS
 		VirtualGoodUnitTest ();
 #endif
+#if PROPELLER_SDK
 		PropellerSDK.SyncVirtualGoods ();
+#endif
 	}
 
 	public void OnPropellerSDKVirtualGoodList (Dictionary<string, object> virtualGoodInfo)
@@ -582,8 +601,10 @@ public class FuelHandler : MonoBehaviour
 			//NotificationCenter.DefaultCenter.PostNotification (getMainMenuClass(), "RefreshVirtualGoods", goodsTable);
 		}
 
+#if PROPELLER_SDK
 		// Acknowledge the receipt of the virtual goods list
 		PropellerSDK.AcknowledgeVirtualGoods(transactionId, true);
+#endif
 	}
 
 	public void OnPropellerSDKVirtualGoodRollback (string transactionId)
@@ -649,10 +670,13 @@ public class FuelHandler : MonoBehaviour
 			} else {
 				Debug.Log ("LoginCallback - login request cancelled");
 			}
-			
+
+#if PROPELLER_SDK
 			PropellerSDK.SdkSocialLoginCompleted(null);
+#endif
 			
 			if (socialPost != SocialPost.NONE) {
+#if PROPELLER_SDK
 				switch (socialPost) {
 				case SocialPost.INVITE:
 					PropellerSDK.SdkSocialInviteCompleted ();
@@ -661,6 +685,7 @@ public class FuelHandler : MonoBehaviour
 					PropellerSDK.SdkSocialShareCompleted ();
 					break;
 				}
+#endif
 				
 				socialPost = SocialPost.NONE;
 				socialPostData = null;
@@ -686,10 +711,13 @@ public class FuelHandler : MonoBehaviour
 		
 		if (result.Error != null) {
 			Debug.Log("UserCallBack - user graph request failed: " + result.Error + " - " + result.Text);
-			
+
+#if PROPELLER_SDK
 			PropellerSDK.SdkSocialLoginCompleted (null);
+#endif
 
 			if (socialPost != SocialPost.NONE) {
+#if PROPELLER_SDK
 				switch (socialPost) {
 				case SocialPost.INVITE:
 					PropellerSDK.SdkSocialInviteCompleted ();
@@ -698,6 +726,7 @@ public class FuelHandler : MonoBehaviour
 					PropellerSDK.SdkSocialShareCompleted ();
 					break;
 				}
+#endif
 				
 				socialPost = SocialPost.NONE;
 				socialPostData = null;
@@ -781,7 +810,9 @@ public class FuelHandler : MonoBehaviour
 			"expireDate = " + expireDate.ToLongDateString ()
 		);
 
+#if PROPELLER_SDK
 		PropellerSDK.SdkSocialLoginCompleted (loginInfo);
+#endif
 	}
 	
 	
@@ -865,8 +896,10 @@ public class FuelHandler : MonoBehaviour
 			if (socialPost != SocialPost.NONE) {
 				socialPost = SocialPost.NONE;
 				socialPostData = null;
-				
+
+#if PROPELLER_SDK
 				PropellerSDK.SdkSocialInviteCompleted ();
+#endif
 				return;
 			}
 			
@@ -896,8 +929,10 @@ public class FuelHandler : MonoBehaviour
 				Debug.Log("appRequestCallback - invite request sent");
 			}
 		}
-		
+
+#if PROPELLER_SDK
 		PropellerSDK.SdkSocialInviteCompleted();
+#endif
 	}  
 
 
@@ -948,7 +983,9 @@ public class FuelHandler : MonoBehaviour
 				socialPost = SocialPost.NONE;
 				socialPostData = null;
 
+#if PROPELLER_SDK
 				PropellerSDK.SdkSocialShareCompleted ();
+#endif
 				return;
 			}
 
@@ -979,7 +1016,9 @@ public class FuelHandler : MonoBehaviour
 			}
 		}
 
+#if PROPELLER_SDK
 		PropellerSDK.SdkSocialShareCompleted();
+#endif
 	}  
 
 
@@ -1074,7 +1113,9 @@ public class FuelHandler : MonoBehaviour
 		
 		//non standardized
 
+#if PROPELLER_SDK
 		PropellerSDK.SetUserConditions (conditions);
+#endif
 
 		Debug.Log 
 		(
@@ -1098,7 +1139,9 @@ public class FuelHandler : MonoBehaviour
 	
 	public void syncUserValues()
 	{
+#if PROPELLER_SDK
 		PropellerSDK.SyncUserValues();
+#endif
 	}
 	
 	public void OnPropellerSDKUserValues (Dictionary<string, string> userValuesInfo)
@@ -1270,10 +1313,14 @@ public class FuelHandler : MonoBehaviour
 		
 		string langCode;
 		if (langLookup.TryGetValue (unityLang.ToString (), out langCode)) {
+#if PROPELLER_SDK
 			PropellerSDK.SetLanguageCode (langCode);
+#endif
 		} else {
 			Debug.Log("SetLanguageLocale Error: " + unityLang.ToString() + " not supported.");
+#if PROPELLER_SDK
 			PropellerSDK.SetLanguageCode ("en");
+#endif
 		}
 	}
 
