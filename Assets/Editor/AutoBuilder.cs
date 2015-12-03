@@ -140,8 +140,8 @@ public static class AutoBuilder {
 
 	private static void SetTargetDebugEnv(BuildTargetGroup buildTargetGroup, string targetDebugEnv)
 	{
-		string environment = null;
-
+		string scriptingDefineSymbols = "PROPELLER_SDK";
+		
 		if (targetDebugEnv == null) {
 			UnityEngine.Debug.Log ("[PropellerSDK] Undefined target debug environment - defaulting to a release build");
 		} else if (targetDebugEnv.Equals ("none")) {
@@ -150,18 +150,13 @@ public static class AutoBuilder {
 		           targetDebugEnv.Equals ("sandbox") ||
 		           targetDebugEnv.Equals ("production")) {
 			UnityEngine.Debug.Log ("[PropellerSDK] Configuring the build environment for debug (" + targetDebugEnv + ")");
-			environment = targetDebugEnv.ToUpper ();
+			scriptingDefineSymbols += ";PROPELLER_SDK_DEBUG";
+			scriptingDefineSymbols += ";PROPELLER_SDK_DEBUG_" + targetDebugEnv.ToUpper ();
 		} else {
 			UnityEngine.Debug.Log ("[PropellerSDK] Unsupported target debug environment (" + targetDebugEnv + ") - defaulting to a release build");
 		}
 
-		if (environment == null) {
-			return;
-		}
-
-		PlayerSettings.SetScriptingDefineSymbolsForGroup(
-			buildTargetGroup,
-			"PROPELLER_SDK_DEBUG;PROPELLER_SDK_DEBUG_" + environment);
+		PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, scriptingDefineSymbols);
 	}
 
 }
