@@ -47,17 +47,20 @@ public static class AutoBuilder {
 	[MenuItem("File/AutoBuilder/iOS")]
 	static void PerformiOSBuild ()
 	{
+		// according to the documentation, this method isn't available when
+		// running the Editor in batch mode. setting the build target via
+		// the buildTarget command-line switch
 		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.iOS);
 
 		//script hook for jenkins building of iOS
 
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 10))
+		if ((arguments != null) && (arguments.Length == 12))
 		{
-			string outputPath = arguments[7];//must match this index with num command line args and where your arg is on the line
-			string buildNumber = arguments[8];
-			string targetDebugEnv = arguments[9];
+			string outputPath = arguments[9];//must match this index with num command line args and where your arg is on the line
+			string buildNumber = arguments[10];
+			string targetDebugEnv = arguments[11];
 			PlayerSettings.bundleVersion = buildNumber;
 
 			SetTargetDebugEnv(BuildTargetGroup.iOS, targetDebugEnv);
@@ -69,16 +72,19 @@ public static class AutoBuilder {
 	[MenuItem("File/AutoBuilder/Android")]
 	static void PerformAndroidBuild ()
 	{
+		// according to the documentation, this method isn't available when
+		// running the Editor in batch mode. setting the build target via
+		// the buildTarget command-line switch
 		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.Android);
 
 		//script hook for jenkins building of Android
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 11)) {
-			string outputPath = arguments[7];//must match this index with num command line args :(
-			string buildNumber = arguments[8];
-			string targetDebugEnv = arguments[9];
-			string keystorePass = arguments[10];
+		if ((arguments != null) && (arguments.Length == 13)) {
+			string outputPath = arguments[9];//must match this index with num command line args :(
+			string buildNumber = arguments[10];
+			string targetDebugEnv = arguments[11];
+			string keystorePass = arguments[12];
 
 			char[] versionDelimiter = {'.'};
 			string[] versionParts = buildNumber.Split(versionDelimiter);
