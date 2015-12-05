@@ -56,11 +56,11 @@ public static class AutoBuilder {
 
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 12))
+		if ((arguments != null) && (arguments.Length == 14))
 		{
-			string outputPath = arguments[9];//must match this index with num command line args and where your arg is on the line
-			string buildNumber = arguments[10];
-			string targetDebugEnv = arguments[11];
+			string outputPath = arguments[11];//must match this index with num command line args and where your arg is on the line
+			string buildNumber = arguments[12];
+			string targetDebugEnv = arguments[13];
 			PlayerSettings.bundleVersion = buildNumber;
 
 			SetTargetDebugEnv(BuildTargetGroup.iOS, targetDebugEnv);
@@ -80,11 +80,11 @@ public static class AutoBuilder {
 		//script hook for jenkins building of Android
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 13)) {
-			string outputPath = arguments[9];//must match this index with num command line args :(
-			string buildNumber = arguments[10];
-			string targetDebugEnv = arguments[11];
-			string keystorePass = arguments[12];
+		if ((arguments != null) && (arguments.Length == 15)) {
+			string outputPath = arguments[11];//must match this index with num command line args :(
+			string buildNumber = arguments[12];
+			string targetDebugEnv = arguments[13];
+			string keystorePass = arguments[14];
 
 			char[] versionDelimiter = {'.'};
 			string[] versionParts = buildNumber.Split(versionDelimiter);

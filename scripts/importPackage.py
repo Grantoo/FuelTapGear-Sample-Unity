@@ -27,7 +27,7 @@ print 'Unity Package Path : ' + unityPackagePath
 
 print 'importing...'
 
-os.system("\"/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity\" -quit -batchmode -projectPath \"" + unityProjectPath + "\" -importPackage \"" + unityPackagePath + "\"")
+os.system("\"/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity\" -quit -batchmode -logFile /dev/stdout -projectPath \"" + unityProjectPath + "\" -importPackage \"" + unityPackagePath + "\"")
 
 print 'done.'
 
