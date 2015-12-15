@@ -62,6 +62,8 @@ public static class AutoBuilder {
 			string buildNumber = arguments[12];
 			string targetDebugEnv = arguments[13];
 			PlayerSettings.bundleVersion = buildNumber;
+			PlayerSettings.iOS.buildNumber = buildNumber;
+			PlayerSettings.iOS.requiresFullScreen = true;
 
 			SetTargetDebugEnv(BuildTargetGroup.iOS, targetDebugEnv);
 
