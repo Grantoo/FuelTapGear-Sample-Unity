@@ -82,11 +82,14 @@ public static class AutoBuilder {
 		//script hook for jenkins building of Android
 		string[] arguments = System.Environment.GetCommandLineArgs();
 
-		if ((arguments != null) && (arguments.Length == 15)) {
+		if ((arguments != null) && (arguments.Length == 18)) {
 			string outputPath = arguments[11];//must match this index with num command line args :(
 			string buildNumber = arguments[12];
 			string targetDebugEnv = arguments[13];
-			string keystorePass = arguments[14];
+			string keystorePath = arguments[14];
+			string keystorePass = arguments[15];
+			string keystoreAlias = arguments[16];
+			string keystoreAliasPass = arguments[17];
 
 			char[] versionDelimiter = {'.'};
 			string[] versionParts = buildNumber.Split(versionDelimiter);
@@ -130,8 +133,8 @@ public static class AutoBuilder {
 			PlayerSettings.Android.bundleVersionCode = bundleVersionCode;
 
 			PlayerSettings.bundleVersion = buildNumber;
-			PlayerSettings.keyaliasPass = keystorePass;
-			PlayerSettings.keystorePass = keystorePass;
+
+			SetAndroidKeystoreProperties(targetDebugEnv, keystorePath, keystorePass, keystoreAlias, keystoreAliasPass);
 
 			SetTargetDebugEnv(BuildTargetGroup.Android, targetDebugEnv);
 
@@ -144,6 +147,32 @@ public static class AutoBuilder {
 	{
 		EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTarget.WebPlayer);
 		BuildPipeline.BuildPlayer(GetScenePaths(), "Builds/Web",BuildTarget.WebPlayer,BuildOptions.None);
+	}
+
+	private static void SetAndroidKeystoreProperties(string targetDebugEnv, string keystorePath, string keystorePass, string keystoreAlias, string keystoreAliasPass)
+	{
+		if ((targetDebugEnv == null) || !targetDebugEnv.Equals("none")) {
+			keystorePath = System.Environment.GetEnvironmentVariable("HOME") + "/.android/debug.keystore";
+			keystorePass = "android";
+			keystoreAlias = "androiddebugkey";
+			keystoreAliasPass = "android";
+		}
+
+		if (!string.IsNullOrEmpty(keystorePath)) {
+			PlayerSettings.Android.keystoreName = keystorePath;
+		}
+		
+		if (!string.IsNullOrEmpty(keystorePass)) {
+			PlayerSettings.Android.keystorePass = keystorePass;
+		}
+		
+		if (!string.IsNullOrEmpty(keystoreAlias)) {
+			PlayerSettings.Android.keyaliasName = keystoreAlias;
+		}
+		
+		if (!string.IsNullOrEmpty(keystoreAliasPass)) {
+			PlayerSettings.Android.keyaliasPass = keystoreAliasPass;
+		}
 	}
 
 	private static void SetTargetDebugEnv(BuildTargetGroup buildTargetGroup, string targetDebugEnv)

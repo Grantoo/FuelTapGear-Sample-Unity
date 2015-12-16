@@ -34,10 +34,13 @@ print 'Output File Name : ' + outputFileName
 print 'Unity Project Path : ' + unityProjectPath
 
 if targetBuildSku == 'Android':
-    keystorePass = sys.argv[7]
+    keystorePath = sys.argv[7]
+    keystorePass = sys.argv[8]
+    keystoreAlias = sys.argv[9]
+    keystoreAliasPass = sys.argv[10]
 
     print 'building Android...'
-    os.system("\"/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity\" -quit -batchmode -buildTarget android -logFile /dev/stdout -projectPath \"" + unityProjectPath + "\" -executeMethod AutoBuilder.PerformAndroidBuild \"" + outputFileName + "\" " + buildNumber + " " + targetDebugEnv + " " + keystorePass)
+    os.system("\"/Applications/" + unityFolderName + "/Unity.app/Contents/MacOS/Unity\" -quit -batchmode -buildTarget android -logFile /dev/stdout -projectPath \"" + unityProjectPath + "\" -executeMethod AutoBuilder.PerformAndroidBuild \"" + outputFileName + "\" " + buildNumber + " " + targetDebugEnv + " \"" + keystorePath + "\" " + keystorePass + " \"" + keystoreAlias + "\" " + keystoreAliasPass)
     print 'Build Complete'
 elif targetBuildSku == 'iOS':
     print 'building iOS...'
