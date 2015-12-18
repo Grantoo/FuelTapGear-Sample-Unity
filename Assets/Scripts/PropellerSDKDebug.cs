@@ -9,7 +9,7 @@ public class PropellerSDKDebug : MonoBehaviour {
 
 #if UNITY_IPHONE
 	[DllImport ("__Internal")]
-	private static extern void iOSUseDebugServers(string sdkHost, string apiHost, string tournamentHost, string challengeHost, string cdnHost, string transactionHost, string dynamicsHost);
+	private static extern bool iOSUseDebugServers(string sdkHost, string apiHost, string tournamentHost, string challengeHost, string cdnHost, string transactionHost, string dynamicsHost);
 #elif UNITY_ANDROID
 	private AndroidJavaClass _jniPropellerSDK;
 #endif
@@ -97,12 +97,12 @@ public class PropellerSDKDebug : MonoBehaviour {
 		propellerSDK.AndroidGCMSenderID = _androidGCMSenderID;
 	}
 
-	void UseDebugServers ()
+	bool UseDebugServers ()
 	{
 #if UNITY_IPHONE
-		iOSUseDebugServers (_sdkHost, _apiHost, _tournamentHost, _challengeHost, _cdnHost, _transactionHost, _dynamicsHost);
+		return iOSUseDebugServers (_sdkHost, _apiHost, _tournamentHost, _challengeHost, _cdnHost, _transactionHost, _dynamicsHost);
 #elif UNITY_ANDROID
-		_jniPropellerSDK.CallStatic ("useDebugServers", _sdkHost, _apiHost, _tournamentHost, _challengeHost, _cdnHost, _transactionHost, _dynamicsHost);
+		return _jniPropellerSDK.CallStatic<bool>("useDebugServers", _sdkHost, _apiHost, _tournamentHost, _challengeHost, _cdnHost, _transactionHost, _dynamicsHost);
 #endif
 	}
 
