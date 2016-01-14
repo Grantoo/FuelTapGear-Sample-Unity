@@ -61,7 +61,7 @@ public class PositionCamera : MonoBehaviour
 		if (firstPass == true) 
 		{
 
-			#if UNITY_IPHONE
+			#if UNITY_IOS
 
 			if ((UnityEngine.iOS.Device.generation.ToString ()).IndexOf ("iPad") > -1) 
 			{

@@ -152,7 +152,7 @@ public class DynamicsHandler : MonoBehaviour
 	{
 		bool isTablet = false;
 		
-		#if UNITY_IPHONE
+		#if UNITY_IOS
 		if (Application.platform == RuntimePlatform.IPhonePlayer) {
 			
 			if(UnityEngine.iOS.Device.generation == UnityEngine.iOS.DeviceGeneration.iPadUnknown ||

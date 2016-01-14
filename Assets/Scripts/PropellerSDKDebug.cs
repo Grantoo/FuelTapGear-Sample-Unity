@@ -7,7 +7,7 @@ public class PropellerSDKDebug : MonoBehaviour {
 
 #if PROPELLER_SDK_DEBUG
 
-#if UNITY_IPHONE
+#if UNITY_IOS
 	[DllImport ("__Internal")]
 	private static extern bool iOSUseDebugServers(string sdkHost, string apiHost, string tournamentHost, string challengeHost, string cdnHost, string transactionHost, string dynamicsHost);
 #elif UNITY_ANDROID
@@ -99,7 +99,7 @@ public class PropellerSDKDebug : MonoBehaviour {
 
 	bool UseDebugServers ()
 	{
-#if UNITY_IPHONE
+#if UNITY_IOS
 		return iOSUseDebugServers (_sdkHost, _apiHost, _tournamentHost, _challengeHost, _cdnHost, _transactionHost, _dynamicsHost);
 #elif UNITY_ANDROID
 		return _jniPropellerSDK.CallStatic<bool>("useDebugServers", _sdkHost, _apiHost, _tournamentHost, _challengeHost, _cdnHost, _transactionHost, _dynamicsHost);

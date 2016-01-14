@@ -210,7 +210,7 @@ public class FuelHandler : MonoBehaviour
 		// application entering background
 		if (paused) 
 		{
-			#if UNITY_IPHONE
+			#if UNITY_IOS
 			UnityEngine.iOS.NotificationServices.ClearLocalNotifications ();
 			UnityEngine.iOS.NotificationServices.ClearRemoteNotifications ();
 			#endif
@@ -1230,7 +1230,7 @@ public class FuelHandler : MonoBehaviour
 	{
 		bool isTablet = false;
 		
-		#if UNITY_IPHONE
+		#if UNITY_IOS
 
 			if (Application.platform == RuntimePlatform.IPhonePlayer) {
 				
