@@ -223,14 +223,6 @@ public class DynamicsHandler : MonoBehaviour
 		int numLaunches = getNumLaunches ();
 		int numSessions = getNumSessions ();
 		
-		float _latitude = 0.0f;
-		float _longitude = 0.0f;
-		if (Input.location.status == LocationServiceStatus.Running) 
-		{
-			_latitude = Input.location.lastData.latitude;
-			_longitude = Input.location.lastData.longitude;
-		}
-		
 		Dictionary<string, string> conditions = new Dictionary<string, string> ();
 		
 		//required
@@ -246,8 +238,6 @@ public class DynamicsHandler : MonoBehaviour
 		conditions.Add ("language", "en");
 		conditions.Add ("gender", "female");
 		conditions.Add ("age", "16");
-		conditions.Add ("gpsLong", _latitude.ToString());
-		conditions.Add ("gpsLat", _longitude.ToString());
 		
 		//game conditions
 		conditions.Add ("gameVersion", "tapgear v1.1");
@@ -269,8 +259,6 @@ public class DynamicsHandler : MonoBehaviour
 				"language = " + "en" + "\n" +
 				"gender = " + "female" + "\n" +
 				"age = " + "16" + "\n" +
-				"gpsLong = " + _latitude.ToString() + "\n" +
-				"gpsLat = " + _longitude.ToString() + "\n" +
 				"gameVersion = " + "tapgear v1.1"
 				);
 		

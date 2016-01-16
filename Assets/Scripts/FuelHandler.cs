@@ -1,6 +1,5 @@
 //#define USE_ANALYTICS
 //#define RUN_UNIT_TESTS
-//#define LOCATION_SERVICES
 
 using UnityEngine;
 using System;
@@ -96,10 +95,6 @@ public class FuelHandler : MonoBehaviour
 		} 
 		else if( Instance == null )
 		{
-			#if LOCATION_SERVICES
-			Input.location.Start();
-			#endif
-
 			#if USE_ANALYTICS
 			flurryService = Flurry.Instance;
 				//AssertNotNull(service, "Unable to create Flurry instance!", this);
@@ -1082,16 +1077,6 @@ public class FuelHandler : MonoBehaviour
 		int numLaunches = getNumLaunches ();
 		int numSessions = getNumSessions ();
 
-		float _latitude = 0.0f;
-		float _longitude = 0.0f;
-		#if LOCATION_SERVICES
-		if (Input.location.status == LocationServiceStatus.Running) 
-		{
-			_latitude = Input.location.lastData.latitude;
-			_longitude = Input.location.lastData.longitude;
-		}
-		#endif
-
 		Dictionary<string, string> conditions = new Dictionary<string, string> ();
 		
 		//required
@@ -1108,8 +1093,6 @@ public class FuelHandler : MonoBehaviour
 		conditions.Add ("language", "en");
 		conditions.Add ("gender", "female");
 		conditions.Add ("age", "16");
-		conditions.Add ("gpsLong", _latitude.ToString());
-		conditions.Add ("gpsLat", _longitude.ToString());
 		
 		//non standardized
 
@@ -1130,8 +1113,6 @@ public class FuelHandler : MonoBehaviour
 				"language = " + "en" + "\n" +
 				"gender = " + "female" + "\n" +
 				"age = " + "16" + "\n" +
-				"gpsLong = " + _latitude.ToString() + "\n" +
-				"gpsLat = " + _longitude.ToString() + "\n" +
 				"gameVersion = " + "1.0.2"
 		);
 
